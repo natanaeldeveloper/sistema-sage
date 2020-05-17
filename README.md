@@ -1,4 +1,3 @@
-<div style="text-align:center">
 <h1>Sistema de Estoque - SAGE</h1>
 
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/Natanael-Oliveira-br/project_SAGE"></a>
@@ -6,7 +5,6 @@
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/network"><img alt="GitHub forks" src="https://img.shields.io/github/forks/Natanael-Oliveira-br/project_SAGE"></a>
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Natanael-Oliveira-br/project_SAGE"></a>
 
-</div>
 
 ## Começando
 ### .....
