@@ -1,31 +1,28 @@
 package br.com.projeto.estoque.viewUpdate;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.ImageIcon;
-import javax.swing.JProgressBar;
-import java.awt.Font;
-import java.awt.SystemColor;
-import javax.swing.JFormattedTextField;
-import java.awt.Color;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.JTabbedPane;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class Janela_login extends JFrame {
+
+	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;

@@ -4,10 +4,7 @@ import javax.persistence.NoResultException;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
-import br.com.projeto.estoque.model.Nivel;
-import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.model.Supervisor;
 import br.com.projeto.estoque.model.TipoComportamento;
 import br.com.projeto.estoque.util.Aviso;
@@ -66,7 +63,6 @@ public class ControllerSupervisor extends ControllerGlobal {
 		Supervisor supervisor = new Supervisor();
 		supervisor.setCpf(cpf);
 		supervisor.setSenha(senha);
-		supervisor.setStatus(Status.ATIVO);
 
 		return supervisor;
 
@@ -77,8 +73,8 @@ public class ControllerSupervisor extends ControllerGlobal {
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.getManager().getTransaction().begin();
 		if (testarCampos(cpf, senha) == true) {
-			if (evitarDuplicacaoSupervisor(cpf) == false) {
-				// cpf já estará no sistema
+			if (buscarSupervisorPeloCpf(cpf) != null) {
+				Aviso.avisar(3);
 			} else {
 				if (confirmarSenha(senha, confSenha) == true) {
 					criarUsuario(criarSupervisor(cpf, Criptografar.encriptografar(senha)));
@@ -95,8 +91,7 @@ public class ControllerSupervisor extends ControllerGlobal {
 
 	}
 
-	// Esse mï¿½todo ï¿½ responsï¿½vel por verificar se a senha digitada ï¿½ igual
-	// ï¿½ senha
+	// Esse mï¿½todo ï¿½ responsï¿½vel por verificar se a senha digitada ï¿½ igual ï¿½ senha
 	// de confirmaï¿½ï¿½o
 
 	public boolean confirmarSenha(String senha, String confSenha) {
@@ -130,21 +125,15 @@ public class ControllerSupervisor extends ControllerGlobal {
 
 	public void mostrarDadosDoSupervisorPeloId(int id, JFormattedTextField cpfCampo, JPasswordField senha) {
 
-		Essencial.setManager(new JPAUtil().getEntityManager());
-		Essencial.getManager().getTransaction().begin();
 		try {
-			if (verificarStatusSupervisor(id) == false) {
-				// Supervisor está inativo
-			} else {
-
-				cpfCampo.setText(buscarSupervisorPeloId(id).getCpf());
-				senha.setText(buscarSupervisorPeloId(id).getSenha());
-			}
+			Essencial.setManager(new JPAUtil().getEntityManager());
+			Essencial.getManager().getTransaction().begin();
+			cpfCampo.setText(buscarSupervisorPeloId(id).getCpf());
+			senha.setText(buscarSupervisorPeloId(id).getSenha());
 		} catch (NullPointerException e) {
 			JOptionPane.showMessageDialog(null, e);
 			Aviso.avisar(7);
-		}
-		finally {
+		} finally {
 			Essencial.getManager().close();
 		}
 	}
@@ -154,7 +143,6 @@ public class ControllerSupervisor extends ControllerGlobal {
 		supervisor.setId(id);
 		supervisor.setCpf(cpf);
 		supervisor.setSenha(Criptografar.encriptografar(senha));
-		supervisor.setStatus(Status.ATIVO);
 		return supervisor;
 	}
 
@@ -163,7 +151,6 @@ public class ControllerSupervisor extends ControllerGlobal {
 		supervisor.setId(id);
 		supervisor.setCpf(cpf);
 		supervisor.setSenha(buscarSupervisorPeloId(id).getSenha());
-		supervisor.setStatus(Status.ATIVO);
 		return supervisor;
 	}
 
@@ -172,7 +159,6 @@ public class ControllerSupervisor extends ControllerGlobal {
 		supervisor.setId(id);
 		supervisor.setCpf(buscarSupervisorPeloId(id).getCpf());
 		supervisor.setSenha(Criptografar.encriptografar(senha));
-		supervisor.setStatus(Status.ATIVO);
 		return supervisor;
 	}
 
@@ -189,8 +175,8 @@ public class ControllerSupervisor extends ControllerGlobal {
 			Essencial.setManager(new JPAUtil().getEntityManager());
 			Essencial.getManager().getTransaction().begin();
 
-			if (buscarSupervisorAtivo(buscarSupervisorPeloId(id).getCpf()) == false) {
-//				Aviso.avisar(11);
+			if (buscarSupervisorPeloId(id) == null) {
+				Aviso.avisar(11);
 			} else {
 				if (testarCampos(cpf, senha) == false) {
 					Aviso.avisar(1);
@@ -284,9 +270,7 @@ public class ControllerSupervisor extends ControllerGlobal {
 
 	}
 
-	public void excluirContaSupervisor(JFormattedTextField campoId, String cpf, String senha,
-			JFormattedTextField campoCpfGerente, JPasswordField campoSenhaGerente,
-			JFormattedTextField campoCpfSupervisor) {
+	public void excluirContaSupervisor(JFormattedTextField campoId, String cpf, String senha, JFormattedTextField campoCpfGerente, JPasswordField campoSenhaGerente, JFormattedTextField campoCpfSupervisor) {
 		int id = 0;
 
 		if (validarConfirmacaoGerente(cpf, senha) == true) {
@@ -303,36 +287,30 @@ public class ControllerSupervisor extends ControllerGlobal {
 					Aviso.avisar(11);
 				} else {
 					Janela_confirmar_delecao confDell = new Janela_confirmar_delecao();
-					SupervisorDeletado.setId(id);
+					SupervisorDeletado .setId(id);
 					confDell.setVisible(true);
 					ControllerAuxiliar ctrlAux = new ControllerAuxiliar();
 					ctrlAux.limparCampos(campoId, campoCpfGerente, campoSenhaGerente, null, campoCpfSupervisor);
 				}
-
+				
 				Essencial.getManager().getTransaction().commit();
 				Essencial.getManager().close();
+				
 
 			}
-
+			
+			
 		}
 
 	}
 
 	public boolean excluirConta(int id) {
 		Essencial.setManager(new JPAUtil().getEntityManager());
-		Supervisor usuario = Essencial.getManager().find(Supervisor.class, id);
-		Supervisor usuario_removido = new Supervisor();
-		usuario_removido.setId(id);
-		usuario_removido.setCpf(usuario.getCpf());
-		usuario_removido.setNivel(usuario.getNivel());
-		usuario_removido.setSenha(usuario.getSenha());
-		usuario_removido.setStatus(Status.INATIVO);
+		Supervisor usuario_Removido = Essencial.getManager().find(Supervisor.class, id);
 		Essencial.getManager().getTransaction().begin();
-		Essencial.getManager().merge(usuario_removido);
+		Essencial.getManager().remove(usuario_Removido);
 		Essencial.getManager().getTransaction().commit();
 		Essencial.getManager().close();
-
-		Aviso.avisar(14);
 
 		return true;
 	}

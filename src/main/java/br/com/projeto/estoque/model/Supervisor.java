@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.NamedQuery;
 
 @NamedQuery(name="buscarSupervisor", query="select s from Supervisor s where s.cpf=:Scpf")
-@NamedQuery(name="buscarSupervisorAtivo", query="select s from Supervisor s where s.cpf=:Scpf and s.status=:Sstatus")
 @Entity
 public class Supervisor {
 
@@ -27,8 +26,6 @@ public class Supervisor {
 	@Column(unique=true, nullable=false)
 	private String cpf;
 	private String senha;
-	@Enumerated(EnumType.STRING)
-	private Status status;
 
 	@OneToMany(mappedBy="supervisor", cascade = CascadeType.ALL)
 	private List<RegistroSupervisor> registros;
@@ -72,14 +69,5 @@ public class Supervisor {
 	public void setNivel(Nivel nivel) {
 		this.nivel = nivel;
 	}
-	
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
 	
 }

@@ -6,7 +6,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import br.com.projeto.estoque.model.Fornecedor;
-import br.com.projeto.estoque.util.Criptografar;
 import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
 
@@ -14,20 +13,20 @@ public class ControllerValidationFornecedor {
 	@SuppressWarnings("unused")
 	private static EntityManager manager;
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unused" })
 	public static void cadastrarFornecedor(JTextField tfCnpj, JTextField tfNome, JPasswordField tfSenha,
 			JPasswordField tfConfirmar) {
 		if (conferirDados(tfCnpj, tfNome, tfSenha, tfConfirmar)) {
 			manager = new JPAUtil().getEntityManager();
 			String cnpj = tfCnpj.getText();
 			String nome = tfNome.getText();
-			String senha = Criptografar.encriptografar(tfSenha.getText());
+			String senha = tfSenha.getText();
 			String senhaConfirmar = tfConfirmar.getText();
 			if (senha.equals(senhaConfirmar) && senhaConfirmar.equals(GerenteAtual.getGerente().getSenha())) {
 				ControllerFornecedor cf = new ControllerFornecedor();
 				if (conferirFornecedor(tfCnpj, tfNome)) {
 					try {
-						cf.criarFornecedor(cnpj, nome);
+//						cf.criarFornecedor(cnpj, nome);
 						JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso!",
 								"Fornecedor Cadastrado", JOptionPane.INFORMATION_MESSAGE);
 						limparDados(tfCnpj, tfNome, tfSenha, tfConfirmar);
@@ -40,6 +39,7 @@ public class ControllerValidationFornecedor {
 			} else {
 				JOptionPane.showMessageDialog(null, "Senha incorreta!", "Senha incorreta", JOptionPane.ERROR_MESSAGE);
 			}
+			manager.close();
 		}
 	}
 

@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import br.com.projeto.estoque.controller.ControllerAtualizarProduto;
+import br.com.projeto.estoque.controller.ControllerValidationGrupo;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -169,7 +170,7 @@ public class Janela_update_produto extends JInternalFrame {
 
 		String[] unidades = new String[] { "g", "mg", "Kg", "mL", "L", "m" };
 
-		cbCategoriaNova = new JComboBox(ControllerValidationProduto.preencherCategorias().toArray());
+		cbCategoriaNova = new JComboBox(ControllerValidationGrupo.preencherCategorias().toArray());
 		cbCategoriaNova.setEnabled(false);
 		cbCategoriaNova.setBackground(SystemColor.controlHighlight);
 		cbCategoriaNova.setBounds(271, 325, 183, 25);
@@ -212,26 +213,26 @@ public class Janela_update_produto extends JInternalFrame {
 
 		btnCarregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerAtualizarProduto.carregarRegistro(tfCodigo, tfNome, tfQuantidade, tpDescricao, tfPeso,
-						cbUnidade, tfPreco, tfFornecedorAtual, cbFornecedorNovo, tfCategoriaAtual, cbCategoriaNova,
-						btnResetar, btnAtualizar);
+//				ControllerAtualizarProduto.carregarRegistro(tfCodigo, tfNome, tfQuantidade, tpDescricao, tfPeso,
+//						cbUnidade, tfPreco, tfFornecedorAtual, cbFornecedorNovo, tfCategoriaAtual, cbCategoriaNova,
+//						btnResetar, btnAtualizar);
 			}
 		});
 
 		btnResetar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerAtualizarProduto.limparDados(tfCodigo, tfNome, tpDescricao, tfPeso, cbUnidade, tfPreco,
-						tfQuantidade, tfFornecedorAtual, cbFornecedorNovo, tfCategoriaAtual, cbCategoriaNova,
-						btnResetar, btnAtualizar);
+//				ControllerAtualizarProduto.limparDados(tfCodigo, tfNome, tpDescricao, tfPeso, cbUnidade, tfPreco,
+//						tfQuantidade, tfFornecedorAtual, cbFornecedorNovo, tfCategoriaAtual, cbCategoriaNova,
+//						btnResetar, btnAtualizar);
 			}
 		});
 
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerAtualizarProduto.atualizarRegistro(tfCodigo, tfNome, tfQuantidade, tpDescricao, tfPeso,
-						cbUnidade, tfPreco, tfFornecedorAtual, cbFornecedorNovo, tfCategoriaAtual, cbCategoriaNova,
-						btnResetar, btnAtualizar);
-				;
+//				ControllerAtualizarProduto.atualizarRegistro(tfCodigo, tfNome, tfQuantidade, tpDescricao, tfPeso,
+//						cbUnidade, tfPreco, tfFornecedorAtual, cbFornecedorNovo, tfCategoriaAtual, cbCategoriaNova,
+//						btnResetar, btnAtualizar);
+//				;
 			}
 		});
 	}

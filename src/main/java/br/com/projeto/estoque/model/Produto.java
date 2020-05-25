@@ -1,6 +1,5 @@
 package br.com.projeto.estoque.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
@@ -20,36 +19,22 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "produto")
-public class Produto implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
+public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(nullable = false, unique = true)
-	private String codigo;
-
 	@ManyToOne
-	private Fornecedor fornecedor;
-
-	@Column(nullable = false, unique = true)
-	private String nome;
+	private Grupo grupo;
 
 	@Column(nullable = false)
-	private Double peso;
-	
-	@Column(nullable = false)
-	private String unidade;
-
-	@Column(nullable = false)
-	private Integer quantidade;
+	private String descricao;
 
 	@Column(nullable = false)
 	private BigDecimal preco;
+
+	@Column(nullable = false)
+	private int quantidade;
 
 	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
@@ -61,63 +46,28 @@ public class Produto implements Serializable {
 	@OneToMany(mappedBy = "produto", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Movimentacao> movimentacoes;
 
-	@ManyToOne
-	private Categoria categoria;
-
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public String getCodigo() {
-		return codigo;
+	public Grupo getGrupo() {
+		return grupo;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
 	}
 
-	public Fornecedor getFornecedor() {
-		return fornecedor;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setFornecedor(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer qtd) {
-		this.quantidade = qtd;
-	}
-
-	public Double getPeso() {
-		return peso;
-	}
-
-	public void setPeso(Double peso) {
-		this.peso = peso;
-	}
-	
-	public String getUnidade() {
-		return unidade;
-	}
-
-	public void setUnidade(String unidade) {
-		this.unidade = unidade;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public BigDecimal getPreco() {
@@ -126,6 +76,14 @@ public class Produto implements Serializable {
 
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
+	}
+
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
 
 	public Calendar getDataFabricacao() {
@@ -146,13 +104,5 @@ public class Produto implements Serializable {
 
 	public List<Movimentacao> getMovimentacoes() {
 		return movimentacoes;
-	}
-
-	public Categoria getCategoria() {
-		return this.categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
 	}
 }

@@ -21,9 +21,9 @@ public class ControllerGerente extends ControllerGlobal {
 		if(verificarCredenciais(cpf, senha)==true) {
 			GerenteAtual.setGerente(buscarGerentePeloCpf(cpf));
 			controller.criarRegistroGerente(tipoComportamento, GerenteAtual.getGerente());
+			Essencial.getManager().getTransaction().commit();
 			login_efetuado=true;
 		}
-		Essencial.getManager().getTransaction().commit();
 		Essencial.getManager().close();
 		return login_efetuado;
 	}
@@ -36,7 +36,7 @@ public class ControllerGerente extends ControllerGlobal {
 			Aviso.avisar(2);
 			return false;
 		}else {
-			if(gerente.getSenha().equals(Criptografar.encriptografar(senha))) {
+			if(gerente.getSenha().equals(senha)) {
 				return true;
 			}else {
 				Aviso.avisar(2);

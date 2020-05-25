@@ -1,39 +1,39 @@
 package br.com.projeto.estoque.viewUpdate;
 
-import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JTabbedPane;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
-import javax.swing.JScrollPane;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JProgressBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JToolBar;
-import javax.swing.JLayeredPane;
-import javax.swing.border.TitledBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import br.com.projeto.estoque.viewUpdate.tableModels.TableModelFornecedores;
+import br.com.projeto.estoque.viewUpdate.tableModels.TableModelMovimentacoes;
+import br.com.projeto.estoque.viewUpdate.tableModels.TableModelProdutos;
 
 public class Janela_principal extends JFrame {
+
+	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
 	private JTable table_supervisores;
@@ -42,9 +42,6 @@ public class Janela_principal extends JFrame {
 	private JTable table_produtos;
 	private JTable table_1;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -105,7 +102,7 @@ public class Janela_principal extends JFrame {
 		panel_superior.add(tabbedPane_area);
 		
 		JPanel panel_area_supervisor = new JPanel();
-		tabbedPane_area.addTab("¡rea do Supervidor",null, panel_area_supervisor, null);
+		tabbedPane_area.addTab("√Årea do Supervisor",null, panel_area_supervisor, null);
 		panel_area_supervisor.setLayout(null);
 		
 		JTabbedPane tabbedPane_acoes_supervisor = new JTabbedPane(JTabbedPane.TOP);
@@ -133,7 +130,7 @@ public class Janela_principal extends JFrame {
 		
 		
 		JPanel panel_area_fornecedor = new JPanel();
-		tabbedPane_area.addTab("¡rea do Fornecedor", null, panel_area_fornecedor, null);
+		tabbedPane_area.addTab("√Årea do Fornecedor", null, panel_area_fornecedor, null);
 		panel_area_fornecedor.setLayout(null);
 		
 		JTabbedPane tabbedPane_acoes_fornecedor = new JTabbedPane(JTabbedPane.TOP);
@@ -162,7 +159,7 @@ public class Janela_principal extends JFrame {
 		
 		
 		JPanel panel_area_produto = new JPanel();
-		tabbedPane_area.addTab("¡rea do Produto", null, panel_area_produto, null);
+		tabbedPane_area.addTab("√Årea do Produto", null, panel_area_produto, null);
 		panel_area_produto.setLayout(null);
 		
 		JTabbedPane tabbedPane_acoes_produto = new JTabbedPane(JTabbedPane.TOP);
@@ -233,8 +230,15 @@ public class Janela_principal extends JFrame {
 		scrollPane_f.setBounds(10, 11, 517, 290);
 		panel_listar_fornecedores.add(scrollPane_f);
 		
-		table_fornecedores = new JTable();
-		table_fornecedores.setModel(new DefaultTableModel(
+		table_fornecedores = new JTable() {
+			private static final long serialVersionUID = 1L;
+
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
+		TableModelFornecedores.popularTabelaFornecedores(table_fornecedores);
+		/*table_fornecedores.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null},
 				{null, null, null, null},
@@ -255,11 +259,11 @@ public class Janela_principal extends JFrame {
 			new String[] {
 				"New column", "New column", "New column", "New column"
 			}
-		));
+		));*/
 		scrollPane_f.setViewportView(table_fornecedores);
 		
 		JPanel panel_listar_movimentacoes = new JPanel();
-		tabbedPane_listagem.addTab("MovimentaÁıes", null, panel_listar_movimentacoes, null);
+		tabbedPane_listagem.addTab("Movimenta√ß√µes", null, panel_listar_movimentacoes, null);
 		panel_listar_movimentacoes.setLayout(null);
 		
 		JScrollPane scrollPane_m = new JScrollPane();
@@ -267,7 +271,8 @@ public class Janela_principal extends JFrame {
 		panel_listar_movimentacoes.add(scrollPane_m);
 		
 		table_movimentacoes = new JTable();
-		table_movimentacoes.setModel(new DefaultTableModel(
+		TableModelMovimentacoes.popularTabelaMovimentacoes(table_movimentacoes);
+		/*table_movimentacoes.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null},
 				{null, null, null, null, null},
@@ -303,7 +308,7 @@ public class Janela_principal extends JFrame {
 			new String[] {
 				"New column", "New column", "New column", "New column", "New column"
 			}
-		));
+		));*/
 		scrollPane_m.setViewportView(table_movimentacoes);
 		
 		JPanel panel_listar_registros = new JPanel();
@@ -381,7 +386,8 @@ public class Janela_principal extends JFrame {
 		
 		table_produtos = new JTable();
 		scrollPane_p.setViewportView(table_produtos);
-		table_produtos.setModel(new DefaultTableModel(
+		TableModelProdutos.popularTabelaProdutos(table_produtos);
+		/*table_produtos.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null, null, null, null, null},
@@ -425,9 +431,10 @@ public class Janela_principal extends JFrame {
 			new String[] {
 				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
 			}
-		));
+		));*/
 		setLocationRelativeTo(null);
 	}
+	@SuppressWarnings("unused")
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
