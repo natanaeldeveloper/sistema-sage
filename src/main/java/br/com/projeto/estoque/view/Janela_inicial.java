@@ -41,8 +41,8 @@ public class Janela_inicial extends JFrame {
 	}
 
 	public Janela_inicial() {
-		ImageIcon ico =  new ImageIcon(getClass().getResource("/icons/pacote02-30.png")) ;
-		setIconImage(ico.getImage());
+		//ImageIcon ico =  new ImageIcon(getClass().getResource("/icons/pacote02-30.png")) ;
+		//setIconImage(ico.getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 336, 277);
 		contentPane = new JPanel();

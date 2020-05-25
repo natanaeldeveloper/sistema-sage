@@ -35,7 +35,7 @@ public class Janela_exibir_produto extends JInternalFrame {
 		JButton btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
+				ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -76,6 +76,6 @@ public class Janela_exibir_produto extends JInternalFrame {
 		scrollPane.setViewportView(tabelaProduto);
 		getContentPane().setLayout(groupLayout);
 
-//		ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
+		ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
 	}
 }

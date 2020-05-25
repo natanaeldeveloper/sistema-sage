@@ -30,9 +30,6 @@ public class Movimentacao {
 	private Integer qtdProduto;
 	
 	@ManyToOne
-	private Fornecedor fornecedor;
-	
-	@ManyToOne
 	private Produto produto;
 	
 	public Integer getId() {
@@ -65,17 +62,11 @@ public class Movimentacao {
 	public void setQtdProduto(Integer qtdProduto) {
 		this.qtdProduto = qtdProduto;
 	}
-	public void setFornecedor(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
-	}
-	public Fornecedor getFornecedor() {
-		return fornecedor;
-	}
-	
-	public Produto getProduto() {
-		return produto;
-	}
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
+	public Produto getProduto() {
+		return produto;
+	}
+	
 }

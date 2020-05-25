@@ -2,6 +2,7 @@ package br.com.projeto.estoque.controller;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class ControllerAuxiliar {
 	public static void limparCampos(JFormattedTextField cpf, JPasswordField senha, JPasswordField confSenha) {

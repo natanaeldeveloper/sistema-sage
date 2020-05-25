@@ -11,61 +11,86 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.model.Fornecedor;
-import br.com.projeto.estoque.model.Grupo;
 import br.com.projeto.estoque.util.JPAUtil;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ControllerValidationProduto {
-
 	private static EntityManager manager;
 
 	// Executa o cadastro da Persist Produto
-	public static void cadastrarProduto(JComboBox cbProduto, JComboBox cbFornecedor, JTextField tfDescricao, JTextField tfPreco,
-			JTextField tfQuantidade, JDateChooser dcFabricacao, JDateChooser dcVencimento) {
-		if (conferirDados(cbProduto, cbFornecedor, tfPreco, tfQuantidade, dcFabricacao, dcVencimento)) {
-			Integer id_produto = pegarProdutos(cbProduto);
-			Integer id_fornecedor = pegarFornecedores(cbFornecedor);
-			BigDecimal preco = null;
+	public static void executarCadastro(JTextField tfNome, JTextField tfQuantidade, JTextField tfPeso,
+			JComboBox cbUnidade, JTextField tfPreco, JEditorPane tpDescricao, JDateChooser dcFabricacao,
+			JDateChooser dcVencimento, JComboBox cbCategoria, JComboBox cbFornecedor) {
+		if (conferirDados(tfNome, tfQuantidade, tfPeso, cbUnidade, tfPreco, tpDescricao, dcFabricacao, dcVencimento,
+				cbCategoria, cbFornecedor)) {
+			String nome = tfNome.getText();
 			Integer qtd = null;
+			String unidade = cbUnidade.getSelectedItem().toString();
+			Double peso = null;
+			BigDecimal preco = null;
 			try {
-				preco = new BigDecimal(tfPreco.getText());
 				qtd = Integer.parseInt(tfQuantidade.getText());
+				peso = Double.parseDouble(tfPeso.getText());
+				preco = new BigDecimal(tfPreco.getText());
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null,
 						"Valor inválido inserido! (Não use vírgulas, apenas pontos, e a quantidade não pode ser decimal)",
 						"Valor inválido", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			String descricao = tfDescricao.getText();
 			Calendar dataFabricacao = toCalendar(dcFabricacao.getDate());
 			Calendar dataVencimento = toCalendar(dcVencimento.getDate());
+			Integer categoria_id = pegarCategorias(cbCategoria);
+			Integer fornecedor_id = pegarFornecedores(cbFornecedor);
+			String descricao = tpDescricao.getText();
 			try {
-				ControllerProduto cp = new ControllerProduto();
-				cp.cadastrarProduto(id_produto, id_fornecedor, descricao, preco, qtd, dataFabricacao, dataVencimento);
+				cadastrarDados(nome, qtd, unidade, peso, preco, descricao, dataFabricacao, dataVencimento, categoria_id,
+						fornecedor_id);
 			} catch (Exception exceptionCadastro) {
-				JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar este Item!", "Erro de cadastro",
+				JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar o Produto!", "Erro de cadastro",
 						JOptionPane.ERROR_MESSAGE);
 				System.out.println(exceptionCadastro.getMessage());
 				return;
 			}
-			JOptionPane.showMessageDialog(null, "Item cadastrado com sucesso!", "Cadastro realizado",
+			limparDados(tfNome, tfQuantidade, tfPeso, tfPreco, tpDescricao);
+		}
+	}
+
+	public static void cadastrarDados(String nome, int qtd, String unidade, Double peso, BigDecimal preco,
+			String descricao, Calendar dataValidade, Calendar dataVencimento, Integer categoria_id,
+			Integer fornecedor_id) {
+		manager = new JPAUtil().getEntityManager();
+		Categoria c = manager.find(Categoria.class, categoria_id);
+		Fornecedor f = manager.find(Fornecedor.class, fornecedor_id);
+		if (f == null) {
+			System.out.println("Fornecedor inexistente");
+			return;
+		} else if (c == null) {
+			System.out.println("Categoria inexistente");
+		} else {
+			ControllerProduto daoP = new ControllerProduto();
+			daoP.cadastrarProduto(nome, qtd, unidade, peso, preco, dataValidade, dataVencimento, c, f, descricao);
+			JOptionPane.showMessageDialog(null, "Produto cadastrado!", "Produto Cadastrado",
 					JOptionPane.INFORMATION_MESSAGE);
-			limparDados(tfPreco, tfQuantidade);
 		}
 	}
 
 	// Confere os dados da Persist Produto
-	public static boolean conferirDados(JComboBox cbProduto, JComboBox cbFornecedor, JTextField tfPreco,
-			JTextField tfQuantidade, JDateChooser dcFabricacao, JDateChooser dcVencimento) {
-		if (!(cbProduto.getItemCount() < 1 || cbFornecedor.getItemCount() < 1 || tfPreco.getText().isEmpty()
-				|| tfQuantidade.getText().isEmpty() || dcFabricacao.getDate() == null
-				|| dcVencimento.getDate() == null)) {
+	public static boolean conferirDados(JTextField tfNome, JTextField tfQuantidade, JTextField tfPeso,
+			JComboBox cbUnidade, JTextField tfPreco, JEditorPane tpDescricao, JDateChooser dcFabricacao,
+			JDateChooser dcVencimento, JComboBox cbCategoria, JComboBox cbFornecedor) {
+		if (!(tfNome.getText().isEmpty() || tfQuantidade.getText().isEmpty() || cbUnidade.getItemCount() < 1
+				|| tfPeso.getText().isEmpty() || tfPreco.getText().isEmpty() || tpDescricao.getText().isEmpty()
+				|| dcFabricacao.getDate() == null || dcVencimento.getDate() == null || cbCategoria.getItemCount() < 1
+				|| cbFornecedor.getItemCount() < 1)) {
 			if (dataErrada(dcFabricacao, dcVencimento)) {
 				return false;
 			}
@@ -95,56 +120,56 @@ public class ControllerValidationProduto {
 		return false;
 	}
 
-	// Preenche os Produtos da JComboBox da Persist Item
-	public static List<Grupo> preencherProdutos() {
+	// Preenche as Categorias da JComboBox da Persis Produto
+	public static List<Categoria> preencherCategorias() {
 		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Grupo g where g.id > -1");
-		List<Grupo> grupos = query.getResultList();
-		manager.close();
-		return grupos;
+		Query query = manager.createQuery("select nome from Categoria c where c.id > -1");
+		List<Categoria> categorias = query.getResultList();
+		return categorias;
 	}
 
-	// Preenche as Categorias da JComboBox da Persist Item
+	// Pega o ID da Categoria da JComboBox, da Perist Produto
+	public static Integer pegarCategorias(JComboBox cbCategoria) {
+		Integer idCategoria = 0;
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select c from Categoria c where c.nome=:nomeCategoria");
+		query.setParameter("nomeCategoria", cbCategoria.getSelectedItem());
+		List<Categoria> categorias = query.getResultList();
+		for (Categoria categoria : categorias) {
+			idCategoria = categoria.getId();
+		}
+		return idCategoria;
+	}
+
+	// Preenche as Categorias da JComboBox da Persis Produto
 	public static List<Fornecedor> preencherFornecedores() {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select nome from Fornecedor f where f.id > -1");
 		List<Fornecedor> fornecedores = query.getResultList();
-		manager.close();
 		return fornecedores;
 	}
 
-	// Pega o ID do Produto da JComboBox da Persist Item
-	public static Integer pegarProdutos(JComboBox cbProduto) {
-		manager = new JPAUtil().getEntityManager();
-		Integer idProduto = 0;
-		Query query = manager.createQuery("select p from Produto p where p.nome=:nomeProduto");
-		query.setParameter("nomeProduto", cbProduto.getSelectedItem());
-		List<Grupo> grupos = query.getResultList();
-		for (Grupo grupo : grupos) {
-			idProduto = grupo.getId();
-		}
-		manager.close();
-		return idProduto;
-	}
-
-	// Pega o ID do Fornecedor da JComboBox da Persist Item
+	// Pega o ID da Categoria da JComboBox, da Perist Produto
 	public static Integer pegarFornecedores(JComboBox cbFornecedor) {
-		manager = new JPAUtil().getEntityManager();
 		Integer idFornecedor = 0;
+		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select f from Fornecedor f where f.nome=:nomeFornecedor");
 		query.setParameter("nomeFornecedor", cbFornecedor.getSelectedItem());
 		List<Fornecedor> fornecedores = query.getResultList();
 		for (Fornecedor fornecedor : fornecedores) {
 			idFornecedor = fornecedor.getId();
 		}
-		manager.close();
 		return idFornecedor;
 	}
 
 	// Limpa os dados dos campos da Persist Produto
-	public static void limparDados(JTextField tfPreco, JTextField tfQuantidade) {
-		tfPreco.setText("");
+	public static void limparDados(JTextField tfNome, JTextField tfQuantidade, JTextField tfPeso, JTextField tfPreco,
+			JEditorPane tpDescricao) {
+		tfNome.setText("");
+		tpDescricao.setText("");
 		tfQuantidade.setText("");
+		tfPeso.setText("");
+		tfPreco.setText("");
 	}
 
 	// Converte Date para Calendar

@@ -1,30 +1,30 @@
 package br.com.projeto.estoque.viewUpdate;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.persistence.EntityManager;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
 
+import java.awt.Color;
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 
+import br.com.projeto.estoque.util.Essencial;
 import br.com.projeto.estoque.util.JPAUtil;
+import javax.swing.JButton;
+import java.awt.SystemColor;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 public class Janela_inicial extends JFrame {
-	
-	private static final long serialVersionUID = 1L;
-
 	private JProgressBar progressBar;
 	private JPanel contentPane;
 	public String loanding = "";
@@ -107,13 +107,13 @@ public class Janela_inicial extends JFrame {
 			}catch(ExceptionInInitializerError e) {
 				result = false;
 				lblNewLabel_1.setForeground(Color.red);
-				lblNewLabel_1.setText("Erro na conexï¿½o!");
+				lblNewLabel_1.setText("Erro na conexão!");
 				progressBar.setIndeterminate(false);
 			}
 			if(manager == null) {
 				result = false;
 				lblNewLabel_1.setForeground(Color.red);
-				lblNewLabel_1.setText("Erro na conexï¿½o!");
+				lblNewLabel_1.setText("Erro na conexão!");
 				progressBar.setIndeterminate(false);
 			}else {
 				progressBar.setIndeterminate(false);

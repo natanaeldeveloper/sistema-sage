@@ -1,6 +1,7 @@
 package br.com.projeto.estoque.controller;
 
 import java.awt.Component;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -10,29 +11,31 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import br.com.projeto.estoque.model.Grupo;
+import br.com.projeto.estoque.model.Produto;
 
 public class ControllerViewProduto {
-	public static void popularTabelaProdutos(JTable tabelaProduto, List<Grupo> listaProdutos) {
-		String estocado;
+	public static void popularTabelaProdutos(JTable tabelaProduto, List<Produto> listaProdutos) {
 		DefaultTableModel modelo = new DefaultTableModel();
 
 		modelo.addColumn("ID:");
 		modelo.addColumn("Código:");
-		modelo.addColumn("Estocado:");
 		modelo.addColumn("Nome:");
 		modelo.addColumn("Categoria:");
+		modelo.addColumn("Quantidade:");
+		modelo.addColumn("Preço:");
 		modelo.addColumn("Peso:");
 		modelo.addColumn("Unidade:");
+		modelo.addColumn("Fornecedor:");
+		modelo.addColumn("Data de Fabricação:");
+		modelo.addColumn("Data de Vencimento:");
 
-		for (Grupo grupo : listaProdutos) {
-			if (grupo.isEstocado() == false) {
-				estocado = "Não";
-			} else {
-				estocado = "Sim";
-			}
-			modelo.addRow(new Object[] { grupo.getId(), grupo.getCodigo(), estocado, grupo.getNome(),
-					grupo.getCategoria().getNome(), grupo.getPeso(), grupo.getUnidade(), });
+		for (Produto produto : listaProdutos) {
+			SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+			modelo.addRow(new Object[] { produto.getId(), produto.getCodigo(), produto.getNome(),
+					produto.getCategoria().getNome(), produto.getQuantidade(), produto.getPreco(), produto.getPeso(),
+					produto.getUnidade(), produto.getFornecedor().getNome(),
+					format1.format(produto.getDataFabricacao().getTime()),
+					format1.format(produto.getDataVencimento().getTime()) });
 			;
 		}
 		tabelaProduto.setModel(modelo);

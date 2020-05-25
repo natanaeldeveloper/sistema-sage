@@ -1,32 +1,35 @@
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-             version="2.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+	<persistence-unit name="estoque"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-    <persistence-unit name="estoqueTecFour">
-        <description></description>
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        
-        <class>br.com.projeto.estoque.model.Grupo</class>
-        <class>br.com.projeto.estoque.model.Produto</class>
-        <class>br.com.projeto.estoque.model.Categoria</class>
-		<class>br.com.projeto.estoque.model.Fornecedor</class>
-		<class>br.com.projeto.estoque.model.Gerente</class>
-		<class>br.com.projeto.estoque.model.Movimentacao</class>
-		<class>br.com.projeto.estoque.model.Registro</class>
-		
-        <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/estoqueTecFour?serverTimezone=GMT-3" />
-            <property name="javax.persistence.jdbc.user" value="root" />
-            <property name="javax.persistence.jdbc.password" value="" />
+		<class>br.com.inf.estoque.model.Fornecedor</class>
 
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect	" />
-            <property name="hibernate.hbm2ddl.auto" value="update" />
-            <property name="hibernate.show_sql" value="true" />
-            <property name="hibernate.format_sql" value="true"/>
-        </properties>
+		<properties>
+			<property name="hibernate.archive.autodetection" value="class" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
 
-    </persistence-unit>
+			<!-- Conexão com o banco de dados -->
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+			<property name="hibernate.connection.driver_class"
+				value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.connection.url"
+				value="jdbc:mysql://localhost:3306/EstoqueTecFour?serverTimezone=GMT" />
+			<property name="hibernate.connection.user" value="root" />
+			<property name="hibernate.connection.password" value="root" />
 
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<!--<property name="use_sql_comments" value="true" /> -->
+
+		</properties>
+	</persistence-unit>
 </persistence>
