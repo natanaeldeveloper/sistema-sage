@@ -17,7 +17,7 @@ public class ControllerRegistroGerente {
 		return dataHora;
 	}
 
-	public RegistroGerente criarRegistroGerente(TipoComportamento tipoComportamento, Gerente gerente) {		
+	public RegistroGerente criarRegistroGerente(TipoComportamento tipoComportamento, Gerente gerente) {
 		RegistroGerente registro = new RegistroGerente();
 		registro.setGerente(gerente);
 		registro.setDataEHora(pegarDataHora());

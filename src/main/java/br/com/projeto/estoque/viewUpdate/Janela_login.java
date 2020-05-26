@@ -22,10 +22,17 @@ import com.formdev.flatlaf.FlatDarkLaf;
 
 import br.com.projeto.estoque.controller.ControllerGerente;
 import br.com.projeto.estoque.model.TipoComportamento;
+<<<<<<< HEAD
 import br.com.projeto.estoque.view.Janela_home;
 
 public class Janela_login extends JFrame {
 
+=======
+
+public class Janela_login extends JFrame {
+	private static final long serialVersionUID = 1L;
+	
+>>>>>>> andrew
 	private JPanel contentPane;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
