@@ -20,10 +20,12 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
+import br.com.projeto.estoque.controller.ControllerGerente;
+import br.com.projeto.estoque.model.TipoComportamento;
+
 public class Janela_login extends JFrame {
-
 	private static final long serialVersionUID = 1L;
-
+	
 	private JPanel contentPane;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
@@ -74,7 +76,8 @@ public class Janela_login extends JFrame {
 		lblNewLabel_2.setBounds(90, 63, 330, 14);
 		panel.add(lblNewLabel_2);
 		
-		JFormattedTextField formattedTextField = new JFormattedTextField();
+		//cpf gerente
+		final JFormattedTextField formattedTextField = new JFormattedTextField();
 		formattedTextField.setForeground(Color.BLACK);
 		formattedTextField.setBackground(SystemColor.control);
 		formattedTextField.setBounds(90, 84, 330, 35);
@@ -87,6 +90,7 @@ public class Janela_login extends JFrame {
 		lblNewLabel_2_1.setBounds(90, 130, 330, 14);
 		panel.add(lblNewLabel_2_1);
 		
+		//senha gerente
 		passwordField = new JPasswordField();
 		passwordField.setForeground(Color.BLACK);
 		passwordField.setBackground(SystemColor.control);
@@ -101,9 +105,17 @@ public class Janela_login extends JFrame {
 		JButton btnNewButton = new JButton("Entrar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Janela_principal jp = new Janela_principal();
-				jp.setVisible(true);
-				dispose();
+				
+				ControllerGerente controller = new ControllerGerente();
+				@SuppressWarnings("deprecation")
+				String senha = passwordField.getText();
+				String cpf = formattedTextField.getText();
+				if(controller.fazerLogin(cpf, senha, TipoComportamento.ENTRADA)==true) {
+					Janela_principal jp = new Janela_principal();
+					jp.setVisible(true);
+					dispose();
+				}		
+				
 			}
 		});
 		//btnNewButton.setBackground(SystemColor.menu);

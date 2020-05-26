@@ -11,9 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.NamedQuery;
+
+@NamedQuery(name="buscarRegistrosGerentes", query="select r from RegistroGerente r")
 @Entity
 public class RegistroGerente {
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;

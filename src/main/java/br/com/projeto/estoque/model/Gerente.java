@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.NamedQuery;
 @NamedQuery(name="buscarGerente", query="select g from Gerente g where g.cpf=:Gcpf")
+@NamedQuery(name="buscarGerentes", query="select g from Gerente g")
 @Entity
 public class Gerente {
 	@Id

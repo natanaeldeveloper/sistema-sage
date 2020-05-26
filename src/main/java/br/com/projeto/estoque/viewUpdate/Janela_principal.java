@@ -23,24 +23,21 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
-import br.com.projeto.estoque.viewUpdate.tableModels.TableModelFornecedores;
-import br.com.projeto.estoque.viewUpdate.tableModels.TableModelMovimentacoes;
-import br.com.projeto.estoque.viewUpdate.tableModels.TableModelProdutos;
+import br.com.projeto.estoque.controller.ControllerTableModels;
 
 public class Janela_principal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
-	private JTable table_supervisores;
+	private JTable table_gerentes;
 	private JTable table_fornecedores;
 	private JTable table_movimentacoes;
 	private JTable table_produtos;
-	private JTable table_1;
+	private JTable table_registros;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -63,7 +60,7 @@ public class Janela_principal extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 700);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
@@ -101,30 +98,30 @@ public class Janela_principal extends JFrame {
 		tabbedPane_area.setBounds(0, 0, 623, 383);
 		panel_superior.add(tabbedPane_area);
 		
-		JPanel panel_area_supervisor = new JPanel();
-		tabbedPane_area.addTab("Área do Supervisor",null, panel_area_supervisor, null);
-		panel_area_supervisor.setLayout(null);
+		JPanel panel_area_gerente = new JPanel();
+		tabbedPane_area.addTab("Área do Gerente",null, panel_area_gerente, null);
+		panel_area_gerente.setLayout(null);
 		
-		JTabbedPane tabbedPane_acoes_supervisor = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane_acoes_supervisor.setBounds(0, 0, 618, 355);
-		panel_area_supervisor.add(tabbedPane_acoes_supervisor);
+		JTabbedPane tabbedPane_acoes_gerente = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_acoes_gerente.setBounds(0, 0, 618, 355);
+		panel_area_gerente.add(tabbedPane_acoes_gerente);
 		
 		
 		
-		//ADICIONAR CAMPOS DE CADASTRAR SUPERVISOR NESSE PANEL
-		JPanel panel_add_supervisor = new JPanel();
-		tabbedPane_acoes_supervisor.addTab("Cadastrar Supervisor", new ImageIcon(getClass().getResource("/sage_icons/profile_plus_round [#1343].png")), panel_add_supervisor, null);
-		panel_add_supervisor.setLayout(null);
+		//ADICIONAR CAMPOS DE CADASTRAR gerente NESSE PANEL
+		JPanel panel_add_gerente = new JPanel();
+		tabbedPane_acoes_gerente.addTab("Cadastrar Gerente", new ImageIcon(getClass().getResource("/sage_icons/profile_plus_round [#1343].png")), panel_add_gerente, null);
+		panel_add_gerente.setLayout(null);
 		
-		//ADICIONAR CAMPOS DE ATUALIZAR SUPERVISOR NESSE PANEL
-		JPanel panel_update_supervisor = new JPanel();
-		tabbedPane_acoes_supervisor.addTab("Atualizar Supervisor",new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1342].png")), panel_update_supervisor, null);
-		panel_update_supervisor.setLayout(null);
+		//ADICIONAR CAMPOS DE ATUALIZAR gerente NESSE PANEL
+		JPanel panel_update_gerente = new JPanel();
+		tabbedPane_acoes_gerente.addTab("Atualizar Gerente",new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1342].png")), panel_update_gerente, null);
+		panel_update_gerente.setLayout(null);
 		
-		//ADICIONAR CAMPOS DE DELETAR SUPERVISOR NESSE PANEL
-		JPanel panel_delete_supervisor = new JPanel();
-		tabbedPane_acoes_supervisor.addTab("Deletar Supervisor", new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_supervisor, null);
-		panel_delete_supervisor.setLayout(null);
+		//ADICIONAR CAMPOS DE DELETAR gerente NESSE PANEL
+		JPanel panel_delete_gerente = new JPanel();
+		tabbedPane_acoes_gerente.addTab("Deletar Gerente", new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_gerente, null);
+		panel_delete_gerente.setLayout(null);
 		
 		
 		
@@ -191,36 +188,16 @@ public class Janela_principal extends JFrame {
 		tabbedPane_listagem.setBounds(642, 0, 552, 333);
 		panel_superior.add(tabbedPane_listagem);
 		
-		JPanel panel_listar_supervisores = new JPanel();
-		tabbedPane_listagem.addTab("Supervisores", null, panel_listar_supervisores, null);
-		panel_listar_supervisores.setLayout(null);
+		JPanel panel_listar_gerentes = new JPanel();
+		tabbedPane_listagem.addTab("Gerentes", null, panel_listar_gerentes, null);
+		panel_listar_gerentes.setLayout(null);
 		
 		JScrollPane scrollPane_s = new JScrollPane();
 		scrollPane_s.setBounds(10, 11, 517, 291);
-		panel_listar_supervisores.add(scrollPane_s);
+		panel_listar_gerentes.add(scrollPane_s);
 		
-		table_supervisores = new JTable();
-		table_supervisores.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column"
-			}
-		));
-		scrollPane_s.setViewportView(table_supervisores);
+		table_gerentes = new JTable();
+		scrollPane_s.setViewportView(table_gerentes);
 		
 		JPanel panel_listar_fornecedores = new JPanel();
 		tabbedPane_listagem.addTab("Fornecedores", null, panel_listar_fornecedores, null);
@@ -237,29 +214,7 @@ public class Janela_principal extends JFrame {
 				return false;
 			}
 		};
-		TableModelFornecedores.popularTabelaFornecedores(table_fornecedores);
-		/*table_fornecedores.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column"
-			}
-		));*/
+//		ControllerTableModels.popularTabelaFornecedores(table_fornecedores);
 		scrollPane_f.setViewportView(table_fornecedores);
 		
 		JPanel panel_listar_movimentacoes = new JPanel();
@@ -271,44 +226,7 @@ public class Janela_principal extends JFrame {
 		panel_listar_movimentacoes.add(scrollPane_m);
 		
 		table_movimentacoes = new JTable();
-		TableModelMovimentacoes.popularTabelaMovimentacoes(table_movimentacoes);
-		/*table_movimentacoes.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-				{null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column"
-			}
-		));*/
+//		ControllerTableModels.popularTabelaMovimentacoes(table_movimentacoes);
 		scrollPane_m.setViewportView(table_movimentacoes);
 		
 		JPanel panel_listar_registros = new JPanel();
@@ -319,31 +237,9 @@ public class Janela_principal extends JFrame {
 		scrollPane_r.setBounds(10, 11, 517, 283);
 		panel_listar_registros.add(scrollPane_r);
 		
-		table_1 = new JTable();
-		table_1.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		));
-		scrollPane_r.setViewportView(table_1);
+		table_registros = new JTable();
+//		ControllerTableModels.popularTableRegistrosGerente(table_registros);
+		scrollPane_r.setViewportView(table_registros);
 		
 		JSeparator separator_vertical = new JSeparator();
 		separator_vertical.setOrientation(SwingConstants.VERTICAL);
@@ -386,52 +282,8 @@ public class Janela_principal extends JFrame {
 		
 		table_produtos = new JTable();
 		scrollPane_p.setViewportView(table_produtos);
-		TableModelProdutos.popularTabelaProdutos(table_produtos);
-		/*table_produtos.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		));*/
+//		ControllerTableModels.popularTabelaProdutos(table_produtos);
+		new ControllerTableModels(table_registros, table_gerentes, table_fornecedores, table_produtos, table_movimentacoes);
 		setLocationRelativeTo(null);
 	}
 	@SuppressWarnings("unused")
