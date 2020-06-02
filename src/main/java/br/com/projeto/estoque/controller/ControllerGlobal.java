@@ -1,4 +1,4 @@
-package br.com.projeto.estoque.controller;
+﻿package br.com.projeto.estoque.controller;
 
 
 import br.com.projeto.estoque.model.TipoComportamento;
@@ -63,5 +63,8 @@ public class ControllerGlobal extends ControllerValidacao {
 //
 //		return criou_usuario;
 //	}
+	public void teste(){
+		int a = 0;
+	}
 
 }
