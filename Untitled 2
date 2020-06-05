@@ -1,0 +1,1347 @@
+package br.com.projeto.estoque.viewUpdate;
+
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Cursor;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.IntelliJTheme;
+import com.toedter.calendar.JDateChooser;
+
+import br.com.projeto.estoque.controller.ControllerAtualizarProduto;
+import br.com.projeto.estoque.controller.ControllerAuxiliar;
+import br.com.projeto.estoque.controller.ControllerTableModels;
+import br.com.projeto.estoque.controller.ControllerValidationFornecedor;
+import br.com.projeto.estoque.controller.ControllerValidationProduto;
+
+@SuppressWarnings("rawtypes")
+public class Janela_principal extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
+	private JPanel contentPane;
+	private JTable table_gerentes;
+	private JTable table_fornecedores;
+	private JTable table_movimentacoes;
+	private JTable table_registros;
+	private JTable table_produtos;
+	private JPasswordField passwordField_1;
+	private JPasswordField passwordField;
+	private JPasswordField passwordField_2;
+	private JFormattedTextField c_cpfNovo;
+	private JFormattedTextField formattedTextField_1_1;
+	private JFormattedTextField formattedTextField_1_2_2_2;
+	private JFormattedTextField formattedTextField_1;
+	private JFormattedTextField formattedTextField;
+	private JPasswordField passwordField_3;
+	private JPasswordField passwordField_4;
+	private JTextField c_cidade_af;
+	private JTextField c_nome_af;
+	private JTextField c_razaosocial_af;
+	private JTextField c_numero_af;
+	private JTextField c_logradouro_af;
+	private JTextField c_complemento_af;
+	private JFormattedTextField c_cnpj_af;
+	private JFormattedTextField c_cpfAtual_1;
+	private JFormattedTextField formattedTextField_1_2_2;
+	private JFormattedTextField c_telefone_af;
+	private JFormattedTextField c_cep_af;
+	private JFormattedTextField c_bairro_af;
+	private JFormattedTextField c_email_af;
+	private JFormattedTextField c_cpfNovo_1;
+	private JFormattedTextField formattedTextField_1_2_1;
+	private JFormattedTextField c_cpfAtual_2;
+	private JFormattedTextField c_cpfAtual;
+	private JFormattedTextField formattedTextField_1_2;
+	private JFormattedTextField tfCodigoCadastrarProduto;
+	private JFormattedTextField c_cnpj_cf;
+	private JFormattedTextField c_telefone_af_1;
+	private JFormattedTextField c_email_cf;
+	private JFormattedTextField c_cep_cf;
+	private JComboBox c_estado_cf;
+	private JFormattedTextField c_bairro_cf;
+	private JComboBox c_estado_af;
+	private JComboBox comboBox_2;
+	private JComboBox cbUnidadeCadastrarProduto;
+	private JComboBox comboBox;
+	private JComboBox comboBox_1;
+	private JTextField c_cidade_cf;
+	private JTextField c_nome_cf;
+	private JTextField c_razaosocial_cf;
+	private JTextField c_numero_cf;
+	private JTextField c_logradouro_cf;
+	private JTextField c_complemento_cf;
+	private JButton bt_limpar_cf;
+	private JProgressBar progressBar_tabelas_superior;
+	private JTextField textField_1;
+	private JTextField textField;
+	private JTextField textField_2;
+	private JTextField tfNomeCadastrarProduto;
+	private JTextField tfMedidaCadastrarProduto;
+	@SuppressWarnings("unused")
+	private ControllerTableModels ctb;
+	private JSpinner spinner;
+	private JSpinner spinner_1;
+	private JEditorPane editorPane;
+	private JEditorPane editorPane_1;
+	private JDateChooser dcFabricacao;
+	private JDateChooser dcVencimento;
+	private JDateChooser dcFabricacao_1;
+	private JDateChooser dcVencimento_1;
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					// IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themas/Dark.json"));
+					UIManager.setLookAndFeel(new FlatDarkLaf());
+					Janela_principal frame = new Janela_principal();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	@SuppressWarnings("unchecked")
+	public Janela_principal() {
+		setTitle("SAGE - Sistema Administrativo de Gerencimento de Estoque");
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1216, 603);
+
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu mnNewMenu_1 = new JMenu("Registros");
+		mnNewMenu_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		menuBar.add(mnNewMenu_1);
+
+		JMenu mnNewMenu_2 = new JMenu("Gerentes");
+		// mnNewMenu_2.setIcon(new
+		// ImageIcon(getClass().getResource("/sage_icons/profile_round [#1342].png")));
+		mnNewMenu_1.add(mnNewMenu_2);
+
+		JMenuItem mntmNewMenuItem = new JMenuItem("Gerar Relatório");
+		mnNewMenu_2.add(mntmNewMenuItem);
+
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Visualizar");
+		mnNewMenu_2.add(mntmNewMenuItem_1);
+
+		JMenu mnNewMenu_3 = new JMenu("Supervisores");
+		// mnNewMenu_3.setIcon( new
+		// ImageIcon(getClass().getResource("/sage_icons/profile_image_round
+		// [#1326].png")));
+		mnNewMenu_1.add(mnNewMenu_3);
+
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Gerar Relatório");
+		mnNewMenu_3.add(mntmNewMenuItem_2);
+
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Visualizar");
+		mnNewMenu_3.add(mntmNewMenuItem_4);
+
+		JMenu mnNewMenu_4 = new JMenu("Movimentações");
+		// mnNewMenu_2.setIcon(new
+		// ImageIcon(getClass().getResource("/sage_icons/cart_round [#1166].png")));
+		mnNewMenu_1.add(mnNewMenu_4);
+
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Gerar Relatório");
+		mnNewMenu_4.add(mntmNewMenuItem_5);
+
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Visualizar");
+		mnNewMenu_4.add(mntmNewMenuItem_6);
+
+		JMenu mnNewMenu = new JMenu("Denifições");
+		mnNewMenu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		menuBar.add(mnNewMenu);
+
+		JMenu mnNewMenu_5 = new JMenu("Alterar Tema");
+		mnNewMenu.add(mnNewMenu_5);
+
+		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Dark");
+		mntmNewMenuItem_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					UIManager.setLookAndFeel(new FlatDarkLaf());
+				} catch (UnsupportedLookAndFeelException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				SwingUtilities.updateComponentTreeUI(new Janela_principal());
+				Janela_principal t = new Janela_principal();
+				repaint();
+				validate();
+				t.setVisible(true);
+				dispose();
+
+			}
+		});
+		mnNewMenu_5.add(mntmNewMenuItem_7);
+
+		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Light");
+		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					UIManager.setLookAndFeel(new FlatIntelliJLaf());
+				} catch (UnsupportedLookAndFeelException e1) {
+					e1.printStackTrace();
+				}
+				SwingUtilities.updateComponentTreeUI(new Janela_principal());
+				Janela_principal t = new Janela_principal();
+				repaint();
+				validate();
+				t.setVisible(true);
+				dispose();
+			}
+		});
+		mnNewMenu_5.add(mntmNewMenuItem_8);
+
+		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Dark Purple");
+		mntmNewMenuItem_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themes/DarkPurple.json"));
+				SwingUtilities.updateComponentTreeUI(new Janela_principal());
+				Janela_principal t = new Janela_principal();
+				repaint();
+				validate();
+				t.setVisible(true);
+				dispose();
+			}
+		});
+		mnNewMenu_5.add(mntmNewMenuItem_9);
+
+		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Light Contrast");
+		mntmNewMenuItem_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themes/light.json"));
+				SwingUtilities.updateComponentTreeUI(new Janela_principal());
+				Janela_principal t = new Janela_principal();
+				repaint();
+				validate();
+				t.setVisible(true);
+				dispose();
+			}
+		});
+		mnNewMenu_5.add(mntmNewMenuItem_10);
+
+		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Dark Contrast");
+		mntmNewMenuItem_11.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themes/dark.json"));
+				SwingUtilities.updateComponentTreeUI(new Janela_principal());
+				Janela_principal t = new Janela_principal();
+				repaint();
+				validate();
+				t.setVisible(true);
+				dispose();
+			}
+		});
+		mnNewMenu_5.add(mntmNewMenuItem_11);
+
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Sair");
+		mnNewMenu.add(mntmNewMenuItem_3);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JPanel panel_superior = new JPanel();
+		panel_superior.setBounds(0, 0, 1210, 553);
+		contentPane.add(panel_superior);
+		panel_superior.setLayout(null);
+
+		JTabbedPane tabbedPane_area = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_area.setBounds(0, 0, 623, 553);
+		panel_superior.add(tabbedPane_area);
+
+		JPanel panel_area_gerente = new JPanel();
+		tabbedPane_area.addTab("Área do Supervisor", null, panel_area_gerente, null);
+		panel_area_gerente.setLayout(null);
+
+		JTabbedPane tabbedPane_acoes_gerente = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_acoes_gerente.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		tabbedPane_acoes_gerente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		tabbedPane_acoes_gerente.setBounds(0, 0, 618, 525);
+		panel_area_gerente.add(tabbedPane_acoes_gerente);
+
+		// ADICIONAR CAMPOS DE CADASTRAR gerente NESSE PANEL
+		JPanel panel_add_gerente = new JPanel();
+		tabbedPane_acoes_gerente.addTab("Cadastrar Supervisor",
+				new ImageIcon(getClass().getResource("/sage_icons/profile_plus_round [#1343].png")), panel_add_gerente,
+				null);
+		panel_add_gerente.setLayout(null);
+
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnLimpar.setBounds(383, 406, 105, 34);
+		panel_add_gerente.add(btnLimpar);
+
+		JButton btnNewButton = new JButton("Cadastrar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(498, 406, 105, 34);
+		panel_add_gerente.add(btnNewButton);
+
+		JLayeredPane layeredPane_2_1 = new JLayeredPane();
+		layeredPane_2_1.setBorder(
+				new TitledBorder(null, "Dados do novo Supervisor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2_1.setBounds(20, 28, 583, 113);
+		panel_add_gerente.add(layeredPane_2_1);
+
+		passwordField_2 = new JPasswordField();
+		passwordField_2.setColumns(10);
+		passwordField_2.setBounds(21, 50, 253, 25);
+		layeredPane_2_1.add(passwordField_2);
+
+		JLabel lblNewLabel_2_1_1 = new JLabel("Senha:");
+		lblNewLabel_2_1_1.setBounds(21, 26, 253, 25);
+		layeredPane_2_1.add(lblNewLabel_2_1_1);
+
+		JLabel lblNewLabel_5_1 = new JLabel("CPF:");
+		lblNewLabel_5_1.setBounds(307, 26, 253, 25);
+		layeredPane_2_1.add(lblNewLabel_5_1);
+
+		c_cpfAtual_1 = new JFormattedTextField();
+		c_cpfAtual_1.setColumns(10);
+		c_cpfAtual_1.setBounds(307, 50, 253, 25);
+		layeredPane_2_1.add(c_cpfAtual_1);
+
+		// ADICIONAR CAMPOS DE ATUALIZAR gerente NESSE PANEL
+		JPanel panel_update_gerente = new JPanel();
+		tabbedPane_acoes_gerente.addTab("Atualizar Supervisor",
+				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1342].png")), panel_update_gerente,
+				null);
+		panel_update_gerente.setLayout(null);
+
+		JButton btnLimpar_1 = new JButton("Limpar");
+		btnLimpar_1.setBounds(64, 406, 105, 34);
+		panel_update_gerente.add(btnLimpar_1);
+
+		JButton btnAtualizar = new JButton("Atualizar Tudo");
+		btnAtualizar.setBounds(476, 406, 127, 34);
+		panel_update_gerente.add(btnAtualizar);
+
+		JButton btnAtualizarSenha = new JButton("Atualizar CPF");
+		btnAtualizarSenha.setBounds(327, 406, 139, 34);
+		panel_update_gerente.add(btnAtualizarSenha);
+
+		JButton btnAtualizarSenha_1 = new JButton("Atualizar Senha");
+		btnAtualizarSenha_1.setBounds(178, 406, 139, 34);
+		panel_update_gerente.add(btnAtualizarSenha_1);
+
+		JLayeredPane layeredPane_1 = new JLayeredPane();
+		layeredPane_1.setBorder(
+				new TitledBorder(null, "Dados do Supervisor", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		layeredPane_1.setBounds(20, 152, 583, 190);
+		panel_update_gerente.add(layeredPane_1);
+
+		JLabel lblPesquisarId = new JLabel("Pesquisar pelo ID:");
+		lblPesquisarId.setBounds(20, 42, 182, 25);
+		layeredPane_1.add(lblPesquisarId);
+		// lblPesquisarId.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+
+		formattedTextField_1_2 = new JFormattedTextField();
+		formattedTextField_1_2.setBounds(20, 69, 86, 25);
+		layeredPane_1.add(formattedTextField_1_2);
+		formattedTextField_1_2.setText("0");
+		formattedTextField_1_2.setColumns(10);
+		// formattedTextField_1_2.setBackground(SystemColor.controlHighlight);
+
+		JButton btnNewButton_1 = new JButton("Buscar");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				passwordField_1.setEditable(true);
+				c_cpfNovo.setEditable(true);
+			}
+		});
+		btnNewButton_1.setBounds(116, 69, 86, 25);
+		layeredPane_1.add(btnNewButton_1);
+		// passwordField.setBackground(SystemColor.controlHighlight);
+
+		JLabel lblNewLabel_3 = new JLabel("Nova Senha:");
+		lblNewLabel_3.setBounds(20, 105, 253, 25);
+		layeredPane_1.add(lblNewLabel_3);
+		// lblNewLabel_3.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+
+		passwordField_1 = new JPasswordField();
+		passwordField_1.setEditable(false);
+		passwordField_1.setBounds(20, 131, 253, 25);
+		layeredPane_1.add(passwordField_1);
+		passwordField_1.setColumns(10);
+		// lblNewLabel_5.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+
+		JLabel lblNewLabel_3_1 = new JLabel("Novo CPF:");
+		lblNewLabel_3_1.setBounds(306, 105, 253, 25);
+		layeredPane_1.add(lblNewLabel_3_1);
+		// lblNewLabel_3_1.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+
+		c_cpfNovo = new JFormattedTextField();
+		c_cpfNovo.setEditable(false);
+		c_cpfNovo.setBounds(306, 131, 253, 25);
+		layeredPane_1.add(c_cpfNovo);
+		c_cpfNovo.setColumns(10);
+
+		JLayeredPane layeredPane_2 = new JLayeredPane();
+		layeredPane_2.setBorder(
+				new TitledBorder(null, "Confirme Seus Dados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2.setBounds(20, 28, 583, 113);
+		panel_update_gerente.add(layeredPane_2);
+
+		passwordField = new JPasswordField();
+		passwordField.setColumns(10);
+		passwordField.setBounds(21, 50, 253, 25);
+		layeredPane_2.add(passwordField);
+
+		JLabel lblNewLabel_2_1 = new JLabel("Sua Senha:");
+		lblNewLabel_2_1.setBounds(21, 26, 253, 25);
+		layeredPane_2.add(lblNewLabel_2_1);
+
+		JLabel lblNewLabel_5 = new JLabel("Seu CPF:");
+		lblNewLabel_5.setBounds(307, 26, 253, 25);
+		layeredPane_2.add(lblNewLabel_5);
+
+		c_cpfAtual = new JFormattedTextField();
+		c_cpfAtual.setColumns(10);
+		c_cpfAtual.setBounds(307, 50, 253, 25);
+		layeredPane_2.add(c_cpfAtual);
+		// c_cpfAtual.setBackground(SystemColor.controlHighlight);
+
+		// ADICIONAR CAMPOS DE DELETAR gerente NESSE PANEL
+		JPanel panel_delete_gerente = new JPanel();
+		tabbedPane_acoes_gerente.addTab("Deletar Supervisor",
+				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_gerente,
+				null);
+		panel_delete_gerente.setLayout(null);
+
+		JLayeredPane layeredPane_2_2 = new JLayeredPane();
+		layeredPane_2_2.setBorder(
+				new TitledBorder(null, "Confirme Seus Dados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2_2.setBounds(20, 28, 583, 113);
+		panel_delete_gerente.add(layeredPane_2_2);
+
+		passwordField_3 = new JPasswordField();
+		passwordField_3.setColumns(10);
+		passwordField_3.setBounds(21, 50, 253, 25);
+		layeredPane_2_2.add(passwordField_3);
+
+		JLabel lblNewLabel_2_1_2 = new JLabel("Sua Senha:");
+		lblNewLabel_2_1_2.setBounds(21, 26, 253, 25);
+		layeredPane_2_2.add(lblNewLabel_2_1_2);
+
+		JLabel lblNewLabel_5_2 = new JLabel("Seu CPF:");
+		lblNewLabel_5_2.setBounds(307, 26, 253, 25);
+		layeredPane_2_2.add(lblNewLabel_5_2);
+
+		c_cpfAtual_2 = new JFormattedTextField();
+		c_cpfAtual_2.setColumns(10);
+		c_cpfAtual_2.setBounds(307, 50, 253, 25);
+		layeredPane_2_2.add(c_cpfAtual_2);
+
+		JLayeredPane layeredPane_1_1 = new JLayeredPane();
+		layeredPane_1_1.setBorder(
+				new TitledBorder(null, "Dados do Supervisor", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		layeredPane_1_1.setBounds(20, 152, 583, 190);
+		panel_delete_gerente.add(layeredPane_1_1);
+
+		JLabel lblPesquisarId_1 = new JLabel("Pesquisar ID:");
+		lblPesquisarId_1.setBounds(20, 33, 182, 25);
+		layeredPane_1_1.add(lblPesquisarId_1);
+
+		formattedTextField_1_2_1 = new JFormattedTextField();
+		formattedTextField_1_2_1.setText("0");
+		formattedTextField_1_2_1.setColumns(10);
+		formattedTextField_1_2_1.setBounds(20, 69, 86, 25);
+		layeredPane_1_1.add(formattedTextField_1_2_1);
+
+		JButton btnNewButton_1_1 = new JButton("Buscar");
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_1_1.setBounds(116, 69, 86, 25);
+		layeredPane_1_1.add(btnNewButton_1_1);
+
+		JLabel lblNewLabel_3_2 = new JLabel("Nova Senha:");
+		lblNewLabel_3_2.setBounds(20, 103, 253, 27);
+		layeredPane_1_1.add(lblNewLabel_3_2);
+
+		passwordField_4 = new JPasswordField();
+		passwordField_4.setEditable(false);
+		passwordField_4.setColumns(10);
+		passwordField_4.setBounds(20, 131, 253, 25);
+		layeredPane_1_1.add(passwordField_4);
+
+		JLabel lblNewLabel_3_1_1 = new JLabel("Novo CPF:");
+		lblNewLabel_3_1_1.setBounds(306, 103, 253, 27);
+		layeredPane_1_1.add(lblNewLabel_3_1_1);
+
+		c_cpfNovo_1 = new JFormattedTextField();
+		c_cpfNovo_1.setEditable(false);
+		c_cpfNovo_1.setColumns(10);
+		c_cpfNovo_1.setBounds(306, 131, 253, 25);
+		layeredPane_1_1.add(c_cpfNovo_1);
+
+		JButton btnLimpar_1_1 = new JButton("Limpar");
+		btnLimpar_1_1.setBounds(383, 406, 105, 34);
+		panel_delete_gerente.add(btnLimpar_1_1);
+
+		JButton btnAtualizarSenha_1_1 = new JButton("Deletar");
+		btnAtualizarSenha_1_1.setBounds(498, 406, 105, 34);
+		panel_delete_gerente.add(btnAtualizarSenha_1_1);
+
+		JPanel panel_area_fornecedor = new JPanel();
+		tabbedPane_area.addTab("Área do Fornecedor", null, panel_area_fornecedor, null);
+		panel_area_fornecedor.setLayout(null);
+
+		JTabbedPane tabbedPane_acoes_fornecedor = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_acoes_fornecedor.setBounds(0, 0, 618, 525);
+		panel_area_fornecedor.add(tabbedPane_acoes_fornecedor);
+
+		// ADICIONAR CAMPOS DE CADASTRAR FORNECEDOR NESSE PANEL
+		JPanel panel_add_fornecedor = new JPanel();
+		tabbedPane_acoes_fornecedor.addTab("Cadastrar Fornecedor",
+				new ImageIcon(getClass().getResource("/sage_icons/profile_image_plus_round [#1327].png")),
+				panel_add_fornecedor, null);
+		panel_add_fornecedor.setLayout(null);
+
+		JLayeredPane layeredPane_2_1_1_1_1 = new JLayeredPane();
+		layeredPane_2_1_1_1_1.setBorder(
+				new TitledBorder(null, "Dados do novo Fornecedor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2_1_1_1_1.setBounds(20, 71, 583, 324);
+		panel_add_fornecedor.add(layeredPane_2_1_1_1_1);
+
+		JLabel lblNewLabel_2_1_1_1_2_1 = new JLabel("CNPJ:");
+		lblNewLabel_2_1_1_1_2_1.setBounds(21, 26, 176, 25);
+		layeredPane_2_1_1_1_1.add(lblNewLabel_2_1_1_1_2_1);
+
+		JLabel lblNewLabel_5_1_1_1_1 = new JLabel("Email:");
+		lblNewLabel_5_1_1_1_1.setBounds(207, 26, 351, 25);
+		layeredPane_2_1_1_1_1.add(lblNewLabel_5_1_1_1_1);
+
+		c_email_cf = new JFormattedTextField();
+		c_email_cf.setColumns(10);
+		c_email_cf.setBounds(207, 50, 351, 25);
+		layeredPane_2_1_1_1_1.add(c_email_cf);
+
+		JLabel lblNewLabel_2_1_1_1_1_4_1 = new JLabel("Nome:");
+		lblNewLabel_2_1_1_1_1_4_1.setBounds(21, 86, 176, 25);
+		layeredPane_2_1_1_1_1.add(lblNewLabel_2_1_1_1_1_4_1);
+
+		JLabel lblNewLabel_2_1_1_1_1_1_1_1 = new JLabel("CEP:");
+		lblNewLabel_2_1_1_1_1_1_1_1.setBounds(207, 86, 151, 25);
+		layeredPane_2_1_1_1_1.add(lblNewLabel_2_1_1_1_1_1_1_1);
+
+		JLabel lblNewLabel_2_1_1_1_1_2_1_1 = new JLabel("Estado:");
+		lblNewLabel_2_1_1_1_1_2_1_1.setBounds(368, 86, 56, 25);
+		layeredPane_2_1_1_1_1.add(lblNewLabel_2_1_1_1_1_2_1_1);
+
+		String[] estados = new String[] {"AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
+				"PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"};
+		c_estado_cf = new JComboBox(estados);
+		c_estado_cf.setBounds(368, 110, 56, 25);
+		layeredPane_2_1_1_1_1.add(c_estado_cf);
+
+		JLabel lblNewLabel_2_1_1_1_1_3_1_1 = new JLabel("Cidade:");
+		lblNewLabel_2_1_1_1_1_3_1_1.setBounds(434, 86, 124, 25);
+		layeredPane_2_1_1_1_1.add(lblNewLabel_2_1_1_1_1_3_1_1);
+
+		c_cidade_cf = new JTextField();
+		c_cidade_cf.setColumns(10);
+		c_cidade_cf.setBounds(434, 110, 124, 25);
+		layeredPane_2_1_1_1_1.add(c_cidade_cf);
+
+		c_nome_cf = new JTextField();
+		c_nome_cf.setColumns(10);
+		c_nome_cf.setBounds(21, 110, 176, 25);
+		layeredPane_2_1_1_1_1.add(c_nome_cf);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Razão Social:");
+		lblNewLabel_1_1.setBounds(21, 148, 248, 14);
+		layeredPane_2_1_1_1_1.add(lblNewLabel_1_1);
+
+		c_razaosocial_cf = new JTextField();
+		c_razaosocial_cf.setColumns(10);
+		c_razaosocial_cf.setBounds(21, 165, 248, 25);
+		layeredPane_2_1_1_1_1.add(c_razaosocial_cf);
+
+		JLabel lblTelefone_1_1 = new JLabel("Telefone:");
+		lblTelefone_1_1.setBounds(279, 148, 145, 14);
+		layeredPane_2_1_1_1_1.add(lblTelefone_1_1);
+
+		c_telefone_af_1 = new JFormattedTextField();
+		c_telefone_af_1.setBounds(279, 165, 145, 25);
+		layeredPane_2_1_1_1_1.add(c_telefone_af_1);
+
+		c_cnpj_cf = new JFormattedTextField();
+		c_cnpj_cf.setBounds(21, 52, 176, 25);
+		layeredPane_2_1_1_1_1.add(c_cnpj_cf);
+
+		c_cep_cf = new JFormattedTextField();
+		c_cep_cf.setBounds(207, 110, 151, 25);
+		layeredPane_2_1_1_1_1.add(c_cep_cf);
+
+		JLabel lblBairro_1_1 = new JLabel("Bairro:");
+		lblBairro_1_1.setBounds(436, 146, 122, 14);
+		layeredPane_2_1_1_1_1.add(lblBairro_1_1);
+
+		c_bairro_cf = new JFormattedTextField();
+		c_bairro_cf.setBounds(434, 165, 124, 25);
+		layeredPane_2_1_1_1_1.add(c_bairro_cf);
+
+		JLabel lblNmerodomiclio_1_1 = new JLabel("Número (Domicílio)");
+		lblNmerodomiclio_1_1.setBounds(21, 201, 124, 14);
+		layeredPane_2_1_1_1_1.add(lblNmerodomiclio_1_1);
+
+		c_numero_cf = new JTextField();
+		c_numero_cf.setColumns(10);
+		c_numero_cf.setBounds(21, 218, 124, 25);
+		layeredPane_2_1_1_1_1.add(c_numero_cf);
+
+		JLabel lblLogradouro_1_2_1 = new JLabel("Logradouro:");
+		lblLogradouro_1_2_1.setBounds(155, 201, 403, 14);
+		layeredPane_2_1_1_1_1.add(lblLogradouro_1_2_1);
+
+		c_logradouro_cf = new JTextField();
+		c_logradouro_cf.setColumns(10);
+		c_logradouro_cf.setBounds(155, 218, 403, 25);
+		layeredPane_2_1_1_1_1.add(c_logradouro_cf);
+
+		JLabel lblLogradouro_1_1_1_1 = new JLabel("Complemento:");
+		lblLogradouro_1_1_1_1.setBounds(21, 254, 537, 14);
+		layeredPane_2_1_1_1_1.add(lblLogradouro_1_1_1_1);
+
+		c_complemento_cf = new JTextField();
+		c_complemento_cf.setColumns(10);
+		c_complemento_cf.setBounds(21, 271, 537, 25);
+		layeredPane_2_1_1_1_1.add(c_complemento_cf);
+
+		bt_limpar_cf = new JButton("Limpar");
+		bt_limpar_cf.setBounds(389, 406, 105, 34);
+		panel_add_fornecedor.add(bt_limpar_cf);
+
+		JButton bt_cadastrar_cf = new JButton("Cadastrar");
+		bt_cadastrar_cf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerValidationFornecedor cvf = new ControllerValidationFornecedor();
+				cvf.enviarDadosParaCadastro(c_nome_cf, c_cnpj_cf, c_razaosocial_cf, c_telefone_af_1, c_email_cf,
+						c_cep_cf, c_estado_cf, c_cidade_cf, c_bairro_cf, c_numero_cf, c_logradouro_cf,
+						c_complemento_cf);
+			}
+		});
+		bt_cadastrar_cf.setBounds(504, 406, 99, 34);
+		panel_add_fornecedor.add(bt_cadastrar_cf);
+
+		// ADICIONAR CAMPOS DE ALTERAR FORNECEDOR NESSE PANEL
+		JPanel panel_update_fornecedor = new JPanel();
+		tabbedPane_acoes_fornecedor.addTab("Atualizar Fornecedor",
+				new ImageIcon(getClass().getResource("/sage_icons/profile_image_round [#1326].png")),
+				panel_update_fornecedor, null);
+		panel_update_fornecedor.setLayout(null);
+
+		JLayeredPane layeredPane_2_1_1_1 = new JLayeredPane();
+		layeredPane_2_1_1_1.setBorder(
+				new TitledBorder(null, "Dados do novo Fornecedor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2_1_1_1.setBounds(20, 71, 583, 324);
+		panel_update_fornecedor.add(layeredPane_2_1_1_1);
+
+		JLabel lblNewLabel_2_1_1_1_2 = new JLabel("CNPJ:");
+		lblNewLabel_2_1_1_1_2.setBounds(21, 26, 176, 25);
+		layeredPane_2_1_1_1.add(lblNewLabel_2_1_1_1_2);
+
+		JLabel lblNewLabel_5_1_1_1 = new JLabel("Email:");
+		lblNewLabel_5_1_1_1.setBounds(207, 26, 351, 25);
+		layeredPane_2_1_1_1.add(lblNewLabel_5_1_1_1);
+
+		c_email_af = new JFormattedTextField();
+		c_email_af.setEnabled(false);
+		c_email_af.setColumns(10);
+		c_email_af.setBounds(207, 50, 351, 25);
+		layeredPane_2_1_1_1.add(c_email_af);
+
+		JLabel lblNewLabel_2_1_1_1_1_4 = new JLabel("Nome:");
+		lblNewLabel_2_1_1_1_1_4.setBounds(21, 86, 176, 25);
+		layeredPane_2_1_1_1.add(lblNewLabel_2_1_1_1_1_4);
+
+		JLabel lblNewLabel_2_1_1_1_1_1_1 = new JLabel("CEP:");
+		lblNewLabel_2_1_1_1_1_1_1.setBounds(207, 86, 151, 25);
+		layeredPane_2_1_1_1.add(lblNewLabel_2_1_1_1_1_1_1);
+
+		JLabel lblNewLabel_2_1_1_1_1_2_1 = new JLabel("Estado:");
+		lblNewLabel_2_1_1_1_1_2_1.setBounds(368, 86, 56, 25);
+		layeredPane_2_1_1_1.add(lblNewLabel_2_1_1_1_1_2_1);
+
+		c_estado_af = new JComboBox();
+		c_estado_af.setEnabled(false);
+		c_estado_af.setModel(new DefaultComboBoxModel(
+				new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
+						"PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
+		c_estado_af.setBounds(368, 110, 56, 25);
+		layeredPane_2_1_1_1.add(c_estado_af);
+
+		JLabel lblNewLabel_2_1_1_1_1_3_1 = new JLabel("Cidade:");
+		lblNewLabel_2_1_1_1_1_3_1.setBounds(434, 86, 124, 25);
+		layeredPane_2_1_1_1.add(lblNewLabel_2_1_1_1_1_3_1);
+
+		c_cidade_af = new JTextField();
+		c_cidade_af.setEnabled(false);
+		c_cidade_af.setColumns(10);
+		c_cidade_af.setBounds(434, 110, 124, 25);
+		layeredPane_2_1_1_1.add(c_cidade_af);
+
+		c_nome_af = new JTextField();
+		c_nome_af.setEnabled(false);
+		c_nome_af.setColumns(10);
+		c_nome_af.setBounds(21, 110, 176, 25);
+		layeredPane_2_1_1_1.add(c_nome_af);
+
+		JLabel lblNewLabel_1 = new JLabel("Razão Social:");
+		lblNewLabel_1.setBounds(21, 148, 248, 14);
+		layeredPane_2_1_1_1.add(lblNewLabel_1);
+
+		c_razaosocial_af = new JTextField();
+		c_razaosocial_af.setEnabled(false);
+		c_razaosocial_af.setColumns(10);
+		c_razaosocial_af.setBounds(21, 165, 248, 25);
+		layeredPane_2_1_1_1.add(c_razaosocial_af);
+
+		JLabel lblTelefone_1 = new JLabel("Telefone:");
+		lblTelefone_1.setBounds(279, 148, 145, 14);
+		layeredPane_2_1_1_1.add(lblTelefone_1);
+
+		c_telefone_af = new JFormattedTextField();
+		c_telefone_af.setEnabled(false);
+		c_telefone_af.setBounds(279, 165, 145, 25);
+		layeredPane_2_1_1_1.add(c_telefone_af);
+
+		c_cnpj_af = new JFormattedTextField();
+		c_cnpj_af.setEnabled(false);
+		c_cnpj_af.setBounds(21, 52, 176, 25);
+		layeredPane_2_1_1_1.add(c_cnpj_af);
+
+		c_cep_af = new JFormattedTextField();
+		c_cep_af.setEnabled(false);
+		c_cep_af.setBounds(207, 110, 151, 25);
+		layeredPane_2_1_1_1.add(c_cep_af);
+
+		JLabel lblBairro_1 = new JLabel("Bairro:");
+		lblBairro_1.setBounds(436, 146, 122, 14);
+		layeredPane_2_1_1_1.add(lblBairro_1);
+
+		c_bairro_af = new JFormattedTextField();
+		c_bairro_af.setEnabled(false);
+		c_bairro_af.setBounds(434, 165, 124, 25);
+		layeredPane_2_1_1_1.add(c_bairro_af);
+
+		JLabel lblNmerodomiclio_1 = new JLabel("Número (Domicílio)");
+		lblNmerodomiclio_1.setBounds(21, 201, 124, 14);
+		layeredPane_2_1_1_1.add(lblNmerodomiclio_1);
+
+		c_numero_af = new JTextField();
+		c_numero_af.setEnabled(false);
+		c_numero_af.setColumns(10);
+		c_numero_af.setBounds(21, 218, 124, 25);
+		layeredPane_2_1_1_1.add(c_numero_af);
+
+		JLabel lblLogradouro_1_2 = new JLabel("Logradouro:");
+		lblLogradouro_1_2.setBounds(155, 201, 403, 14);
+		layeredPane_2_1_1_1.add(lblLogradouro_1_2);
+
+		c_logradouro_af = new JTextField();
+		c_logradouro_af.setEnabled(false);
+		c_logradouro_af.setColumns(10);
+		c_logradouro_af.setBounds(155, 218, 403, 25);
+		layeredPane_2_1_1_1.add(c_logradouro_af);
+
+		JLabel lblLogradouro_1_1_1 = new JLabel("Complemento:");
+		lblLogradouro_1_1_1.setBounds(21, 254, 537, 14);
+		layeredPane_2_1_1_1.add(lblLogradouro_1_1_1);
+
+		c_complemento_af = new JTextField();
+		c_complemento_af.setEnabled(false);
+		c_complemento_af.setColumns(10);
+		c_complemento_af.setBounds(21, 271, 537, 25);
+		layeredPane_2_1_1_1.add(c_complemento_af);
+
+		JLabel lblPesquisarId_2 = new JLabel("Pesquisar pelo ID:");
+		lblPesquisarId_2.setBounds(393, 11, 182, 25);
+		panel_update_fornecedor.add(lblPesquisarId_2);
+
+		formattedTextField_1_2_2 = new JFormattedTextField();
+		formattedTextField_1_2_2.setText("0");
+		formattedTextField_1_2_2.setColumns(10);
+		formattedTextField_1_2_2.setBounds(393, 37, 86, 23);
+		panel_update_fornecedor.add(formattedTextField_1_2_2);
+
+		JButton btnNewButton_1_2 = new JButton("Buscar");
+		btnNewButton_1_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				c_cnpj_af.setEnabled(true);
+				c_cpfAtual_1.setEnabled(true);
+				c_telefone_af.setEnabled(true);
+				c_cep_af.setEnabled(true);
+				c_bairro_af.setEnabled(true);
+				c_email_af.setEnabled(true);
+				c_cpfNovo_1.setEnabled(true);
+				c_nome_af.setEnabled(true);
+				c_razaosocial_af.setEnabled(true);
+				c_numero_af.setEnabled(true);
+				c_logradouro_af.setEnabled(true);
+				c_complemento_af.setEnabled(true);
+				c_cidade_af.setEnabled(true);
+				c_estado_af.setEnabled(true);
+
+			}
+		});
+		btnNewButton_1_2.setBounds(489, 35, 86, 25);
+		panel_update_fornecedor.add(btnNewButton_1_2);
+
+		JButton bt_limpar_af = new JButton("Limpar");
+		bt_limpar_af.setBounds(389, 406, 105, 34);
+		panel_update_fornecedor.add(bt_limpar_af);
+
+		JButton bt_atualizar_af = new JButton("Atualizar");
+		bt_atualizar_af.setBounds(504, 406, 99, 34);
+		panel_update_fornecedor.add(bt_atualizar_af);
+
+		// ADICIONAR CAMPOS DE DELETAR FORNECEDOR NESSE PANEL
+		JPanel panel_delete_fornecedor = new JPanel();
+		tabbedPane_acoes_fornecedor.addTab("Deletar Fornecedor",
+				new ImageIcon(getClass().getResource("/sage_icons/profile_image_minus_round [#1329].png")),
+				panel_delete_fornecedor, null);
+		panel_delete_fornecedor.setLayout(null);
+
+		JLabel lblPesquisarId_2_1 = new JLabel("Pesquisar pelo ID:");
+		lblPesquisarId_2_1.setBounds(393, 11, 182, 25);
+		panel_delete_fornecedor.add(lblPesquisarId_2_1);
+
+		JFormattedTextField formattedTextField_1_2_2_1 = new JFormattedTextField();
+		formattedTextField_1_2_2_1.setText("0");
+		formattedTextField_1_2_2_1.setColumns(10);
+		formattedTextField_1_2_2_1.setBounds(393, 37, 86, 23);
+		panel_delete_fornecedor.add(formattedTextField_1_2_2_1);
+
+		JButton btnNewButton_1_2_1 = new JButton("Buscar");
+		btnNewButton_1_2_1.setBounds(489, 35, 86, 25);
+		panel_delete_fornecedor.add(btnNewButton_1_2_1);
+
+		JLayeredPane layeredPane_2_1_1_1_2 = new JLayeredPane();
+		layeredPane_2_1_1_1_2.setBorder(
+				new TitledBorder(null, "Dados do novo Fornecedor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2_1_1_1_2.setBounds(20, 71, 583, 173);
+		panel_delete_fornecedor.add(layeredPane_2_1_1_1_2);
+
+		JLabel lblNewLabel_2_1_1_1_2_2 = new JLabel("CNPJ:");
+		lblNewLabel_2_1_1_1_2_2.setBounds(21, 26, 176, 25);
+		layeredPane_2_1_1_1_2.add(lblNewLabel_2_1_1_1_2_2);
+
+		JLabel lblNewLabel_5_1_1_1_2 = new JLabel("Email:");
+		lblNewLabel_5_1_1_1_2.setBounds(21, 86, 525, 25);
+		layeredPane_2_1_1_1_2.add(lblNewLabel_5_1_1_1_2);
+
+		JFormattedTextField c_email_af_1 = new JFormattedTextField();
+		c_email_af_1.setEnabled(false);
+		c_email_af_1.setColumns(10);
+		c_email_af_1.setBounds(21, 110, 536, 25);
+		layeredPane_2_1_1_1_2.add(c_email_af_1);
+
+		JLabel lblNewLabel_2_1_1_1_1_4_2 = new JLabel("Nome:");
+		lblNewLabel_2_1_1_1_1_4_2.setBounds(207, 26, 339, 25);
+		layeredPane_2_1_1_1_2.add(lblNewLabel_2_1_1_1_1_4_2);
+
+		textField_1 = new JTextField();
+		textField_1.setEnabled(false);
+		textField_1.setColumns(10);
+		textField_1.setBounds(207, 50, 350, 25);
+		layeredPane_2_1_1_1_2.add(textField_1);
+
+		JFormattedTextField c_cnpj_af_1 = new JFormattedTextField();
+		c_cnpj_af_1.setEnabled(false);
+		c_cnpj_af_1.setBounds(21, 52, 176, 25);
+		layeredPane_2_1_1_1_2.add(c_cnpj_af_1);
+
+		JButton bt_limpar_af_1 = new JButton("Limpar");
+		bt_limpar_af_1.setBounds(389, 406, 105, 34);
+		panel_delete_fornecedor.add(bt_limpar_af_1);
+
+		JButton bt_atualizar_af_1 = new JButton("Deletar");
+		bt_atualizar_af_1.setBounds(504, 406, 99, 34);
+		panel_delete_fornecedor.add(bt_atualizar_af_1);
+
+		JPanel panel_area_produto = new JPanel();
+		tabbedPane_area.addTab("Área do Produto", null, panel_area_produto, null);
+		panel_area_produto.setLayout(null);
+
+		JTabbedPane tabbedPane_acoes_produto = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_acoes_produto.setBounds(0, 0, 618, 525);
+		panel_area_produto.add(tabbedPane_acoes_produto);
+
+		// ADICIONAR CAMPOS DE CADASTRAR PRODUTO NESSE PANEL
+		JPanel panel_add_produto = new JPanel();
+		tabbedPane_acoes_produto.addTab("Cadastrar Produto",
+				new ImageIcon(getClass().getResource("/sage_icons/cart_plus_round [#1158].png")), panel_add_produto,
+				null);
+		panel_add_produto.setLayout(null);
+
+		JLayeredPane layeredPane_3 = new JLayeredPane();
+		layeredPane_3
+				.setBorder(new TitledBorder(null, "Dados do Produto", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		layeredPane_3.setBounds(20, 71, 583, 221);
+		panel_add_produto.add(layeredPane_3);
+
+		dcFabricacao_1 = new JDateChooser();
+		dcFabricacao_1.setForeground(SystemColor.menu);
+		dcFabricacao_1.setBounds(397, 106, 140, 24);
+		layeredPane_3.add(dcFabricacao_1);
+
+		dcVencimento_1 = new JDateChooser();
+		dcVencimento_1.setForeground(SystemColor.menu);
+		dcVencimento_1.setBounds(397, 165, 140, 24);
+		layeredPane_3.add(dcVencimento_1);
+
+		JLabel lblNewLabel_4 = new JLabel("Nome:");
+		lblNewLabel_4.setBounds(48, 33, 189, 20);
+		layeredPane_3.add(lblNewLabel_4);
+
+		tfNomeCadastrarProduto = new JTextField();
+		tfNomeCadastrarProduto.setEnabled(false);
+		tfNomeCadastrarProduto.setColumns(10);
+		tfNomeCadastrarProduto.setBounds(48, 52, 189, 24);
+		layeredPane_3.add(tfNomeCadastrarProduto);
+
+		JLabel lblNewLabel_2_3 = new JLabel("Descrição:");
+		lblNewLabel_2_3.setBounds(48, 85, 189, 20);
+		layeredPane_3.add(lblNewLabel_2_3);
+
+		tfCodigoCadastrarProduto = new JFormattedTextField();
+		tfCodigoCadastrarProduto.setEnabled(false);
+		tfCodigoCadastrarProduto.setBounds(247, 52, 100, 24);
+		layeredPane_3.add(tfCodigoCadastrarProduto);
+
+		JLabel lblCdigo_1 = new JLabel("Código:");
+		lblCdigo_1.setBounds(247, 33, 100, 20);
+		layeredPane_3.add(lblCdigo_1);
+
+		JLabel lblPreo_1 = new JLabel("Preço:");
+		lblPreo_1.setBounds(357, 33, 94, 20);
+		layeredPane_3.add(lblPreo_1);
+
+		formattedTextField_1_1 = new JFormattedTextField();
+		formattedTextField_1_1.setBounds(357, 52, 94, 24);
+		layeredPane_3.add(formattedTextField_1_1);
+
+		List<String> vazio = ControllerAuxiliar.preencherGrupos();
+		vazio.add(0, "...");
+		comboBox_2 = new JComboBox(vazio.toArray());
+		comboBox_2.setBounds(247, 106, 140, 24);
+		layeredPane_3.add(comboBox_2);
+
+		tfMedidaCadastrarProduto = new JTextField();
+		tfMedidaCadastrarProduto.setEnabled(false);
+		tfMedidaCadastrarProduto.setColumns(10);
+		tfMedidaCadastrarProduto.setBounds(247, 165, 76, 24);
+		layeredPane_3.add(tfMedidaCadastrarProduto);
+
+		JLabel lblDataDeFabricao_1 = new JLabel("Data de Fabricação:");
+		lblDataDeFabricao_1.setBounds(397, 87, 140, 20);
+		layeredPane_3.add(lblDataDeFabricao_1);
+
+		JLabel lblPreo_1_1_1 = new JLabel("Data de Vencimento:");
+		lblPreo_1_1_1.setBounds(397, 141, 140, 20);
+		layeredPane_3.add(lblPreo_1_1_1);
+
+		cbUnidadeCadastrarProduto = new JComboBox();
+		cbUnidadeCadastrarProduto.setBounds(333, 165, 54, 24);
+		layeredPane_3.add(cbUnidadeCadastrarProduto);
+
+		editorPane_1 = new JEditorPane();
+		editorPane_1.setBounds(48, 108, 187, 81);
+		layeredPane_3.add(editorPane_1);
+
+		spinner_1 = new JSpinner();
+		spinner_1.setBounds(473, 52, 64, 24);
+		layeredPane_3.add(spinner_1);
+
+		JLabel lblNewLabel_2_2_3 = new JLabel("Grupo:");
+		lblNewLabel_2_2_3.setBounds(247, 85, 140, 20);
+		layeredPane_3.add(lblNewLabel_2_2_3);
+
+		JLabel lblNewLabel_2_2_1_1 = new JLabel("Quantidade:");
+		lblNewLabel_2_2_1_1.setBounds(473, 33, 64, 20);
+		layeredPane_3.add(lblNewLabel_2_2_1_1);
+
+		JLabel lblNewLabel_2_2_2_2 = new JLabel("Medida:");
+		lblNewLabel_2_2_2_2.setBounds(245, 141, 88, 20);
+		layeredPane_3.add(lblNewLabel_2_2_2_2);
+
+		JLabel lblNewLabel_2_2_2_1_1 = new JLabel("Unidade:");
+		lblNewLabel_2_2_2_1_1.setBounds(306, 134, 54, 20);
+		layeredPane_3.add(lblNewLabel_2_2_2_1_1);
+
+		JButton bt_atualizar_af_2 = new JButton("Cadastrar");
+		bt_atualizar_af_2.setBounds(504, 406, 99, 34);
+		panel_add_produto.add(bt_atualizar_af_2);
+
+		JButton bt_limpar_af_2 = new JButton("Limpar");
+		bt_limpar_af_2.setBounds(389, 406, 105, 34);
+		panel_add_produto.add(bt_limpar_af_2);
+
+		// ADICIONAR CAMPOS DE ALTERAR PRODUTO NESSE PANEL
+		JPanel panel_update_produto = new JPanel();
+		tabbedPane_acoes_produto.addTab("Atualizar Produto",
+				new ImageIcon(getClass().getResource("/sage_icons/cart_round [#1166].png")), panel_update_produto,
+				null);
+		panel_update_produto.setLayout(null);
+
+		JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane
+				.setBorder(new TitledBorder(null, "Dados do Produto", TitledBorder.LEFT, TitledBorder.TOP, null, null));
+		layeredPane.setBounds(20, 71, 583, 221);
+		panel_update_produto.add(layeredPane);
+
+		dcFabricacao = new JDateChooser();
+		dcFabricacao.setForeground(SystemColor.control);
+		dcFabricacao.setBounds(397, 106, 140, 24);
+		layeredPane.add(dcFabricacao);
+
+		dcVencimento = new JDateChooser();
+		dcVencimento.setForeground(SystemColor.control);
+		dcVencimento.setBounds(397, 165, 140, 24);
+		layeredPane.add(dcVencimento);
+
+		JLabel lblNewLabel = new JLabel("Nome:");
+		lblNewLabel.setBounds(48, 33, 189, 20);
+		layeredPane.add(lblNewLabel);
+
+		textField = new JTextField();
+		textField.setEnabled(false);
+		textField.setColumns(10);
+		textField.setBounds(48, 52, 189, 24);
+		layeredPane.add(textField);
+
+		JLabel lblNewLabel_2 = new JLabel("Descrição:");
+		lblNewLabel_2.setBounds(48, 85, 189, 20);
+		layeredPane.add(lblNewLabel_2);
+
+		formattedTextField = new JFormattedTextField();
+		formattedTextField.setEnabled(false);
+		formattedTextField.setBounds(247, 52, 100, 24);
+		layeredPane.add(formattedTextField);
+
+		JLabel lblCdigo = new JLabel("Código:");
+		lblCdigo.setBounds(247, 33, 100, 20);
+		layeredPane.add(lblCdigo);
+
+		JLabel lblPreo = new JLabel("Preço:");
+		lblPreo.setBounds(357, 33, 94, 20);
+		layeredPane.add(lblPreo);
+
+		formattedTextField_1 = new JFormattedTextField();
+		formattedTextField_1.setBounds(357, 52, 94, 24);
+		layeredPane.add(formattedTextField_1);
+
+		comboBox = new JComboBox(vazio.toArray());
+		comboBox.setBounds(247, 106, 140, 24);
+		layeredPane.add(comboBox);
+
+		textField_2 = new JTextField();
+		textField_2.setEnabled(false);
+		textField_2.setColumns(10);
+		textField_2.setBounds(247, 165, 76, 24);
+		layeredPane.add(textField_2);
+
+		JLabel lblDataDeFabricao = new JLabel("Data de Fabricação:");
+		lblDataDeFabricao.setBounds(397, 87, 140, 20);
+		layeredPane.add(lblDataDeFabricao);
+
+		JLabel lblPreo_1_1 = new JLabel("Data de Vencimento:");
+		lblPreo_1_1.setBounds(397, 141, 140, 20);
+		layeredPane.add(lblPreo_1_1);
+
+		comboBox_1 = new JComboBox();
+		comboBox_1.setEnabled(false);
+		comboBox_1.setBounds(333, 165, 54, 24);
+		layeredPane.add(comboBox_1);
+
+		editorPane = new JEditorPane();
+		editorPane.setBounds(48, 108, 187, 81);
+		layeredPane.add(editorPane);
+
+		spinner = new JSpinner();
+		spinner.setBounds(473, 52, 64, 24);
+		layeredPane.add(spinner);
+
+		JLabel lblNewLabel_2_2 = new JLabel("Grupo:");
+		lblNewLabel_2_2.setBounds(247, 85, 140, 20);
+		layeredPane.add(lblNewLabel_2_2);
+
+		JLabel lblNewLabel_2_2_1 = new JLabel("Quantidade:");
+		lblNewLabel_2_2_1.setBounds(473, 33, 64, 20);
+		layeredPane.add(lblNewLabel_2_2_1);
+
+		JLabel lblNewLabel_2_2_2 = new JLabel("Medida:");
+		lblNewLabel_2_2_2.setBounds(245, 141, 88, 20);
+		layeredPane.add(lblNewLabel_2_2_2);
+
+		JLabel lblNewLabel_2_2_2_1 = new JLabel("Unidade:");
+		lblNewLabel_2_2_2_1.setBounds(306, 134, 54, 20);
+		layeredPane.add(lblNewLabel_2_2_2_1);
+
+		JLabel lblPesquisarId_2_2 = new JLabel("Pesquisar pelo ID:");
+		lblPesquisarId_2_2.setBounds(393, 11, 182, 25);
+		panel_update_produto.add(lblPesquisarId_2_2);
+
+		formattedTextField_1_2_2_2 = new JFormattedTextField();
+		formattedTextField_1_2_2_2.setText("0");
+		formattedTextField_1_2_2_2.setColumns(10);
+		formattedTextField_1_2_2_2.setBounds(393, 36, 86, 23);
+		panel_update_produto.add(formattedTextField_1_2_2_2);
+
+		JButton btnNewButton_1_2_2 = new JButton("Buscar");
+		btnNewButton_1_2_2.setBounds(489, 35, 86, 25);
+		panel_update_produto.add(btnNewButton_1_2_2);
+
+		JButton bt_atualizar_af_3 = new JButton("Atualizar");
+		bt_atualizar_af_3.setBounds(504, 406, 99, 34);
+		panel_update_produto.add(bt_atualizar_af_3);
+
+		JButton bt_limpar_af_3 = new JButton("Limpar");
+		bt_limpar_af_3.setBounds(393, 406, 105, 34);
+		panel_update_produto.add(bt_limpar_af_3);
+
+		// ADICIONAR CAMPOS DE DELETAR PRODUTO NESSE PANEL
+		JPanel panel_delete_produto = new JPanel();
+		tabbedPane_acoes_produto.addTab("Deletar Produto",
+				new ImageIcon(getClass().getResource("/sage_icons/cart_minus_round [#1162].png")), panel_delete_produto,
+				null);
+		panel_delete_produto.setLayout(null);
+
+		JTabbedPane tabbedPane_listagem = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_listagem.setBounds(652, 49, 548, 475);
+		panel_superior.add(tabbedPane_listagem);
+
+		JPanel panel_listar_movimentacoes = new JPanel();
+		tabbedPane_listagem.addTab("Produtos", null, panel_listar_movimentacoes, null);
+		panel_listar_movimentacoes.setLayout(null);
+
+		JScrollPane scrollPane_m = new JScrollPane();
+		scrollPane_m.setBounds(10, 11, 517, 425);
+		panel_listar_movimentacoes.add(scrollPane_m);
+
+		table_produtos = new JTable();
+		table_movimentacoes = new JTable();
+		// ControllerTableModels.popularTabelaMovimentacoes(table_movimentacoes);
+		scrollPane_m.setViewportView(table_produtos);
+
+		JPanel panel_listar_fornecedores = new JPanel();
+		tabbedPane_listagem.addTab("Fornecedores", null, panel_listar_fornecedores, null);
+		panel_listar_fornecedores.setLayout(null);
+
+		JScrollPane scrollPane_f = new JScrollPane();
+		scrollPane_f.setBounds(10, 11, 517, 425);
+		panel_listar_fornecedores.add(scrollPane_f);
+
+		table_fornecedores = new JTable() {
+			private static final long serialVersionUID = 1L;
+
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
+		// ControllerTableModels.popularTabelaFornecedores(table_fornecedores);
+		scrollPane_f.setViewportView(table_fornecedores);
+
+		JPanel panel_listar_registros = new JPanel();
+		panel_listar_registros.setLayout(null);
+		tabbedPane_listagem.addTab("Supervisores", null, panel_listar_registros, null);
+
+		JScrollPane scrollPane_r = new JScrollPane();
+		scrollPane_r.setBounds(10, 11, 517, 425);
+		panel_listar_registros.add(scrollPane_r);
+
+		table_registros = new JTable();
+		// ControllerTableModels.popularTableRegistrosGerente(table_registros);
+		scrollPane_r.setViewportView(table_registros);
+
+		JPanel panel_listar_gerentes = new JPanel();
+		tabbedPane_listagem.addTab("Gerentes", null, panel_listar_gerentes, null);
+		panel_listar_gerentes.setLayout(null);
+
+		JScrollPane scrollPane_s = new JScrollPane();
+		scrollPane_s.setBounds(10, 11, 517, 425);
+		panel_listar_gerentes.add(scrollPane_s);
+
+		table_gerentes = new JTable();
+		scrollPane_s.setViewportView(table_gerentes);
+
+		JSeparator separator_vertical = new JSeparator();
+		separator_vertical.setOrientation(SwingConstants.VERTICAL);
+		separator_vertical.setBounds(633, 0, 11, 553);
+		panel_superior.add(separator_vertical);
+
+		JButton btn_atualizar_tabelas_superior = new JButton("Atualizar listas");
+		btn_atualizar_tabelas_superior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ctb = new ControllerTableModels(table_registros, table_gerentes, table_fornecedores, table_produtos,
+						table_movimentacoes);
+				new Atualizar().start();
+			}
+		});
+		btn_atualizar_tabelas_superior.setBounds(652, 11, 125, 27);
+		panel_superior.add(btn_atualizar_tabelas_superior);
+
+		progressBar_tabelas_superior = new JProgressBar();
+		progressBar_tabelas_superior.setBounds(799, 21, 385, 10);
+		panel_superior.add(progressBar_tabelas_superior);
+
+		// ControllerTableModels.popularTabelaProdutos(table_produtos);
+		// new ControllerTableModels(table_registros, table_gerentes,
+		// table_fornecedores, table_produtos, table_movimentacoes);
+		// setLocationRelativeTo(null);
+		
+		//Essa instância popula todas as tabelas assim que o programa é iniciado
+		ctb = new ControllerTableModels(table_registros, table_gerentes, table_fornecedores, table_produtos,
+				table_movimentacoes);
+
+		//----------ActionListeners de Cadastrar o Produto
+		comboBox_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (comboBox_2.getSelectedIndex() != 0) {
+					ControllerAuxiliar.preencherCamposGrupo(comboBox_2, tfNomeCadastrarProduto,
+							tfCodigoCadastrarProduto, tfMedidaCadastrarProduto, cbUnidadeCadastrarProduto);
+				} else {
+					ControllerValidationProduto.resetarCamposGrupoProduto(tfNomeCadastrarProduto,
+							tfCodigoCadastrarProduto, tfMedidaCadastrarProduto, cbUnidadeCadastrarProduto);
+				}
+			}
+		});
+
+		bt_atualizar_af_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ControllerValidationProduto cvp = new ControllerValidationProduto();
+				cvp.enviarDadosParaCadastrar(formattedTextField_1_1, spinner_1, editorPane_1, dcFabricacao_1,
+						dcVencimento_1, comboBox_2);
+			}
+		});
+
+		bt_limpar_af_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ControllerValidationProduto.resetarTodosOsCampos(formattedTextField_1_1, spinner_1, editorPane_1,
+						dcFabricacao_1, dcVencimento_1, comboBox_2);
+			}
+		});
+
+		// ------------------ActionListeners de Atualizar o Produto
+		btnNewButton_1_2_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
+				cap.buscarProduto(formattedTextField_1_2_2_2, formattedTextField_1, spinner, editorPane, comboBox,
+						dcFabricacao, dcVencimento);
+			}
+		});
+
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (comboBox.getSelectedIndex() != 0) {
+					ControllerAuxiliar.preencherCamposGrupo(comboBox, textField, formattedTextField, textField_2,
+							comboBox_1);
+				} else {
+					ControllerValidationProduto.resetarCamposGrupoProduto(textField, formattedTextField, textField_2,
+							comboBox_1);
+				}
+			}
+		});
+
+		bt_atualizar_af_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
+				cap.atualizarProduto(formattedTextField_1_2_2_2, formattedTextField_1, spinner, editorPane, comboBox,
+						dcFabricacao, dcVencimento);
+			}
+		});
+	}
+
+	public class Atualizar extends Thread {
+		public void run() {
+			try {
+				progressBar_tabelas_superior.setStringPainted(true);
+				while (progressBar_tabelas_superior.getValue() < 100) {
+					sleep(5);
+					progressBar_tabelas_superior.setValue(progressBar_tabelas_superior.getValue() + 1);
+				}
+				sleep(500);
+				progressBar_tabelas_superior.setValue(0);
+				progressBar_tabelas_superior.setStringPainted(false);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
+}
