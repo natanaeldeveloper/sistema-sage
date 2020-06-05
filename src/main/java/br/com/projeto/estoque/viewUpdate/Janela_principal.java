@@ -51,11 +51,13 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.toedter.calendar.JDateChooser;
 
+import br.com.projeto.estoque.controller.ControllerAtualizarFornecedor;
 import br.com.projeto.estoque.controller.ControllerAtualizarProduto;
 import br.com.projeto.estoque.controller.ControllerAuxiliar;
 import br.com.projeto.estoque.controller.ControllerGlobal;
 import br.com.projeto.estoque.controller.ControllerSupervisor;
 import br.com.projeto.estoque.controller.ControllerTableModels;
+import br.com.projeto.estoque.controller.ControllerValidationFornecedor;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
 import br.com.projeto.estoque.util.GerenteAtual;
 
@@ -97,25 +99,26 @@ public class Janela_principal extends JFrame {
 	private JTable table_movimentacoes;
 	private JTable table_registros;
 
-	private JTextField c_cidade_af;
-	private JTextField c_nome_af;
-	private JTextField c_razaosocial_af;
-	private JTextField c_numero_af;
-	private JTextField c_logradouro_af;
-	private JTextField c_complemento_af;
-	private JFormattedTextField c_cnpj_af;
+	private JTextField tfCidadeAtualizarFornecedor;
+	private JTextField tfNomeAtualizarFornecedor;
+	private JTextField tfRazaoSocialAtualizarFornecedor;
+	private JTextField tfNumeroAtualizarFornecedor;
+	private JTextField tfLogradouroAtualizarFornecedor;
+	private JTextField tfComplementoAtualizarFornecedor;
+	private JFormattedTextField tfCnpjAtualizarFornecedor;
 
-	private JFormattedTextField formattedTextField_1_2_2;
-	private JFormattedTextField c_telefone_af;
-	private JFormattedTextField c_cep_af;
-	private JFormattedTextField c_bairro_af;
-	private JFormattedTextField c_email_af;
+	private JFormattedTextField tfIdAtualizarFornecedor;
+	private JFormattedTextField tfTelefoneAtualizarFornecedor;
+	private JFormattedTextField tfCepAtualizarFornecedor;
+	private JFormattedTextField tfBairroAtualizarFornecedor;
+	private JFormattedTextField tfEmailAtualizarFornecedor;
 
-	private JComboBox c_estado_af;
+	private JComboBox cbEstadoAtualizarFornecedor;
 	private JComboBox cbGrupoCadastrar;
 	private JComboBox cbGrupoAtualizar;
 	private JComboBox cbUnidadeGrupoCadastrar;
 	private JComboBox cbUnidadeGrupoAtualizar;
+	private JComboBox cbEstadoCadastrarFornecedor;
 
 	private JSpinner spQuantidadeCadastrarProduto;
 	private JSpinner spQuantidadeAtualizarProduto;
@@ -128,24 +131,24 @@ public class Janela_principal extends JFrame {
 	private JDateChooser dcFabricacaoAtualizarProduto;
 	private JDateChooser dcVencimentoAtualizarProduto;
 
-	private JTextField c_cidade_cf;
-	private JTextField c_nome_cf;
-	private JTextField c_razaosocial_cf;
-	private JTextField c_numero_cf;
-	private JTextField c_logradouro_cf;
-	private JTextField c_complemento_cf;
-	private JButton bt_limpar_cf;
+	private JTextField tfCidadeCadastrarFornecedor;
+	private JTextField tfNomeCadastrarFornecedor;
+	private JTextField tfRazaoSocialCadastrarFornecedor;
+	private JTextField tfNumeroCadastrarFornecedor;
+	private JTextField tfLogradouroCadastrarFornecedor;
+	private JTextField tfComplementoCadastrarFornecedor;
+	private JButton btnLimparFornecedor;
 	private JProgressBar progressBar_tabelas_superior;
 	private JTextField textField_1;
 	private JTextField tfNomeGrupoAtualizar;
 	private JTextField tfMedidaGrupoAtualizar;
 	private JTextField tfNomeGrupoCadastrar;
 	private JTextField tfMedidaGrupoCadastrar;
-	private JFormattedTextField c_email_cf = new JFormattedTextField();
-	private JFormattedTextField c_telefone_af_1 = new JFormattedTextField();
-	private JFormattedTextField c_cep_cf = new JFormattedTextField();
-	private JFormattedTextField c_cnpj_cf = new JFormattedTextField();
-	private JFormattedTextField c_bairro_cf = new JFormattedTextField();
+	private JFormattedTextField tfEmailCadastrarFornecedor = new JFormattedTextField();
+	private JFormattedTextField tfTelefoneCadastrarFornecedor = new JFormattedTextField();
+	private JFormattedTextField tfCepCadastrarFornecedor = new JFormattedTextField();
+	private JFormattedTextField tfCnpjCadastrarFornecedor = new JFormattedTextField();
+	private JFormattedTextField tfBairroCadastrarFornecedor = new JFormattedTextField();
 	private JFormattedTextField formattedTextField_1_2_2_1 = new JFormattedTextField();
 	private JFormattedTextField c_email_af_1 = new JFormattedTextField();
 	private JFormattedTextField c_cnpj_af_1 = new JFormattedTextField();
@@ -156,13 +159,21 @@ public class Janela_principal extends JFrame {
 	private JFormattedTextField tfIdAtualizarProduto = new JFormattedTextField();
 
 	private JButton botao_limpar_dados_deleteSupervisor = new JButton("Limpar");
-	private JButton btnBuscarIdAtualizarProduto;
-	private JButton btnResetarIdAtualizar;
+	private JButton btnBuscarProduto;
+	private JButton btnResetarAtualizarProduto;
 	private JButton btnLimparAtualizarProduto;
 	private JButton btnAtualizarProduto;
 
+	private JButton btnBuscarFornecedor;
+	private JButton btnResetarAtualizarFornecedor;
+	private JButton btnLimparAtualizarFornecedor;
+	private JButton btnAtualizarFornecedor;
+
 	ControllerSupervisor ctrlSuper = new ControllerSupervisor();
 	ControllerAuxiliar ctrlAux = new ControllerAuxiliar();
+
+	MaskFormatter ms;
+	DefaultFormatterFactory df;
 
 	public static void main(String[] args) {
 
@@ -326,7 +337,7 @@ public class Janela_principal extends JFrame {
 
 		JTabbedPane tabbedPane_acoes_gerente = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_acoes_gerente.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-//		tabbedPane_acoes_gerente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		// tabbedPane_acoes_gerente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabbedPane_acoes_gerente.setBounds(0, 0, 618, 525);
 		panel_area_gerente.add(tabbedPane_acoes_gerente);
 
@@ -671,9 +682,9 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_5_1_1_1_1.setBounds(207, 26, 351, 25);
 		layeredPane_2_1_1_1_1.add(lblNewLabel_5_1_1_1_1);
 
-		c_email_cf.setColumns(10);
-		c_email_cf.setBounds(207, 50, 351, 25);
-		layeredPane_2_1_1_1_1.add(c_email_cf);
+		tfEmailCadastrarFornecedor.setColumns(10);
+		tfEmailCadastrarFornecedor.setBounds(207, 50, 351, 25);
+		layeredPane_2_1_1_1_1.add(tfEmailCadastrarFornecedor);
 
 		JLabel lblNewLabel_2_1_1_1_1_4_1 = new JLabel("Nome:");
 		lblNewLabel_2_1_1_1_1_4_1.setBounds(21, 86, 176, 25);
@@ -689,87 +700,114 @@ public class Janela_principal extends JFrame {
 
 		String[] estados = new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
 				"PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" };
-		JComboBox c_estado_cf = new JComboBox(estados);
-		c_estado_cf.setBounds(368, 110, 56, 25);
-		layeredPane_2_1_1_1_1.add(c_estado_cf);
+		cbEstadoCadastrarFornecedor = new JComboBox(estados);
+		cbEstadoCadastrarFornecedor.setBounds(368, 110, 56, 25);
+		layeredPane_2_1_1_1_1.add(cbEstadoCadastrarFornecedor);
 
 		JLabel lblNewLabel_2_1_1_1_1_3_1_1 = new JLabel("Cidade:");
 		lblNewLabel_2_1_1_1_1_3_1_1.setBounds(434, 86, 124, 25);
 		layeredPane_2_1_1_1_1.add(lblNewLabel_2_1_1_1_1_3_1_1);
 
-		c_cidade_cf = new JTextField();
-		c_cidade_cf.setColumns(10);
-		c_cidade_cf.setBounds(434, 110, 124, 25);
-		layeredPane_2_1_1_1_1.add(c_cidade_cf);
+		tfCidadeCadastrarFornecedor = new JTextField();
+		tfCidadeCadastrarFornecedor.setColumns(10);
+		tfCidadeCadastrarFornecedor.setBounds(434, 110, 124, 25);
+		layeredPane_2_1_1_1_1.add(tfCidadeCadastrarFornecedor);
 
-		c_nome_cf = new JTextField();
-		c_nome_cf.setColumns(10);
-		c_nome_cf.setBounds(21, 110, 176, 25);
-		layeredPane_2_1_1_1_1.add(c_nome_cf);
+		tfNomeCadastrarFornecedor = new JTextField();
+		tfNomeCadastrarFornecedor.setColumns(10);
+		tfNomeCadastrarFornecedor.setBounds(21, 110, 176, 25);
+		layeredPane_2_1_1_1_1.add(tfNomeCadastrarFornecedor);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Razão Social:");
 		lblNewLabel_1_1.setBounds(21, 148, 248, 14);
 		layeredPane_2_1_1_1_1.add(lblNewLabel_1_1);
 
-		c_razaosocial_cf = new JTextField();
-		c_razaosocial_cf.setColumns(10);
-		c_razaosocial_cf.setBounds(21, 165, 248, 25);
-		layeredPane_2_1_1_1_1.add(c_razaosocial_cf);
+		tfRazaoSocialCadastrarFornecedor = new JTextField();
+		tfRazaoSocialCadastrarFornecedor.setColumns(10);
+		tfRazaoSocialCadastrarFornecedor.setBounds(21, 165, 248, 25);
+		layeredPane_2_1_1_1_1.add(tfRazaoSocialCadastrarFornecedor);
 
 		JLabel lblTelefone_1_1 = new JLabel("Telefone:");
 		lblTelefone_1_1.setBounds(279, 148, 145, 14);
 		layeredPane_2_1_1_1_1.add(lblTelefone_1_1);
 
-		c_telefone_af_1.setBounds(279, 165, 145, 25);
-		layeredPane_2_1_1_1_1.add(c_telefone_af_1);
+		ms = null;
+		try {
+			ms = new MaskFormatter("(##)####-####");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		df = new DefaultFormatterFactory(ms);
+		tfTelefoneCadastrarFornecedor.setFormatterFactory(df);
+		tfTelefoneCadastrarFornecedor.setBounds(279, 165, 145, 25);
+		layeredPane_2_1_1_1_1.add(tfTelefoneCadastrarFornecedor);
 
-		c_cnpj_cf.setBounds(21, 52, 176, 25);
-		layeredPane_2_1_1_1_1.add(c_cnpj_cf);
+		ms = null;
+		try {
+			ms = new MaskFormatter("##.###.###/####-##");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		df = new DefaultFormatterFactory(ms);
+		tfCnpjCadastrarFornecedor.setFormatterFactory(df);
+		tfCnpjCadastrarFornecedor.setBounds(21, 50, 176, 25);
+		layeredPane_2_1_1_1_1.add(tfCnpjCadastrarFornecedor);
 
-		c_cep_cf.setBounds(207, 110, 151, 25);
-		layeredPane_2_1_1_1_1.add(c_cep_cf);
+		ms = null;
+		try {
+			ms = new MaskFormatter("#####-###");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		df = new DefaultFormatterFactory(ms);
+		tfCepCadastrarFornecedor.setFormatterFactory(df);
+		tfCepCadastrarFornecedor.setBounds(207, 110, 151, 25);
+		layeredPane_2_1_1_1_1.add(tfCepCadastrarFornecedor);
 
 		JLabel lblBairro_1_1 = new JLabel("Bairro:");
 		lblBairro_1_1.setBounds(436, 146, 122, 14);
 		layeredPane_2_1_1_1_1.add(lblBairro_1_1);
 
-		c_bairro_cf.setBounds(434, 165, 124, 25);
-		layeredPane_2_1_1_1_1.add(c_bairro_cf);
+		tfBairroCadastrarFornecedor.setBounds(434, 165, 124, 25);
+		layeredPane_2_1_1_1_1.add(tfBairroCadastrarFornecedor);
 
 		JLabel lblNmerodomiclio_1_1 = new JLabel("Número (Domicílio)");
 		lblNmerodomiclio_1_1.setBounds(21, 201, 124, 14);
 		layeredPane_2_1_1_1_1.add(lblNmerodomiclio_1_1);
 
-		c_numero_cf = new JTextField();
-		c_numero_cf.setColumns(10);
-		c_numero_cf.setBounds(21, 218, 124, 25);
-		layeredPane_2_1_1_1_1.add(c_numero_cf);
+		tfNumeroCadastrarFornecedor = new JTextField();
+		tfNumeroCadastrarFornecedor.setColumns(10);
+		tfNumeroCadastrarFornecedor.setBounds(21, 218, 124, 25);
+		layeredPane_2_1_1_1_1.add(tfNumeroCadastrarFornecedor);
 
 		JLabel lblLogradouro_1_2_1 = new JLabel("Logradouro:");
 		lblLogradouro_1_2_1.setBounds(155, 201, 403, 14);
 		layeredPane_2_1_1_1_1.add(lblLogradouro_1_2_1);
 
-		c_logradouro_cf = new JTextField();
-		c_logradouro_cf.setColumns(10);
-		c_logradouro_cf.setBounds(155, 218, 403, 25);
-		layeredPane_2_1_1_1_1.add(c_logradouro_cf);
+		tfLogradouroCadastrarFornecedor = new JTextField();
+		tfLogradouroCadastrarFornecedor.setColumns(10);
+		tfLogradouroCadastrarFornecedor.setBounds(155, 218, 403, 25);
+		layeredPane_2_1_1_1_1.add(tfLogradouroCadastrarFornecedor);
 
 		JLabel lblLogradouro_1_1_1_1 = new JLabel("Complemento:");
 		lblLogradouro_1_1_1_1.setBounds(21, 254, 537, 14);
 		layeredPane_2_1_1_1_1.add(lblLogradouro_1_1_1_1);
 
-		c_complemento_cf = new JTextField();
-		c_complemento_cf.setColumns(10);
-		c_complemento_cf.setBounds(21, 271, 537, 25);
-		layeredPane_2_1_1_1_1.add(c_complemento_cf);
+		tfComplementoCadastrarFornecedor = new JTextField();
+		tfComplementoCadastrarFornecedor.setColumns(10);
+		tfComplementoCadastrarFornecedor.setBounds(21, 271, 537, 25);
+		layeredPane_2_1_1_1_1.add(tfComplementoCadastrarFornecedor);
 
-		bt_limpar_cf = new JButton("Limpar");
-		bt_limpar_cf.setBounds(389, 406, 105, 34);
-		panel_add_fornecedor.add(bt_limpar_cf);
+		btnLimparFornecedor = new JButton("Limpar");
+		btnLimparFornecedor.setBounds(389, 406, 105, 34);
+		panel_add_fornecedor.add(btnLimparFornecedor);
 
-		JButton bt_cadastrar_cf = new JButton("Cadastrar");
-		bt_cadastrar_cf.setBounds(504, 406, 99, 34);
-		panel_add_fornecedor.add(bt_cadastrar_cf);
+		JButton btnCadastrarFornecedor = new JButton("Cadastrar");
+		btnCadastrarFornecedor.setBounds(504, 406, 99, 34);
+		panel_add_fornecedor.add(btnCadastrarFornecedor);
 
 		// ADICIONAR CAMPOS DE ALTERAR FORNECEDOR NESSE PANEL
 		JPanel panel_update_fornecedor = new JPanel();
@@ -792,11 +830,11 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_5_1_1_1.setBounds(207, 26, 351, 25);
 		layeredPane_2_1_1_1.add(lblNewLabel_5_1_1_1);
 
-		c_email_af = new JFormattedTextField();
-		c_email_af.setEnabled(false);
-		c_email_af.setColumns(10);
-		c_email_af.setBounds(207, 50, 351, 25);
-		layeredPane_2_1_1_1.add(c_email_af);
+		tfEmailAtualizarFornecedor = new JFormattedTextField();
+		tfEmailAtualizarFornecedor.setEnabled(false);
+		tfEmailAtualizarFornecedor.setColumns(10);
+		tfEmailAtualizarFornecedor.setBounds(207, 50, 351, 25);
+		layeredPane_2_1_1_1.add(tfEmailAtualizarFornecedor);
 
 		JLabel lblNewLabel_2_1_1_1_1_4 = new JLabel("Nome:");
 		lblNewLabel_2_1_1_1_1_4.setBounds(21, 86, 176, 25);
@@ -810,138 +848,153 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_2_1_1_1_1_2_1.setBounds(368, 86, 56, 25);
 		layeredPane_2_1_1_1.add(lblNewLabel_2_1_1_1_1_2_1);
 
-		c_estado_af = new JComboBox();
-		c_estado_af.setEnabled(false);
-		c_estado_af.setModel(new DefaultComboBoxModel(
+		cbEstadoAtualizarFornecedor = new JComboBox();
+		cbEstadoAtualizarFornecedor.setEnabled(false);
+		cbEstadoAtualizarFornecedor.setModel(new DefaultComboBoxModel(
 				new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
 						"PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
-		c_estado_af.setBounds(368, 110, 56, 25);
-		layeredPane_2_1_1_1.add(c_estado_af);
+		cbEstadoAtualizarFornecedor.setBounds(368, 110, 56, 25);
+		layeredPane_2_1_1_1.add(cbEstadoAtualizarFornecedor);
 
 		JLabel lblNewLabel_2_1_1_1_1_3_1 = new JLabel("Cidade:");
 		lblNewLabel_2_1_1_1_1_3_1.setBounds(434, 86, 124, 25);
 		layeredPane_2_1_1_1.add(lblNewLabel_2_1_1_1_1_3_1);
 
-		c_cidade_af = new JTextField();
-		c_cidade_af.setEnabled(false);
-		c_cidade_af.setColumns(10);
-		c_cidade_af.setBounds(434, 110, 124, 25);
-		layeredPane_2_1_1_1.add(c_cidade_af);
+		tfCidadeAtualizarFornecedor = new JTextField();
+		tfCidadeAtualizarFornecedor.setEnabled(false);
+		tfCidadeAtualizarFornecedor.setColumns(10);
+		tfCidadeAtualizarFornecedor.setBounds(434, 110, 124, 25);
+		layeredPane_2_1_1_1.add(tfCidadeAtualizarFornecedor);
 
-		c_nome_af = new JTextField();
-		c_nome_af.setEnabled(false);
-		c_nome_af.setColumns(10);
-		c_nome_af.setBounds(21, 110, 176, 25);
-		layeredPane_2_1_1_1.add(c_nome_af);
+		tfNomeAtualizarFornecedor = new JTextField();
+		tfNomeAtualizarFornecedor.setEnabled(false);
+		tfNomeAtualizarFornecedor.setColumns(10);
+		tfNomeAtualizarFornecedor.setBounds(21, 110, 176, 25);
+		layeredPane_2_1_1_1.add(tfNomeAtualizarFornecedor);
 
 		JLabel lblNewLabel_1 = new JLabel("Razão Social:");
 		lblNewLabel_1.setBounds(21, 148, 248, 14);
 		layeredPane_2_1_1_1.add(lblNewLabel_1);
 
-		c_razaosocial_af = new JTextField();
-		c_razaosocial_af.setEnabled(false);
-		c_razaosocial_af.setColumns(10);
-		c_razaosocial_af.setBounds(21, 165, 248, 25);
-		layeredPane_2_1_1_1.add(c_razaosocial_af);
+		tfRazaoSocialAtualizarFornecedor = new JTextField();
+		tfRazaoSocialAtualizarFornecedor.setEnabled(false);
+		tfRazaoSocialAtualizarFornecedor.setColumns(10);
+		tfRazaoSocialAtualizarFornecedor.setBounds(21, 165, 248, 25);
+		layeredPane_2_1_1_1.add(tfRazaoSocialAtualizarFornecedor);
 
 		JLabel lblTelefone_1 = new JLabel("Telefone:");
 		lblTelefone_1.setBounds(279, 148, 145, 14);
 		layeredPane_2_1_1_1.add(lblTelefone_1);
 
-		c_telefone_af = new JFormattedTextField();
-		c_telefone_af.setEnabled(false);
-		c_telefone_af.setBounds(279, 165, 145, 25);
-		layeredPane_2_1_1_1.add(c_telefone_af);
+		ms = null;
+		try {
+			ms = new MaskFormatter("(##)####-####");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		df = new DefaultFormatterFactory(ms);
+		tfTelefoneAtualizarFornecedor = new JFormattedTextField();
+		tfTelefoneAtualizarFornecedor.setEnabled(false);
+		tfTelefoneAtualizarFornecedor.setBounds(279, 165, 145, 25);
+		tfTelefoneAtualizarFornecedor.setFormatterFactory(df);
+		layeredPane_2_1_1_1.add(tfTelefoneAtualizarFornecedor);
 
-		c_cnpj_af = new JFormattedTextField();
-		c_cnpj_af.setEnabled(false);
-		c_cnpj_af.setBounds(21, 52, 176, 25);
-		layeredPane_2_1_1_1.add(c_cnpj_af);
+		ms = null;
+		try {
+			ms = new MaskFormatter("##.###.###/####-##");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		df = new DefaultFormatterFactory(ms);
+		tfCnpjAtualizarFornecedor = new JFormattedTextField();
+		tfCnpjAtualizarFornecedor.setEnabled(false);
+		tfCnpjAtualizarFornecedor.setBounds(21, 50, 176, 25);
+		tfCnpjAtualizarFornecedor.setFormatterFactory(df);
+		layeredPane_2_1_1_1.add(tfCnpjAtualizarFornecedor);
 
-		c_cep_af = new JFormattedTextField();
-		c_cep_af.setEnabled(false);
-		c_cep_af.setBounds(207, 110, 151, 25);
-		layeredPane_2_1_1_1.add(c_cep_af);
+		ms = null;
+		try {
+			ms = new MaskFormatter("#####-###");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		df = new DefaultFormatterFactory(ms);
+		tfCepAtualizarFornecedor = new JFormattedTextField();
+		tfCepAtualizarFornecedor.setEnabled(false);
+		tfCepAtualizarFornecedor.setBounds(207, 110, 151, 25);
+		tfCepAtualizarFornecedor.setFormatterFactory(df);
+		layeredPane_2_1_1_1.add(tfCepAtualizarFornecedor);
 
 		JLabel lblBairro_1 = new JLabel("Bairro:");
 		lblBairro_1.setBounds(436, 146, 122, 14);
 		layeredPane_2_1_1_1.add(lblBairro_1);
 
-		c_bairro_af = new JFormattedTextField();
-		c_bairro_af.setEnabled(false);
-		c_bairro_af.setBounds(434, 165, 124, 25);
-		layeredPane_2_1_1_1.add(c_bairro_af);
+		tfBairroAtualizarFornecedor = new JFormattedTextField();
+		tfBairroAtualizarFornecedor.setEnabled(false);
+		tfBairroAtualizarFornecedor.setBounds(434, 165, 124, 25);
+		layeredPane_2_1_1_1.add(tfBairroAtualizarFornecedor);
 
 		JLabel lblNmerodomiclio_1 = new JLabel("Número (Domicílio)");
 		lblNmerodomiclio_1.setBounds(21, 201, 124, 14);
 		layeredPane_2_1_1_1.add(lblNmerodomiclio_1);
 
-		c_numero_af = new JTextField();
-		c_numero_af.setEnabled(false);
-		c_numero_af.setColumns(10);
-		c_numero_af.setBounds(21, 218, 124, 25);
-		layeredPane_2_1_1_1.add(c_numero_af);
+		tfNumeroAtualizarFornecedor = new JTextField();
+		tfNumeroAtualizarFornecedor.setEnabled(false);
+		tfNumeroAtualizarFornecedor.setColumns(10);
+		tfNumeroAtualizarFornecedor.setBounds(21, 218, 124, 25);
+		layeredPane_2_1_1_1.add(tfNumeroAtualizarFornecedor);
 
 		JLabel lblLogradouro_1_2 = new JLabel("Logradouro:");
 		lblLogradouro_1_2.setBounds(155, 201, 403, 14);
 		layeredPane_2_1_1_1.add(lblLogradouro_1_2);
 
-		c_logradouro_af = new JTextField();
-		c_logradouro_af.setEnabled(false);
-		c_logradouro_af.setColumns(10);
-		c_logradouro_af.setBounds(155, 218, 403, 25);
-		layeredPane_2_1_1_1.add(c_logradouro_af);
+		tfLogradouroAtualizarFornecedor = new JTextField();
+		tfLogradouroAtualizarFornecedor.setEnabled(false);
+		tfLogradouroAtualizarFornecedor.setColumns(10);
+		tfLogradouroAtualizarFornecedor.setBounds(155, 218, 403, 25);
+		layeredPane_2_1_1_1.add(tfLogradouroAtualizarFornecedor);
 
 		JLabel lblLogradouro_1_1_1 = new JLabel("Complemento:");
 		lblLogradouro_1_1_1.setBounds(21, 254, 537, 14);
 		layeredPane_2_1_1_1.add(lblLogradouro_1_1_1);
 
-		c_complemento_af = new JTextField();
-		c_complemento_af.setEnabled(false);
-		c_complemento_af.setColumns(10);
-		c_complemento_af.setBounds(21, 271, 537, 25);
-		layeredPane_2_1_1_1.add(c_complemento_af);
+		tfComplementoAtualizarFornecedor = new JTextField();
+		tfComplementoAtualizarFornecedor.setEnabled(false);
+		tfComplementoAtualizarFornecedor.setColumns(10);
+		tfComplementoAtualizarFornecedor.setBounds(21, 271, 537, 25);
+		layeredPane_2_1_1_1.add(tfComplementoAtualizarFornecedor);
 
 		JLabel lblPesquisarId_2 = new JLabel("Pesquisar pelo ID:");
 		lblPesquisarId_2.setBounds(393, 11, 182, 25);
 		panel_update_fornecedor.add(lblPesquisarId_2);
 
-		formattedTextField_1_2_2 = new JFormattedTextField();
-		formattedTextField_1_2_2.setText("0");
-		formattedTextField_1_2_2.setColumns(10);
-		formattedTextField_1_2_2.setBounds(393, 37, 86, 23);
-		panel_update_fornecedor.add(formattedTextField_1_2_2);
+		tfIdAtualizarFornecedor = new JFormattedTextField();
+		tfIdAtualizarFornecedor.setText("0");
+		tfIdAtualizarFornecedor.setColumns(10);
+		tfIdAtualizarFornecedor.setBounds(393, 37, 86, 23);
+		panel_update_fornecedor.add(tfIdAtualizarFornecedor);
 
-		JButton btnNewButton_1_2 = new JButton("Buscar");
-		btnNewButton_1_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				c_cnpj_af.setEnabled(true);
-				cpf_supervisor_criarSupervisor.setEnabled(true);
-				c_telefone_af.setEnabled(true);
-				c_cep_af.setEnabled(true);
-				c_bairro_af.setEnabled(true);
-				c_email_af.setEnabled(true);
-				cpf_supervisor_deleteSupervisor.setEnabled(true);
-				c_nome_af.setEnabled(true);
-				c_razaosocial_af.setEnabled(true);
-				c_numero_af.setEnabled(true);
-				c_logradouro_af.setEnabled(true);
-				c_complemento_af.setEnabled(true);
-				c_cidade_af.setEnabled(true);
-				c_estado_af.setEnabled(true);
+		btnBuscarFornecedor = new JButton("Buscar");
+		btnBuscarFornecedor.setBounds(489, 36, 86, 25);
+		panel_update_fornecedor.add(btnBuscarFornecedor);
 
-			}
-		});
-		btnNewButton_1_2.setBounds(489, 35, 86, 25);
-		panel_update_fornecedor.add(btnNewButton_1_2);
+		btnLimparAtualizarFornecedor = new JButton("Limpar");
+		btnLimparAtualizarFornecedor.setEnabled(false);
+		btnLimparAtualizarFornecedor.setBounds(389, 406, 105, 34);
+		panel_update_fornecedor.add(btnLimparAtualizarFornecedor);
 
-		JButton bt_limpar_af = new JButton("Limpar");
-		bt_limpar_af.setBounds(389, 406, 105, 34);
-		panel_update_fornecedor.add(bt_limpar_af);
+		btnAtualizarFornecedor = new JButton("Atualizar");
+		btnAtualizarFornecedor.setEnabled(false);
+		btnAtualizarFornecedor.setBounds(504, 406, 99, 34);
+		panel_update_fornecedor.add(btnAtualizarFornecedor);
 
-		JButton bt_atualizar_af = new JButton("Atualizar");
-		bt_atualizar_af.setBounds(504, 406, 99, 34);
-		panel_update_fornecedor.add(bt_atualizar_af);
+		btnResetarAtualizarFornecedor = new JButton("Resetar");
+		btnResetarAtualizarFornecedor.setEnabled(false);
+		btnResetarAtualizarFornecedor.setBounds(306, 36, 77, 25);
+		panel_update_fornecedor.add(btnResetarAtualizarFornecedor);
 
 		// ADICIONAR CAMPOS DE DELETAR FORNECEDOR NESSE PANEL
 		JPanel panel_delete_fornecedor = new JPanel();
@@ -1233,9 +1286,9 @@ public class Janela_principal extends JFrame {
 		tfIdAtualizarProduto.setBounds(393, 36, 86, 23);
 		panel_update_produto.add(tfIdAtualizarProduto);
 
-		btnBuscarIdAtualizarProduto = new JButton("Buscar");
-		btnBuscarIdAtualizarProduto.setBounds(489, 35, 86, 25);
-		panel_update_produto.add(btnBuscarIdAtualizarProduto);
+		btnBuscarProduto = new JButton("Buscar");
+		btnBuscarProduto.setBounds(489, 35, 86, 25);
+		panel_update_produto.add(btnBuscarProduto);
 
 		btnAtualizarProduto = new JButton("Atualizar");
 		btnAtualizarProduto.setEnabled(false);
@@ -1247,10 +1300,10 @@ public class Janela_principal extends JFrame {
 		btnLimparAtualizarProduto.setBounds(393, 406, 105, 34);
 		panel_update_produto.add(btnLimparAtualizarProduto);
 
-		btnResetarIdAtualizar = new JButton("Resetar");
-		btnResetarIdAtualizar.setEnabled(false);
-		btnResetarIdAtualizar.setBounds(306, 35, 77, 25);
-		panel_update_produto.add(btnResetarIdAtualizar);
+		btnResetarAtualizarProduto = new JButton("Resetar");
+		btnResetarAtualizarProduto.setEnabled(false);
+		btnResetarAtualizarProduto.setBounds(306, 35, 77, 25);
+		panel_update_produto.add(btnResetarAtualizarProduto);
 
 		// ADICIONAR CAMPOS DE DELETAR PRODUTO NESSE PANEL
 		JPanel panel_delete_produto = new JPanel();
@@ -1382,10 +1435,10 @@ public class Janela_principal extends JFrame {
 
 		// ------------------ActionListeners de Atualizar o Produto
 		// MÉTODO DE PREENCHER OS DADOS DO PRODUTO NA TELA DE ATUALIZAR BASEADO NO ID
-		btnBuscarIdAtualizarProduto.addActionListener(new ActionListener() {
+		btnBuscarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
-				cap.buscarProduto(btnBuscarIdAtualizarProduto, btnResetarIdAtualizar, tfIdAtualizarProduto,
+				cap.buscarProduto(btnBuscarProduto, btnResetarAtualizarProduto, tfIdAtualizarProduto,
 						tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto, epDescricaoAtualizarProduto,
 						cbGrupoAtualizar, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
 						btnLimparAtualizarProduto, btnAtualizarProduto);
@@ -1425,14 +1478,93 @@ public class Janela_principal extends JFrame {
 			}
 		});
 
-		// BOTÃO DE RESETAR O ID E DESABILITAR OS CAMPOS
-		btnResetarIdAtualizar.addActionListener(new ActionListener() {
+		// BOTÃO DE RESETAR O ID E DESABILITAR OS CAMPOS DA TELA DE ATUALIZAR PRODUTOS
+		btnResetarAtualizarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
-				cap.desabilitarAtualizacao(btnBuscarIdAtualizarProduto, btnResetarIdAtualizar, tfIdAtualizarProduto,
+				cap.desabilitarAtualizacao(btnBuscarProduto, btnResetarAtualizarProduto, tfIdAtualizarProduto,
 						tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto, epDescricaoAtualizarProduto,
 						cbGrupoAtualizar, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
 						btnLimparAtualizarProduto, btnAtualizarProduto);
+			}
+		});
+
+		// ------------------ActionListeners de Cadastrar Fornecedores
+
+		// ESSE BOTÃO CHAMA O MÉTODO DE CADASTRAR O FORNECEDOR
+		btnCadastrarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerValidationFornecedor cvf = new ControllerValidationFornecedor();
+				cvf.enviarDadosParaCadastro(tfNomeCadastrarFornecedor, tfCnpjCadastrarFornecedor,
+						tfRazaoSocialCadastrarFornecedor, tfTelefoneCadastrarFornecedor, tfEmailCadastrarFornecedor,
+						tfCepCadastrarFornecedor, cbEstadoCadastrarFornecedor, tfCidadeCadastrarFornecedor,
+						tfBairroCadastrarFornecedor, tfNumeroCadastrarFornecedor, tfLogradouroCadastrarFornecedor,
+						tfComplementoCadastrarFornecedor);
+			}
+		});
+
+		// ESSE BOTÃO CHAMA O MÉTODO DE LIMPAR OS DADOS DO FORNECEDOR NA SUA VIEW DE
+		// CADASTRO
+		btnLimparFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAuxiliar.limparCamposFornecedor(tfNomeCadastrarFornecedor, tfCnpjCadastrarFornecedor,
+						tfRazaoSocialCadastrarFornecedor, tfTelefoneCadastrarFornecedor, tfEmailCadastrarFornecedor,
+						tfCepCadastrarFornecedor, cbEstadoCadastrarFornecedor, tfCidadeCadastrarFornecedor,
+						tfBairroCadastrarFornecedor, tfNumeroCadastrarFornecedor, tfLogradouroCadastrarFornecedor,
+						tfComplementoCadastrarFornecedor);
+			}
+		});
+
+		// ------------------ActionListeners de Atualizar Fornecedores
+
+		// ESSE BOTÃO CHAMA O MÉTODO DE BUSCAR O FORNECEDOR PELO ID
+		btnBuscarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAtualizarFornecedor caf = new ControllerAtualizarFornecedor();
+				caf.buscarFornecedor(btnBuscarFornecedor, btnResetarAtualizarFornecedor, tfIdAtualizarFornecedor,
+						tfNomeAtualizarFornecedor, tfCnpjAtualizarFornecedor, tfRazaoSocialAtualizarFornecedor,
+						tfTelefoneAtualizarFornecedor, tfEmailAtualizarFornecedor, tfCepAtualizarFornecedor,
+						cbEstadoAtualizarFornecedor, tfCidadeAtualizarFornecedor, tfBairroAtualizarFornecedor,
+						tfNumeroAtualizarFornecedor, tfLogradouroAtualizarFornecedor, tfComplementoAtualizarFornecedor,
+						btnLimparAtualizarFornecedor, btnAtualizarFornecedor);
+			}
+		});
+
+		// ESSE BOTÃO CHAMA O MÉTODO DE RESETAR OS INPUTS DA VIEW DE ATUALIZAR O
+		// FORNECEDOR
+		btnResetarAtualizarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAtualizarFornecedor caf = new ControllerAtualizarFornecedor();
+				caf.desabilitarAtualizacaoFornecedor(btnBuscarFornecedor, btnResetarAtualizarFornecedor,
+						tfIdAtualizarFornecedor, tfNomeAtualizarFornecedor, tfCnpjAtualizarFornecedor,
+						tfRazaoSocialAtualizarFornecedor, tfTelefoneAtualizarFornecedor, tfEmailAtualizarFornecedor,
+						tfCepAtualizarFornecedor, cbEstadoAtualizarFornecedor, tfCidadeAtualizarFornecedor,
+						tfBairroAtualizarFornecedor, tfNumeroAtualizarFornecedor, tfLogradouroAtualizarFornecedor,
+						tfComplementoAtualizarFornecedor, btnLimparAtualizarFornecedor, btnAtualizarFornecedor);
+			}
+		});
+
+		// ESSE BOTÃO CHAMA O MÉTODO DE LIMPAR OS INPUTS NA TELA DE ATUALIZAR O
+		// FORNECEDOR
+		btnLimparAtualizarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAuxiliar.limparCamposFornecedor(tfNomeAtualizarFornecedor, tfCnpjAtualizarFornecedor,
+						tfRazaoSocialAtualizarFornecedor, tfTelefoneAtualizarFornecedor, tfEmailAtualizarFornecedor,
+						tfCepAtualizarFornecedor, cbEstadoAtualizarFornecedor, tfCidadeAtualizarFornecedor,
+						tfBairroAtualizarFornecedor, tfNumeroAtualizarFornecedor, tfLogradouroAtualizarFornecedor,
+						tfComplementoAtualizarFornecedor);
+			}
+		});
+
+		// ESSE BOTÃO CHAMA O MÉTODO DE ATUALIZAR O FORNECEDOR
+		btnAtualizarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAtualizarFornecedor caf = new ControllerAtualizarFornecedor();
+				caf.atualizarFornecedor(tfIdAtualizarFornecedor, tfNomeAtualizarFornecedor, tfCnpjAtualizarFornecedor,
+						tfRazaoSocialAtualizarFornecedor, tfTelefoneAtualizarFornecedor, tfEmailAtualizarFornecedor,
+						tfCepAtualizarFornecedor, cbEstadoAtualizarFornecedor, tfCidadeAtualizarFornecedor,
+						tfBairroAtualizarFornecedor, tfNumeroAtualizarFornecedor, tfLogradouroAtualizarFornecedor,
+						tfComplementoAtualizarFornecedor);
 			}
 		});
 

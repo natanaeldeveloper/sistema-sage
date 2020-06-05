@@ -19,7 +19,8 @@ public class ControllerValidationProduto {
 	public void enviarDadosParaCadastrar(JFormattedTextField tfPreco, JSpinner spQuantidade, JEditorPane epDescricao,
 			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo) {
 		// O código só vai rodar se todos os campos estiverem preenchidos
-		if (ControllerAuxiliar.dadosConferem(tfPreco, spQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento, cbGrupo)) {
+		if (ControllerAuxiliar.dadosConferem(tfPreco, spQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento,
+				cbGrupo)) {
 			BigDecimal preco = null;
 			try {
 				preco = new BigDecimal(tfPreco.getText());
@@ -38,13 +39,20 @@ public class ControllerValidationProduto {
 			// O comando de cadastrar no banco só será executado se as datas estiverem
 			// coerentes
 			if (!ControllerAuxiliar.dataErrada(dcDataFabricacao, dcDataVencimento)) {
-				ControllerProduto cp = new ControllerProduto();
-				cp.cadastrarProduto(idGrupo, descricao, preco, quantidade, dataFabricacao, dataVencimento);
+				try {
+					ControllerProduto cp = new ControllerProduto();
+					cp.cadastrarProduto(idGrupo, descricao, preco, quantidade, dataFabricacao, dataVencimento);
 
-				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Produto cadastrado",
-						JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Produto cadastrado",
+							JOptionPane.INFORMATION_MESSAGE);
 
-				ControllerAuxiliar.resetarTodosOsCampos(tfPreco, spQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento, cbGrupo);
+					ControllerAuxiliar.resetarTodosOsCampos(tfPreco, spQuantidade, epDescricao, dcDataFabricacao,
+							dcDataVencimento, cbGrupo);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null,
+							"Ocorreu um erro ao cadastrar o Produto, cheque os dados e tente novamente.\nSe o erro persistir, entre em contato.",
+							"Erro inesperado", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		} else {
 			return;

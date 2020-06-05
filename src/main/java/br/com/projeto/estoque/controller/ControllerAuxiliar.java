@@ -77,22 +77,40 @@ public class ControllerAuxiliar {
 
 	}
 
-	// Preenche as Categorias de uma JComboBox
-	public static List<Categoria> preencherCategorias() {
-		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Categoria c");
-		List<Categoria> categorias = query.getResultList();
-		manager.close();
-		return categorias;
+	// Esse método confere se todos os dados das views de Cadastrar e Atualizar
+	// Fornecedores estão preenchidos
+	public static boolean conferirDadosFornecedor(JTextField tfNome, JFormattedTextField tfCnpj,
+			JTextField tfRazaoSocial, JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep,
+			JComboBox cbEstado, JTextField tfCidade, JTextField tfBairro, JTextField tfNumero,
+			JTextField tfLogradouro) {
+		if (tfNome.getText().isEmpty() || tfCnpj.getText().isEmpty() || tfRazaoSocial.getText().isEmpty()
+				|| tfTelefone.getText().isEmpty() || tfEmail.getText().isEmpty() || tfCep.getText().isEmpty()
+				|| cbEstado.getSelectedIndex() < 0 || tfCidade.getText().isEmpty() || tfBairro.getText().isEmpty()
+				|| tfNumero.getText().isEmpty() || tfLogradouro.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Algum dos campos está vazio! Cheque e tente novamente.", "Campo vazio",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
-	// Preenche os Grupos de uma JComboBox
-	public static List<String> preencherGrupos() {
-		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Grupo g");
-		List<String> grupos = query.getResultList();
-		manager.close();
-		return grupos;
+	// Esse método limpa os dados das views de Cadastrar e Atualizar Fornecedores
+	public static void limparCamposFornecedor(JTextField tfNome, JFormattedTextField tfCnpj, JTextField tfRazaoSocial,
+			JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep, JComboBox cbEstado,
+			JTextField tfCidade, JTextField tfBairro, JTextField tfNumero, JTextField tfLogradouro,
+			JTextField tfComplemento) {
+		tfNome.setText("");
+		tfCnpj.setText("");
+		tfRazaoSocial.setText("");
+		tfTelefone.setText("");
+		tfEmail.setText("");
+		tfCep.setText("");
+		cbEstado.setSelectedIndex(0);
+		tfCidade.setText("");
+		tfBairro.setText("");
+		tfNumero.setText("");
+		tfLogradouro.setText("");
+		tfComplemento.setText("");
 	}
 
 	// Preenche os campos das views de Cadastrar e Atualizar Produtos, baseado no
@@ -150,11 +168,29 @@ public class ControllerAuxiliar {
 		cbGrupo.setSelectedIndex(0);
 	}
 
+	// Preenche as Categorias de uma JComboBox
+	public static List<String> preencherCategorias() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select nome from Categoria c");
+		List<String> categorias = query.getResultList();
+		manager.close();
+		return categorias;
+	}
+
+	// Preenche os Grupos de uma JComboBox
+	public static List<String> preencherGrupos() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select nome from Grupo g");
+		List<String> grupos = query.getResultList();
+		manager.close();
+		return grupos;
+	}
+
 	// Preenche os Fornecedores de uma JComboBox
-	public static List<Fornecedor> preencherFornecedores() {
+	public static List<String> preencherFornecedores() {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select nome from Fornecedor f");
-		List<Fornecedor> fornecedores = query.getResultList();
+		List<String> fornecedores = query.getResultList();
 		manager.close();
 		return fornecedores;
 	}
