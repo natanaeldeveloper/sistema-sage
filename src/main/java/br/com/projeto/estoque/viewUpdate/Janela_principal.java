@@ -155,7 +155,12 @@ public class Janela_principal extends JFrame {
 	private JFormattedTextField tfCodigoGrupoAtualizar = new JFormattedTextField();
 	private JFormattedTextField tfPrecoAtualizarProduto = new JFormattedTextField();
 	private JFormattedTextField tfIdAtualizarProduto = new JFormattedTextField();
+
 	private JButton botao_limpar_dados_deleteSupervisor = new JButton("Limpar");
+	private JButton btnBuscarIdAtualizarProduto;
+	private JButton btnResetarIdAtualizar;
+	private JButton btnLimparAtualizarProduto;
+	private JButton btnAtualizarProduto;
 
 	ControllerSupervisor ctrlSuper = new ControllerSupervisor();
 	ControllerAuxiliar ctrlAux = new ControllerAuxiliar();
@@ -1165,11 +1170,13 @@ public class Janela_principal extends JFrame {
 		JLabel lblPreo = new JLabel("Preço:");
 		lblPreo.setBounds(357, 33, 94, 20);
 		layeredPane.add(lblPreo);
+		tfPrecoAtualizarProduto.setEnabled(false);
 
 		tfPrecoAtualizarProduto.setBounds(357, 52, 94, 24);
 		layeredPane.add(tfPrecoAtualizarProduto);
 
-		cbGrupoAtualizar = new JComboBox();
+		cbGrupoAtualizar = new JComboBox(vazio.toArray());
+		cbGrupoAtualizar.setEnabled(false);
 		cbGrupoAtualizar.setBounds(247, 106, 140, 24);
 		layeredPane.add(cbGrupoAtualizar);
 
@@ -1193,10 +1200,12 @@ public class Janela_principal extends JFrame {
 		layeredPane.add(cbUnidadeGrupoAtualizar);
 
 		epDescricaoAtualizarProduto = new JEditorPane();
+		epDescricaoAtualizarProduto.setEnabled(false);
 		epDescricaoAtualizarProduto.setBounds(48, 108, 187, 81);
 		layeredPane.add(epDescricaoAtualizarProduto);
 
 		spQuantidadeAtualizarProduto = new JSpinner();
+		spQuantidadeAtualizarProduto.setEnabled(false);
 		spQuantidadeAtualizarProduto.setBounds(473, 52, 64, 24);
 		layeredPane.add(spQuantidadeAtualizarProduto);
 
@@ -1225,17 +1234,24 @@ public class Janela_principal extends JFrame {
 		tfIdAtualizarProduto.setBounds(393, 36, 86, 23);
 		panel_update_produto.add(tfIdAtualizarProduto);
 
-		JButton btnBuscarIdAtualizarProduto = new JButton("Buscar");
+		btnBuscarIdAtualizarProduto = new JButton("Buscar");
 		btnBuscarIdAtualizarProduto.setBounds(489, 35, 86, 25);
 		panel_update_produto.add(btnBuscarIdAtualizarProduto);
 
-		JButton btnAtualizarProduto = new JButton("Atualizar");
+		btnAtualizarProduto = new JButton("Atualizar");
+		btnAtualizarProduto.setEnabled(false);
 		btnAtualizarProduto.setBounds(504, 406, 99, 34);
 		panel_update_produto.add(btnAtualizarProduto);
 
-		JButton btnLimparAtualizarProduto = new JButton("Limpar");
+		btnLimparAtualizarProduto = new JButton("Limpar");
+		btnLimparAtualizarProduto.setEnabled(false);
 		btnLimparAtualizarProduto.setBounds(393, 406, 105, 34);
 		panel_update_produto.add(btnLimparAtualizarProduto);
+
+		btnResetarIdAtualizar = new JButton("Resetar");
+		btnResetarIdAtualizar.setEnabled(false);
+		btnResetarIdAtualizar.setBounds(306, 35, 77, 25);
+		panel_update_produto.add(btnResetarIdAtualizar);
 
 		// ADICIONAR CAMPOS DE DELETAR PRODUTO NESSE PANEL
 		JPanel panel_delete_produto = new JPanel();
@@ -1331,20 +1347,22 @@ public class Janela_principal extends JFrame {
 		// setLocationRelativeTo(null);
 
 		// ----------ActionListeners de Cadastrar o Produto
-		// MÉTODO DE PREENCHER OS DADOS DO GRUPO DA TELA DE CADASTRAR PRODUTOS BASEADO NO GRUPO ESCOLHIDO
+		// MÉTODO DE PREENCHER OS DADOS DO GRUPO DA TELA DE CADASTRAR PRODUTOS BASEADO
+		// NO GRUPO ESCOLHIDO
 		cbGrupoCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (cbGrupoCadastrar.getSelectedIndex() != 0) {
 					ControllerAuxiliar.preencherCamposGrupo(cbGrupoCadastrar, tfNomeGrupoCadastrar,
 							tfCodigoGrupoCadastrar, tfMedidaGrupoCadastrar, cbUnidadeGrupoCadastrar);
 				} else {
-					ControllerValidationProduto.resetarCamposGrupoProduto(tfNomeGrupoCadastrar, tfCodigoGrupoCadastrar,
+					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoCadastrar, tfCodigoGrupoCadastrar,
 							tfMedidaGrupoCadastrar, cbUnidadeGrupoCadastrar);
 				}
 			}
 		});
 
-		// MÉTODO QUE PEGA OS DADOS DOS INPUTS E CHAMA O CONTROLLER PARA CADASTRAR O PRODUTO
+		// MÉTODO QUE PEGA OS DADOS DOS INPUTS E CHAMA O CONTROLLER PARA CADASTRAR O
+		// PRODUTO
 		bt_atualizar_af_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ControllerValidationProduto cvp = new ControllerValidationProduto();
@@ -1357,31 +1375,33 @@ public class Janela_principal extends JFrame {
 		// MÉTODO DE LIMPAR OS DADOS DA TELA DE CADASTRAR PRODUTOS
 		bt_limpar_af_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ControllerValidationProduto.resetarTodosOsCampos(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
+				ControllerAuxiliar.resetarTodosOsCampos(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
 						epDescricaoCadastrarProduto, dcFabricacaoCadastrarProduto, dcVencimentoCadastrarProduto,
 						cbGrupoCadastrar);
 			}
 		});
 
 		// ------------------ActionListeners de Atualizar o Produto
-		// MÉTODO DE PREENCHER OS DADOS DO PRODUTO NA TELA DE ATUALIZAR
+		// MÉTODO DE PREENCHER OS DADOS DO PRODUTO NA TELA DE ATUALIZAR BASEADO NO ID
 		btnBuscarIdAtualizarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
-				cap.buscarProduto(tfIdAtualizarProduto, tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto,
-						epDescricaoAtualizarProduto, cbGrupoAtualizar, dcFabricacaoAtualizarProduto,
-						dcVencimentoAtualizarProduto);
+				cap.buscarProduto(btnBuscarIdAtualizarProduto, btnResetarIdAtualizar, tfIdAtualizarProduto,
+						tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto, epDescricaoAtualizarProduto,
+						cbGrupoAtualizar, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
+						btnLimparAtualizarProduto, btnAtualizarProduto);
 			}
 		});
 
-		// MÉTODO DE PREENCHER DADOS DO GRUPO DA TELA DE ATUALIZAR PRODUTOS BASEADO NO GRUPO ESCOLHIDO
+		// MÉTODO DE PREENCHER DADOS DO GRUPO DA TELA DE ATUALIZAR PRODUTOS BASEADO NO
+		// GRUPO ESCOLHIDO
 		cbGrupoAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (cbGrupoAtualizar.getSelectedIndex() != 0) {
 					ControllerAuxiliar.preencherCamposGrupo(cbGrupoAtualizar, tfNomeGrupoAtualizar,
 							tfCodigoGrupoAtualizar, tfMedidaGrupoAtualizar, cbUnidadeGrupoAtualizar);
 				} else {
-					ControllerValidationProduto.resetarCamposGrupoProduto(tfNomeGrupoAtualizar, tfCodigoGrupoAtualizar,
+					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoAtualizar, tfCodigoGrupoAtualizar,
 							tfMedidaGrupoAtualizar, cbUnidadeGrupoAtualizar);
 				}
 			}
@@ -1394,6 +1414,26 @@ public class Janela_principal extends JFrame {
 				cap.atualizarProduto(tfIdAtualizarProduto, tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto,
 						epDescricaoAtualizarProduto, cbGrupoAtualizar, dcFabricacaoAtualizarProduto,
 						dcVencimentoAtualizarProduto);
+			}
+		});
+
+		// BOTÃO DE LIMPAR NA TELA DE ATUALIZAR PRODUTO
+		btnLimparAtualizarProduto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ControllerAuxiliar.resetarTodosOsCampos(tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto,
+						epDescricaoAtualizarProduto, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
+						cbGrupoAtualizar);
+			}
+		});
+
+		// BOTÃO DE RESETAR O ID E DESABILITAR OS CAMPOS
+		btnResetarIdAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
+				cap.desabilitarAtualizacao(btnBuscarIdAtualizarProduto, btnResetarIdAtualizar, tfIdAtualizarProduto,
+						tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto, epDescricaoAtualizarProduto,
+						cbGrupoAtualizar, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
+						btnLimparAtualizarProduto, btnAtualizarProduto);
 			}
 		});
 
