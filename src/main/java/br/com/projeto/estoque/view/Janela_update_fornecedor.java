@@ -194,7 +194,7 @@ public class Janela_update_fornecedor extends JInternalFrame {
 
 				if (senha.equals(confirmar) && confirmar.equals(GerenteAtual.getGerente().getSenha())) {
 					ControllerFornecedor cf = new ControllerFornecedor();
-					cf.atualizarFornecedor(idInserido, cnpj, nome);
+//					cf.atualizarFornecedor(idInserido, cnpj, nome);
 					JOptionPane.showMessageDialog(null, "Fornecedor atualizado com sucesso!", "Fornecedor atualizado",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {

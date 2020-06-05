@@ -25,7 +25,7 @@ public class Grupo {
 	private String descricao;
 
 	@Column(nullable = false)
-	private Double peso;
+	private Double medida;
 	
 	@Column(nullable = false)
 	private String unidade;
@@ -68,12 +68,12 @@ public class Grupo {
 		this.descricao = descricao;
 	}
 
-	public Double getPeso() {
-		return peso;
+	public Double getMedida() {
+		return medida;
 	}
 
-	public void setPeso(Double peso) {
-		this.peso = peso;
+	public void setMedida(Double medida) {
+		this.medida = medida;
 	}
 
 	public String getUnidade() {

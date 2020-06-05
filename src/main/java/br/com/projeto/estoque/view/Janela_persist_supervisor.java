@@ -112,7 +112,7 @@ public class Janela_persist_supervisor extends JInternalFrame {
 		b_limpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				ControllerAuxiliar.limparCampos(c_cpf, c_senha, c_confSenha);
+//				ControllerAuxiliar.limparCampos(c_cpf, c_senha, c_confSenha);
 				
 			}
 		});
@@ -129,7 +129,7 @@ public class Janela_persist_supervisor extends JInternalFrame {
 				String senha = c_senha.getText();
 				String confSenha = c_confSenha.getText();
 			
-				ctrls.cadastrarSupervisor(cpf, senha, confSenha, c_cpf, c_senha, c_confSenha);
+//				ctrls.cadastrarSupervisor(cpf, senha, confSenha, c_cpf, c_senha, c_confSenha);
 			}
 		});
 		b_cadastrar.setFont(new Font("Arial", Font.PLAIN, 14));

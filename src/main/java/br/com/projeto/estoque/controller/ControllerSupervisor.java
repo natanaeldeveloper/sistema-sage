@@ -221,6 +221,7 @@ public class ControllerSupervisor extends ControllerGlobal {
 		return supervisor;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean atualizarSupervisor(String cpf, String senha, JFormattedTextField campo, String login,
 			JFormattedTextField cpf_gerente_AtualizacaoSupervisor, JPasswordField senha_gerente_AtualizacaoSupervisor) {
 		Boolean supervisorAtualizado = false;
@@ -233,7 +234,7 @@ public class ControllerSupervisor extends ControllerGlobal {
 				senha_gerente_AtualizacaoSupervisor.getText()) == true) {
 
 			if (evitarValorVazio(campo, id) == false) {
-//				Só vai executar as demais se for digitado um id
+				// Só vai executar as demais se for digitado um id
 			} else {
 
 				id = Integer.valueOf(campo.getText());
@@ -283,7 +284,7 @@ public class ControllerSupervisor extends ControllerGlobal {
 				senha_gerente_AtualizacaoSupervisor.getText()) == true) {
 
 			if (evitarValorVazio(campo, id) == false) {
-//			Só vai executar as demais se for digitado um id
+				// Só vai executar as demais se for digitado um id
 			} else {
 
 				id = Integer.valueOf(campo.getText());
@@ -326,7 +327,7 @@ public class ControllerSupervisor extends ControllerGlobal {
 				senha_gerente_AtualizacaoSupervisor.getText()) == true) {
 
 			if (evitarValorVazio(campo, id) == false) {
-//				Só vai executar as demais se for digitado um id
+				// Só vai executar as demais se for digitado um id
 			} else {
 
 				id = Integer.valueOf(campo.getText());
@@ -364,7 +365,7 @@ public class ControllerSupervisor extends ControllerGlobal {
 		JOptionPane.showMessageDialog(null, cpf);
 		if (validarConfirmacaoGerente(cpf, senha) == true) {
 			if (evitarValorVazio(campoId, id) == false) {
-//				Só vai executar as demais se for digitado um id
+				// Só vai executar as demais se for digitado um id
 			} else {
 
 				id = Integer.valueOf(campoId.getText());

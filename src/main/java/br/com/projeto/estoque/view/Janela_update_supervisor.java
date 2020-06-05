@@ -123,9 +123,9 @@ public class Janela_update_supervisor extends JInternalFrame {
 		Atualizar.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				if(ctrlSupervisor.atualizarSupervisor(c_cpfNovo.getText(), c_senhaNova.getText(), formattedTextField_1)==true) {
-					ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
-				}
+//				if(ctrlSupervisor.atualizarSupervisor(c_cpfNovo.getText(), c_senhaNova.getText(), formattedTextField_1)==true) {
+//					ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
+//				}
 			}
 		});
 		Atualizar.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -177,7 +177,7 @@ public class Janela_update_supervisor extends JInternalFrame {
 				ControllerSupervisor ctls = new ControllerSupervisor();
 				try {
 					int id = Integer.valueOf(formattedTextField_1.getText());
-					ctls.mostrarDadosDoSupervisorPeloId(id, c_cpfAtual, c_senhaAtual);
+//					ctls.mostrarDadosDoSupervisorPeloId(id, c_cpfAtual, c_senhaAtual);
 				} catch (NumberFormatException e) {
 					Aviso.avisar(8);
 				}
@@ -190,9 +190,9 @@ public class Janela_update_supervisor extends JInternalFrame {
 		btnAtualizarApenasCpf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(ctrlSupervisor.atualizarSupervisorCpf(formattedTextField_1, c_cpfNovo.getText())==true) {
-					ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
-				}
+//				if(ctrlSupervisor.atualizarSupervisorCpf(formattedTextField_1, c_cpfNovo.getText())==true) {
+//					ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
+//				}
 				
 			}
 		});
@@ -206,9 +206,9 @@ public class Janela_update_supervisor extends JInternalFrame {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(ctrlSupervisor.atualizarSupervisorSenha(formattedTextField_1, c_senhaNova.getText())==true) {
-					ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
-				}
+//				if(ctrlSupervisor.atualizarSupervisorSenha(formattedTextField_1, c_senhaNova.getText())==true) {
+//					ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
+//				}
 				
 			}
 		});
@@ -219,7 +219,7 @@ public class Janela_update_supervisor extends JInternalFrame {
 
 		b_limpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
+//				ctrlAux.limparCampos(formattedTextField_1, c_cpfAtual, c_senhaAtual, c_senhaNova, c_cpfNovo);
 			}
 		});
 

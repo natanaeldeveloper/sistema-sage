@@ -14,7 +14,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import br.com.projeto.estoque.controller.ControllerGrupo;
-import br.com.projeto.estoque.controller.ControllerViewProduto;
 
 public class Janela_adicionar_produto extends JInternalFrame {
 
@@ -51,7 +50,7 @@ public class Janela_adicionar_produto extends JInternalFrame {
 		JButton btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarGruposNaoEstocados());
+//				ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.listarGruposNaoEstocados());
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -81,7 +80,7 @@ public class Janela_adicionar_produto extends JInternalFrame {
 		scrollPane.setViewportView(tabelaProduto);
 		getContentPane().setLayout(groupLayout);
 
-		ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarGruposNaoEstocados());
+//		ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.listarGruposNaoEstocados());
 	}
 
 }

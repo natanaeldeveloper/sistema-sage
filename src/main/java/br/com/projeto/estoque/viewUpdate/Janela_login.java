@@ -52,7 +52,7 @@ public class Janela_login extends JFrame {
 	 * Create the frame.
 	 */
 	public Janela_login() {
-		setTitle("Acesso ao sistema");
+		setTitle("Login - SAGE");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 697);
@@ -162,7 +162,8 @@ public class Janela_login extends JFrame {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				ControllerSupervisor ctrlSuper = new ControllerSupervisor();
-				if (ctrlSuper.fazerLogin(formattedTextField_cpf_super.getText(), passwordField_senha_super.getText(), TipoComportamento.ENTRADA) == true) {
+				if (ctrlSuper.fazerLogin(formattedTextField_cpf_super.getText(), passwordField_senha_super.getText(),
+						TipoComportamento.ENTRADA) == true) {
 					Janela_principal jp = new Janela_principal();
 					jp.setVisible(true);
 					dispose();

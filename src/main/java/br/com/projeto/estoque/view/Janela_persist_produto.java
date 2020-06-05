@@ -141,12 +141,12 @@ public class Janela_persist_produto extends JInternalFrame {
 		scrollPane.setViewportView(tpDescricao);
 		tpDescricao.setBackground(SystemColor.controlHighlight);
 
-		cbCategoria = new JComboBox<Object>(ControllerValidationGrupo.preencherCategorias().toArray());
+//		cbCategoria = new JComboBox<Object>(ControllerValidationGrupo.preencherCategorias().toArray());
 		cbCategoria.setBackground(SystemColor.controlHighlight);
 		cbCategoria.setBounds(306, 247, 148, 22);
 		getContentPane().add(cbCategoria);
 
-		cbFornecedor = new JComboBox<Object>(ControllerValidationProduto.preencherFornecedores().toArray());
+//		cbFornecedor = new JComboBox<Object>(ControllerValidationProduto.preencherFornecedores().toArray());
 		cbFornecedor.setBounds(306, 187, 148, 22);
 		cbFornecedor.setBackground(SystemColor.controlHighlight);
 		getContentPane().add(cbFornecedor);

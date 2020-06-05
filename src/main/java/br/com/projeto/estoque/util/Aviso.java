@@ -13,19 +13,19 @@ public class Aviso {
 			JOptionPane.showMessageDialog(null, "CPF ou senha incorretos");
 			break;
 		case 3:
-			JOptionPane.showMessageDialog(null, "CPF já cadastrado no Sistema");
+			JOptionPane.showMessageDialog(null, "CPF j� cadastrado no Sistema");
 			break;
 		case 4:
-			JOptionPane.showMessageDialog(null, "Você não tem permissão para fazer isso!");
+			JOptionPane.showMessageDialog(null, "Voc� n�o tem permiss�o para fazer isso!");
 			break;
 		case 5:
-			JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+			JOptionPane.showMessageDialog(null, "Usu�rio cadastrado com sucesso!");
 			break;
 		case 6:
-			JOptionPane.showMessageDialog(null, "As senhas não são iguais!");
+			JOptionPane.showMessageDialog(null, "As senhas n�o s�o iguais!");
 			break;
 		case 7:
-			JOptionPane.showMessageDialog(null, "O que você está procurando não existe no banco de dados");
+			JOptionPane.showMessageDialog(null, "O que voc� est� procurando n�o existe no banco de dados");
 			break;
 		case 8:
 			JOptionPane.showMessageDialog(null, "O ID tem um valor numérico!");
@@ -40,13 +40,10 @@ public class Aviso {
 			JOptionPane.showMessageDialog(null, "O Supervisor a ser modificado não existe no banco de dados");
 			break;
 		case 12:
-			JOptionPane.showMessageDialog(null, "Digite o valor do atributo a ser modificado!");
+			JOptionPane.showMessageDialog(null, "Digite seu novo CPF!");
 			break;
 		case 13:
 			JOptionPane.showMessageDialog(null, "Digite sua nova SENHA");
-			break;
-		case 14:
-			JOptionPane.showMessageDialog(null, "Login já existe no sistema!");
 			break;
 		default:
 			break;

@@ -23,6 +23,7 @@ import br.com.projeto.estoque.util.JPAUtil;
 @SuppressWarnings("unchecked")
 public class ControllerTableModels {
 
+	// Méotdo construtor, popula todas as tabelas baseado nos parâmetros
 	public ControllerTableModels(JTable table_registros, JTable table_gerente, JTable table_fornecedores,
 			JTable table_produtos, JTable table_movimentacoes) {
 		popularTableRegistrosGerente(table_registros);
@@ -32,6 +33,7 @@ public class ControllerTableModels {
 		popularTabelaMovimentacoes(table_movimentacoes);
 	}
 
+	// Método para popular a tabela de registros do gerente
 	public static void popularTableRegistrosGerente(JTable table_registros) {
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistrosGerentes"));
@@ -53,7 +55,8 @@ public class ControllerTableModels {
 		table_registros.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resizeColumnWidth(table_registros, 126);
 	}
-	
+
+	// Método para popular a tabela de gerentes
 	public void popularTableGerente(JTable table_gerente) {
 		Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarGerentes"));
 		List<Gerente> registrosGerente;
@@ -67,11 +70,12 @@ public class ControllerTableModels {
 		for (Gerente registro : registrosGerente) {
 			modelo.addRow(new Object[] { registro.getId(), registro.getCpf(), });
 		}
-		
+
 		table_gerente.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resizeColumnWidth(table_gerente, 257);
 	}
 
+	// Método para popular a tabela de fornecedores
 	public static void popularTabelaFornecedores(JTable tabela) {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		tabela.setModel(tableModel);
@@ -104,6 +108,7 @@ public class ControllerTableModels {
 		resizeColumnWidth(tabela, 150);
 	}
 
+	// Método para popular a tabela de movimentações
 	public static void popularTabelaMovimentacoes(JTable tabela) {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		tabela.setModel(tableModel);
@@ -127,6 +132,7 @@ public class ControllerTableModels {
 		resizeColumnWidth(tabela, 164);
 	}
 
+	// Método para popular a tabela de produtos
 	public static void popularTabelaProdutos(JTable tabela) {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		tabela.setModel(tableModel);
@@ -153,6 +159,9 @@ public class ControllerTableModels {
 		resizeColumnWidth(tabela, 164);
 	}
 
+	// Método para redimencionar e centralizar as colunas, tomando a tabela como
+	// primeiro parâmetro e o tamanho
+	// de todas as suas colunas como o segundo
 	public static void resizeColumnWidth(JTable table, int minW) {
 		final TableColumnModel columnModel = table.getColumnModel();
 		for (int column = 0; column < table.getColumnCount(); column++) {

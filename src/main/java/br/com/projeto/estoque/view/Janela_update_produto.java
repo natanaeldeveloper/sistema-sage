@@ -162,7 +162,7 @@ public class Janela_update_produto extends JInternalFrame {
 		tfPreco.setBounds(323, 397, 131, 25);
 		getContentPane().add(tfPreco);
 
-		cbFornecedorNovo = new JComboBox(ControllerValidationProduto.preencherFornecedores().toArray());
+//		cbFornecedorNovo = new JComboBox(ControllerValidationProduto.preencherFornecedores().toArray());
 		cbFornecedorNovo.setEnabled(false);
 		cbFornecedorNovo.setBackground(SystemColor.controlHighlight);
 		cbFornecedorNovo.setBounds(271, 262, 183, 25);
@@ -170,7 +170,7 @@ public class Janela_update_produto extends JInternalFrame {
 
 		String[] unidades = new String[] { "g", "mg", "Kg", "mL", "L", "m" };
 
-		cbCategoriaNova = new JComboBox(ControllerValidationGrupo.preencherCategorias().toArray());
+//		cbCategoriaNova = new JComboBox(ControllerValidationGrupo.preencherCategorias().toArray());
 		cbCategoriaNova.setEnabled(false);
 		cbCategoriaNova.setBackground(SystemColor.controlHighlight);
 		cbCategoriaNova.setBounds(271, 325, 183, 25);

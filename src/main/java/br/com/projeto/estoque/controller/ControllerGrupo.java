@@ -9,14 +9,14 @@ import javax.persistence.Query;
 import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.model.Grupo;
 import br.com.projeto.estoque.util.JPAUtil;
-import br.com.projeto.estoque.util.RecursoNaoEncontradoException;
 
 @SuppressWarnings("unchecked")
 public class ControllerGrupo {
 	private static EntityManager manager;
 	private static Random rand;
 
-	public Grupo cadastrarGrupo(String nome, String descricao, Integer id_categoria, Double peso, String unidade) {
+	// Método para cadastrar novos Grupos
+	public Grupo cadastrarGrupo(String nome, String descricao, Integer id_categoria, Double medida, String unidade) {
 		manager = new JPAUtil().getEntityManager();
 		rand = new Random();
 
@@ -26,10 +26,13 @@ public class ControllerGrupo {
 		grupo.setNome(nome);
 		grupo.setDescricao(descricao);
 		grupo.setCategoria(c);
-		grupo.setPeso(peso);
+		grupo.setMedida(medida);
 		grupo.setUnidade(unidade);
+		// Quando um Grupo é inicialmente inserido no banco, ele não possui nenhum
+		// Produto associado, então ainda não está "estocado"
 		grupo.setEstocado(false);
 
+		// O código do Grupo é gerado de forma randômica, em hexadecimal
 		int valorRandomico = rand.nextInt(0x1000000);
 		String codigoGerado = Integer.toHexString(valorRandomico);
 
@@ -43,62 +46,57 @@ public class ControllerGrupo {
 		return grupo;
 	}
 
-	public Grupo deletarGrupo(Integer id) {
-		manager = new JPAUtil().getEntityManager();
-
-		Grupo grupoDeletado = manager.find(Grupo.class, id);
-
-		try {
-			if (grupoDeletado.getCodigo().equals(id)) {
-				manager.getTransaction().begin();
-				manager.remove(grupoDeletado);
-				manager.getTransaction().commit();
-				manager.close();
-			}
-		} catch (Exception e) {
-			throw new RecursoNaoEncontradoException();
-		}
-		manager.close();
-		return null;
-	}
-
-	public Grupo encontrarGrupoPeloCodigo(Integer id) {
-		manager = new JPAUtil().getEntityManager();
-
-		Grupo grupoEncontrado = manager.find(Grupo.class, id);
-
-		try {
-			if (grupoEncontrado.getCodigo() != null) {
-
-				Query query = manager.createQuery("select g from Grupo g where g.id=:idGrupo");
-				query.setParameter("idGrupo", grupoEncontrado.getCodigo());
-
-				List<Grupo> grupos = query.getResultList();
-
-				for (Grupo grupo : grupos) {
-					System.out.println(grupo.getNome());
-				}
-			}
-		} catch (Exception e) {
-			throw new RecursoNaoEncontradoException();
-		}
-		manager.close();
-		return null;
-	}
-
-	public List<Grupo> encontrarGruposNaoEstocados() {
-		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select g from Grupo g where g.estocado = 0");
-		List<Grupo> grupos = query.getResultList();
-		manager.close();
-		return grupos;
-	}
-
-	public List<Grupo> encontrarTodosOsGrupos() {
+	// Método para listar todos os grupos, retorna uma List<Grupo>
+	public static List<Grupo> listarGrupos() {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select g from Grupo g");
 		List<Grupo> grupos = query.getResultList();
 		manager.close();
 		return grupos;
+	}
+	
+	public static Object encontrarGrupoPeloProduto(Integer id) {
+		manager = new JPAUtil().getEntityManager();
+		Query query  = manager.createQuery("select grupo.nome from Produto p where p.id=:idProduto");
+		query.setParameter("idProduto", id);
+		Object grupo = query.getSingleResult();
+		manager.close();
+		return grupo;
+	}
+
+	// Método para encontrar um único grupo
+	public Grupo encontrarGrupoPeloCodigo(Integer id) {
+		manager = new JPAUtil().getEntityManager();
+
+		Grupo grupoEncontrado = manager.find(Grupo.class, id);
+		manager.close();
+		return grupoEncontrado;
+	}
+
+	// Método para listar todos os grupos que não estão com "estocado" = true
+	public static List<Grupo> listarGruposNaoEstocados() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select g from Grupo g where g.estocado = 0");
+		List<Grupo> gruposNaoEstocados = query.getResultList();
+		manager.close();
+		return gruposNaoEstocados;
+	}
+
+	// Método para atualizar um grupo. Os dados alteráveis são limitados à descrição
+	// e à categoria
+	public Grupo atualizarGrupo(Integer id, String descricao, Integer id_categoria) {
+		manager = new JPAUtil().getEntityManager();
+
+		Categoria categoria = manager.find(Categoria.class, id_categoria);
+
+		Grupo grupoAtualizado = manager.find(Grupo.class, id);
+		grupoAtualizado.setDescricao(descricao);
+		grupoAtualizado.setCategoria(categoria);
+		manager.getTransaction().begin();
+		manager.merge(grupoAtualizado);
+		manager.getTransaction().commit();
+
+		manager.close();
+		return grupoAtualizado;
 	}
 }
