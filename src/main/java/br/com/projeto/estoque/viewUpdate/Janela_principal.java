@@ -3,7 +3,6 @@ package br.com.projeto.estoque.viewUpdate;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -185,7 +184,7 @@ public class Janela_principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Janela_principal() {
-		setTitle("MENU");
+		setTitle("SAGE - Sistema Administrativo de Gerenciamento de Estoque");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1216, 603);
@@ -327,7 +326,7 @@ public class Janela_principal extends JFrame {
 
 		JTabbedPane tabbedPane_acoes_gerente = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_acoes_gerente.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		tabbedPane_acoes_gerente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//		tabbedPane_acoes_gerente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabbedPane_acoes_gerente.setBounds(0, 0, 618, 525);
 		panel_area_gerente.add(tabbedPane_acoes_gerente);
 

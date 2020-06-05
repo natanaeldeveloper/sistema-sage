@@ -52,7 +52,7 @@ public class Janela_login extends JFrame {
 	 * Create the frame.
 	 */
 	public Janela_login() {
-		setTitle("Acesso ao sistema");
+		setTitle("Login - SAGE");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 697);
