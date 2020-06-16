@@ -145,10 +145,10 @@ public class Janela_home extends JFrame {
 		mntmVerProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 	
-					Janela_exibir_produto internalFrame = new Janela_exibir_produto();
-					desktopPane.add(internalFrame);
-					getContentPane().add(desktopPane);
-					internalFrame.setVisible(true);
+//					Janela_exibir_produto internalFrame = new Janela_exibir_produto();
+//					desktopPane.add(internalFrame);
+//					getContentPane().add(desktopPane);
+//					internalFrame.setVisible(true);
 				
 			}
 		});

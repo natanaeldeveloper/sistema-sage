@@ -80,15 +80,6 @@ public class ControllerValidationGrupo {
 		return idCategoria;
 	}
 
-	// Preenche as Categorias da JComboBox da Persis Produto
-	public static List<Categoria> preencherCategorias() {
-		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Categoria c where c.id > -1");
-		List<Categoria> categorias = query.getResultList();
-		manager.close();
-		return categorias;
-	}
-
 	public static void limparDados(JTextField tfNome, JTextField tfPeso) {
 		tfNome.setText("");
 		tfPeso.setText("");

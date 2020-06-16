@@ -1,10 +1,6 @@
 package br.com.projeto.estoque.controller;
 
 import java.sql.Timestamp;
-import java.util.List;
-
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import br.com.projeto.estoque.model.Gerente;
 import br.com.projeto.estoque.model.RegistroGerente;
@@ -25,6 +21,5 @@ public class ControllerRegistroGerente {
 		Essencial.getManager().persist(registro);
 		return registro;
 	}
-	
 
 }

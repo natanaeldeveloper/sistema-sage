@@ -14,23 +14,28 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.NamedQuery;
 
-@NamedQuery(name="buscarSupervisor", query="select s from Supervisor s where s.cpf=:Scpf")
-@NamedQuery(name="buscarSupervisorAtivo", query="select s from Supervisor s where s.cpf=:Scpf and s.status=:Sstatus")
+@NamedQuery(name = "buscarSupervisor", query = "select s from Supervisor s where s.cpf=:Scpf and s.status='ATIVO'")
+@NamedQuery(name = "buscarSupervisorLogin", query = "select s from Supervisor s where s.login=:Slogin")
+@NamedQuery(name = "buscarSupervisorComCpf", query = "select s from Supervisor s where s.cpf=:Scpf")
 @Entity
 public class Supervisor {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Enumerated(EnumType.STRING)
 	private Nivel nivel = Nivel.RESTRITO;
-	@Column(unique=true, nullable=false)
+	@Column(unique = true, nullable = false)
 	private String cpf;
+
+	@Column(unique = true, nullable = false)
+	private String login;
 	private String senha;
+
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	@OneToMany(mappedBy="supervisor", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "supervisor", cascade = CascadeType.ALL)
 	private List<RegistroSupervisor> registros;
 
 	public Integer getId() {
@@ -64,7 +69,7 @@ public class Supervisor {
 	public void setRegistros(List<RegistroSupervisor> registros) {
 		this.registros = registros;
 	}
-	
+
 	public Nivel getNivel() {
 		return nivel;
 	}
@@ -72,7 +77,15 @@ public class Supervisor {
 	public void setNivel(Nivel nivel) {
 		this.nivel = nivel;
 	}
-	
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
 	public Status getStatus() {
 		return status;
 	}
@@ -81,5 +94,4 @@ public class Supervisor {
 		this.status = status;
 	}
 
-	
 }

@@ -71,7 +71,7 @@ public class Janela_persist_grupo extends JInternalFrame {
 		tfPeso.setBounds(574, 187, 80, 24);
 		getContentPane().add(tfPeso);
 
-		cbCategoria = new JComboBox<Object>(ControllerValidationGrupo.preencherCategorias().toArray());
+//		cbCategoria = new JComboBox<Object>(ControllerValidationGrupo.preencherCategorias().toArray());
 		cbCategoria.setBackground(SystemColor.controlHighlight);
 		cbCategoria.setBounds(312, 187, 148, 22);
 		getContentPane().add(cbCategoria);

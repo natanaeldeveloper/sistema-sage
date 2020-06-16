@@ -100,7 +100,7 @@ public class Janela_delete_supervisor extends JInternalFrame {
 		JButton b_limpar = new JButton("Limpar");
 		b_limpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlAux.limparCampos(c_cpf, formattedTextField_1, c_senha, null, formattedTextField_1);
+//				ctrlAux.limparCampos(c_cpf, formattedTextField_1, c_senha, null, formattedTextField_1);
 			}
 		});
 		b_limpar.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -112,7 +112,7 @@ public class Janela_delete_supervisor extends JInternalFrame {
 		b_cadastrar.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.excluirContaSupervisor(formattedTextField_1, c_cpf.getText(), c_senha.getText(), c_cpf, c_senha, formattedTextField_1);
+//				ctrlSuper.excluirContaSupervisor(formattedTextField_1, c_cpf.getText(), c_senha.getText(), c_cpf, c_senha, formattedTextField_1);
 			}
 		});
 		b_cadastrar.setFont(new Font("Arial", Font.PLAIN, 14));

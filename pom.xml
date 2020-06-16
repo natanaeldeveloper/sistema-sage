@@ -1,13 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>br.com.projeto.estoque</groupId>
-	<artifactId>TecFour</artifactId>
+	<artifactId>TecFouur</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
-	<name>TecFour</name>
+
+	<name>TecFouur</name>
 	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -20,6 +27,18 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.19</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.12.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>0.34</version>
 		</dependency>
 
 		<dependency>
@@ -51,16 +70,14 @@
 			<artifactId>jgoodies-looks</artifactId>
 			<version>2.7.0</version>
 		</dependency>
+
 		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>6.4.0</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.6</version>
+			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.formdev</groupId>
-			<artifactId>flatlaf</artifactId>
-			<version>0.34</version>
-		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -86,7 +103,7 @@
 						<!-- DEFINE QUAL É A CLASSE MAIN DA APLICAÇÃO -->
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>br.com.projeto.estoque.view.Janela_inicial</mainClass>
+							<mainClass>br.com.projeto.estoque.view.Janela_conexao</mainClass>
 						</manifest>
 					</archive>
 
@@ -113,6 +130,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>

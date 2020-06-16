@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
 
+import br.com.projeto.estoque.controller.ControllerValidationGrupo;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -140,12 +141,12 @@ public class Janela_persist_produto extends JInternalFrame {
 		scrollPane.setViewportView(tpDescricao);
 		tpDescricao.setBackground(SystemColor.controlHighlight);
 
-		cbCategoria = new JComboBox<Object>(ControllerValidationProduto.preencherCategorias().toArray());
+//		cbCategoria = new JComboBox<Object>(ControllerValidationGrupo.preencherCategorias().toArray());
 		cbCategoria.setBackground(SystemColor.controlHighlight);
 		cbCategoria.setBounds(306, 247, 148, 22);
 		getContentPane().add(cbCategoria);
 
-		cbFornecedor = new JComboBox<Object>(ControllerValidationProduto.preencherFornecedores().toArray());
+//		cbFornecedor = new JComboBox<Object>(ControllerValidationProduto.preencherFornecedores().toArray());
 		cbFornecedor.setBounds(306, 187, 148, 22);
 		cbFornecedor.setBackground(SystemColor.controlHighlight);
 		getContentPane().add(cbFornecedor);
@@ -176,14 +177,14 @@ public class Janela_persist_produto extends JInternalFrame {
 
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerValidationProduto.limparDados(tfNome, tfQuantidade, tfPeso, tfPreco, tpDescricao);
+//				ControllerValidationProduto.limparDados(tfNome, tfQuantidade, tfPeso, tfPreco, tpDescricao);
 			}
 		});
 
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ControllerValidationProduto.executarCadastro(tfNome, tfQuantidade, tfPeso, cbUnidade, tfPreco, tpDescricao,
-						dcFabricacao, dcVencimento, cbCategoria, cbFornecedor);
+//				ControllerValidationProduto.executarCadastro(tfNome, tfQuantidade, tfPeso, cbUnidade, tfPreco, tpDescricao,
+//						dcFabricacao, dcVencimento, cbCategoria, cbFornecedor);
 			}
 		});
 	}

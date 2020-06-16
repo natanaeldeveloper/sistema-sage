@@ -1,18 +1,15 @@
 package br.com.projeto.estoque.viewUpdate;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.ParseException;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -43,8 +40,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.MaskFormatter;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
@@ -53,50 +48,31 @@ import com.toedter.calendar.JDateChooser;
 
 import br.com.projeto.estoque.controller.ControllerAtualizarProduto;
 import br.com.projeto.estoque.controller.ControllerAuxiliar;
-import br.com.projeto.estoque.controller.ControllerGlobal;
-import br.com.projeto.estoque.controller.ControllerSupervisor;
 import br.com.projeto.estoque.controller.ControllerTableModels;
+import br.com.projeto.estoque.controller.ControllerValidationFornecedor;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
-import br.com.projeto.estoque.util.GerenteAtual;
 
-@SuppressWarnings({ "deprecation", "unchecked", "rawtypes" })
+@SuppressWarnings("rawtypes")
 public class Janela_principal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unused")
-	private ControllerTableModels ctb;
-
-	// CAMPOS DO PAINEL DE DELEÇÃO DO SUPERVISOR
-	private JFormattedTextField cpf_gerente_deleteSupervisor;
-	private JPasswordField senha_gerente_deleteSupervisor;
-	private JFormattedTextField cpf_supervisor_deleteSupervisor;
-	private JFormattedTextField id_pesquisa_deleteSupervisor;
-	private JFormattedTextField login_supervisor_deleteSupervisor = new JFormattedTextField();
-
-	// CAMPOS DO PAINEL DE CRIAÇÃO/CADASTRO DO SUPERVISOR
-	private JFormattedTextField cpf_supervisor_criarSupervisor;
-	private JFormattedTextField login_supervisor_criarSupervisor = new JFormattedTextField();
-	private JPasswordField confirmacaoSenha_supervisor_criarSupervisor;
-	private JPasswordField senha_supervisor_criarSupervisor;
-
-	// CAMPOS DO PAINEL DE ATUALIZAÇÃO DO SUPERVISOR
-	private JFormattedTextField cpf_gerente_AtualizacaoSupervisor;
-	private JFormattedTextField id_pesquisa_supervisor_AtualizacaoSupervisor;
-	private JPasswordField nova_senha_supervisor_AtualizacaoSupervisor;
-	private JPasswordField senha_gerente_AtualizacaoSupervisor;
-	private JFormattedTextField novo_cpf_supervisor_AtualizacaoSupervisor;
-	private JFormattedTextField cpf_atual_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-	private JFormattedTextField login_atual_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-	private JFormattedTextField novo_login_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-
 	private JPanel contentPane;
 	private JTable table_gerentes;
 	private JTable table_fornecedores;
-	private JTable table_produtos;
 	private JTable table_movimentacoes;
 	private JTable table_registros;
-
+	private JTable table_produtos;
+	private JPasswordField passwordField_1;
+	private JPasswordField passwordField;
+	private JPasswordField passwordField_2;
+	private JFormattedTextField c_cpfNovo;
+	private JFormattedTextField formattedTextField_1_1;
+	private JFormattedTextField formattedTextField_1_2_2_2;
+	private JFormattedTextField formattedTextField_1;
+	private JFormattedTextField formattedTextField;
+	private JPasswordField passwordField_3;
+	private JPasswordField passwordField_4;
 	private JTextField c_cidade_af;
 	private JTextField c_nome_af;
 	private JTextField c_razaosocial_af;
@@ -104,30 +80,29 @@ public class Janela_principal extends JFrame {
 	private JTextField c_logradouro_af;
 	private JTextField c_complemento_af;
 	private JFormattedTextField c_cnpj_af;
-
+	private JFormattedTextField c_cpfAtual_1;
 	private JFormattedTextField formattedTextField_1_2_2;
 	private JFormattedTextField c_telefone_af;
 	private JFormattedTextField c_cep_af;
 	private JFormattedTextField c_bairro_af;
 	private JFormattedTextField c_email_af;
-
+	private JFormattedTextField c_cpfNovo_1;
+	private JFormattedTextField formattedTextField_1_2_1;
+	private JFormattedTextField c_cpfAtual_2;
+	private JFormattedTextField c_cpfAtual;
+	private JFormattedTextField formattedTextField_1_2;
+	private JFormattedTextField tfCodigoCadastrarProduto;
+	private JFormattedTextField c_cnpj_cf;
+	private JFormattedTextField c_telefone_af_1;
+	private JFormattedTextField c_email_cf;
+	private JFormattedTextField c_cep_cf;
+	private JComboBox c_estado_cf;
+	private JFormattedTextField c_bairro_cf;
 	private JComboBox c_estado_af;
-	private JComboBox cbGrupoCadastrar;
-	private JComboBox cbGrupoAtualizar;
-	private JComboBox cbUnidadeGrupoCadastrar;
-	private JComboBox cbUnidadeGrupoAtualizar;
-
-	private JSpinner spQuantidadeCadastrarProduto;
-	private JSpinner spQuantidadeAtualizarProduto;
-
-	private JEditorPane epDescricaoCadastrarProduto;
-	private JEditorPane epDescricaoAtualizarProduto;
-
-	private JDateChooser dcFabricacaoCadastrarProduto;
-	private JDateChooser dcVencimentoCadastrarProduto;
-	private JDateChooser dcFabricacaoAtualizarProduto;
-	private JDateChooser dcVencimentoAtualizarProduto;
-
+	private JComboBox comboBox_2;
+	private JComboBox cbUnidadeCadastrarProduto;
+	private JComboBox comboBox;
+	private JComboBox comboBox_1;
 	private JTextField c_cidade_cf;
 	private JTextField c_nome_cf;
 	private JTextField c_razaosocial_cf;
@@ -137,35 +112,22 @@ public class Janela_principal extends JFrame {
 	private JButton bt_limpar_cf;
 	private JProgressBar progressBar_tabelas_superior;
 	private JTextField textField_1;
-	private JTextField tfNomeGrupoAtualizar;
-	private JTextField tfMedidaGrupoAtualizar;
-	private JTextField tfNomeGrupoCadastrar;
-	private JTextField tfMedidaGrupoCadastrar;
-	private JFormattedTextField c_email_cf = new JFormattedTextField();
-	private JFormattedTextField c_telefone_af_1 = new JFormattedTextField();
-	private JFormattedTextField c_cep_cf = new JFormattedTextField();
-	private JFormattedTextField c_cnpj_cf = new JFormattedTextField();
-	private JFormattedTextField c_bairro_cf = new JFormattedTextField();
-	private JFormattedTextField formattedTextField_1_2_2_1 = new JFormattedTextField();
-	private JFormattedTextField c_email_af_1 = new JFormattedTextField();
-	private JFormattedTextField c_cnpj_af_1 = new JFormattedTextField();
-	private JFormattedTextField tfCodigoGrupoCadastrar = new JFormattedTextField();
-	private JFormattedTextField tfPrecoCadastrarProduto = new JFormattedTextField();
-	private JFormattedTextField tfCodigoGrupoAtualizar = new JFormattedTextField();
-	private JFormattedTextField tfPrecoAtualizarProduto = new JFormattedTextField();
-	private JFormattedTextField tfIdAtualizarProduto = new JFormattedTextField();
-
-	private JButton botao_limpar_dados_deleteSupervisor = new JButton("Limpar");
-	private JButton btnBuscarIdAtualizarProduto;
-	private JButton btnResetarIdAtualizar;
-	private JButton btnLimparAtualizarProduto;
-	private JButton btnAtualizarProduto;
-
-	ControllerSupervisor ctrlSuper = new ControllerSupervisor();
-	ControllerAuxiliar ctrlAux = new ControllerAuxiliar();
+	private JTextField textField;
+	private JTextField textField_2;
+	private JTextField tfNomeCadastrarProduto;
+	private JTextField tfMedidaCadastrarProduto;
+	@SuppressWarnings("unused")
+	private ControllerTableModels ctb;
+	private JSpinner spinner;
+	private JSpinner spinner_1;
+	private JEditorPane editorPane;
+	private JEditorPane editorPane_1;
+	private JDateChooser dcFabricacao;
+	private JDateChooser dcVencimento;
+	private JDateChooser dcFabricacao_1;
+	private JDateChooser dcVencimento_1;
 
 	public static void main(String[] args) {
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -183,8 +145,9 @@ public class Janela_principal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings("unchecked")
 	public Janela_principal() {
-		setTitle("SAGE - Sistema Administrativo de Gerenciamento de Estoque");
+		setTitle("SAGE - Sistema Administrativo de Gerencimento de Estoque");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1216, 603);
@@ -278,7 +241,7 @@ public class Janela_principal extends JFrame {
 		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Dark Purple");
 		mntmNewMenuItem_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themas/DarkPurple.json"));
+				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themes/DarkPurple.json"));
 				SwingUtilities.updateComponentTreeUI(new Janela_principal());
 				Janela_principal t = new Janela_principal();
 				repaint();
@@ -289,10 +252,10 @@ public class Janela_principal extends JFrame {
 		});
 		mnNewMenu_5.add(mntmNewMenuItem_9);
 
-		JMenuItem mntmNewMenuItem_10 = new JMenuItem("LightGray");
+		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Light Contrast");
 		mntmNewMenuItem_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themas/LightGray.json"));
+				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themes/light.json"));
 				SwingUtilities.updateComponentTreeUI(new Janela_principal());
 				Janela_principal t = new Janela_principal();
 				repaint();
@@ -303,9 +266,22 @@ public class Janela_principal extends JFrame {
 		});
 		mnNewMenu_5.add(mntmNewMenuItem_10);
 
-		JMenuItem btn_sair = new JMenuItem("Sair");
+		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Dark Contrast");
+		mntmNewMenuItem_11.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IntelliJTheme.install(Janela_principal.class.getResourceAsStream("/themes/dark.json"));
+				SwingUtilities.updateComponentTreeUI(new Janela_principal());
+				Janela_principal t = new Janela_principal();
+				repaint();
+				validate();
+				t.setVisible(true);
+				dispose();
+			}
+		});
+		mnNewMenu_5.add(mntmNewMenuItem_11);
 
-		mnNewMenu.add(btn_sair);
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Sair");
+		mnNewMenu.add(mntmNewMenuItem_3);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -326,7 +302,7 @@ public class Janela_principal extends JFrame {
 
 		JTabbedPane tabbedPane_acoes_gerente = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_acoes_gerente.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-//		tabbedPane_acoes_gerente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		tabbedPane_acoes_gerente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		tabbedPane_acoes_gerente.setBounds(0, 0, 618, 525);
 		panel_area_gerente.add(tabbedPane_acoes_gerente);
 
@@ -337,68 +313,45 @@ public class Janela_principal extends JFrame {
 				null);
 		panel_add_gerente.setLayout(null);
 
-		JButton limpar_dados_criarSupervisor = new JButton("Limpar");
-
-		limpar_dados_criarSupervisor.setBounds(383, 406, 105, 34);
-		panel_add_gerente.add(limpar_dados_criarSupervisor);
+		JButton btnLimpar = new JButton("Limpar");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnLimpar.setBounds(383, 406, 105, 34);
+		panel_add_gerente.add(btnLimpar);
 
 		JButton btnNewButton = new JButton("Cadastrar");
-
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnNewButton.setBounds(498, 406, 105, 34);
 		panel_add_gerente.add(btnNewButton);
 
 		JLayeredPane layeredPane_2_1 = new JLayeredPane();
 		layeredPane_2_1.setBorder(
 				new TitledBorder(null, "Dados do novo Supervisor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		layeredPane_2_1.setBounds(20, 47, 583, 158);
+		layeredPane_2_1.setBounds(20, 28, 583, 113);
 		panel_add_gerente.add(layeredPane_2_1);
 
-		senha_supervisor_criarSupervisor = new JPasswordField();
-		senha_supervisor_criarSupervisor.setColumns(10);
-		senha_supervisor_criarSupervisor.setBounds(21, 111, 253, 25);
-		layeredPane_2_1.add(senha_supervisor_criarSupervisor);
+		passwordField_2 = new JPasswordField();
+		passwordField_2.setColumns(10);
+		passwordField_2.setBounds(21, 50, 253, 25);
+		layeredPane_2_1.add(passwordField_2);
 
 		JLabel lblNewLabel_2_1_1 = new JLabel("Senha:");
-		lblNewLabel_2_1_1.setBounds(21, 87, 253, 25);
+		lblNewLabel_2_1_1.setBounds(21, 26, 253, 25);
 		layeredPane_2_1.add(lblNewLabel_2_1_1);
 
 		JLabel lblNewLabel_5_1 = new JLabel("CPF:");
 		lblNewLabel_5_1.setBounds(307, 26, 253, 25);
 		layeredPane_2_1.add(lblNewLabel_5_1);
 
-		cpf_supervisor_criarSupervisor = new JFormattedTextField();
-		cpf_supervisor_criarSupervisor.setColumns(10);
-		cpf_supervisor_criarSupervisor.setBounds(307, 50, 253, 25);
-		layeredPane_2_1.add(cpf_supervisor_criarSupervisor);
-
-		confirmacaoSenha_supervisor_criarSupervisor = new JPasswordField();
-		confirmacaoSenha_supervisor_criarSupervisor.setColumns(10);
-		confirmacaoSenha_supervisor_criarSupervisor.setBounds(307, 111, 253, 25);
-		layeredPane_2_1.add(confirmacaoSenha_supervisor_criarSupervisor);
-
-		JLabel lblConfirmaoDeSenha = new JLabel("\r\nConfirmação de senha:");
-		lblConfirmaoDeSenha.setBounds(307, 87, 253, 25);
-		layeredPane_2_1.add(lblConfirmaoDeSenha);
-
-		login_supervisor_criarSupervisor.setBounds(21, 51, 253, 25);
-		layeredPane_2_1.add(login_supervisor_criarSupervisor);
-		login_supervisor_criarSupervisor.setColumns(10);
-
-		JLabel lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(21, 31, 253, 25);
-		layeredPane_2_1.add(lblLogin);
-
-		JLabel label = new JLabel("USUÁRIO ATUAL:");
-		label.setForeground(Color.BLACK);
-		label.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label.setBounds(20, 11, 106, 25);
-		panel_add_gerente.add(label);
-
-		JLabel usuario_atual_cadastrarSupervisor = new JLabel("");
-		usuario_atual_cadastrarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		usuario_atual_cadastrarSupervisor.setBounds(143, 11, 169, 25);
-		usuario_atual_cadastrarSupervisor.setText(GerenteAtual.getGerente().getLogin());
-		panel_add_gerente.add(usuario_atual_cadastrarSupervisor);
+		c_cpfAtual_1 = new JFormattedTextField();
+		c_cpfAtual_1.setColumns(10);
+		c_cpfAtual_1.setBounds(307, 50, 253, 25);
+		layeredPane_2_1.add(c_cpfAtual_1);
 
 		// ADICIONAR CAMPOS DE ATUALIZAR gerente NESSE PANEL
 		JPanel panel_update_gerente = new JPanel();
@@ -407,117 +360,84 @@ public class Janela_principal extends JFrame {
 				null);
 		panel_update_gerente.setLayout(null);
 
-		JButton botao_limpar_dados_AtualizacaoSupervisor = new JButton("Limpar");
+		JButton btnLimpar_1 = new JButton("Limpar");
+		btnLimpar_1.setBounds(64, 406, 105, 34);
+		panel_update_gerente.add(btnLimpar_1);
 
-		botao_limpar_dados_AtualizacaoSupervisor.setBounds(30, 429, 78, 34);
-		panel_update_gerente.add(botao_limpar_dados_AtualizacaoSupervisor);
+		JButton btnAtualizar = new JButton("Atualizar Tudo");
+		btnAtualizar.setBounds(476, 406, 127, 34);
+		panel_update_gerente.add(btnAtualizar);
 
-		JButton btn_atualizar_tudo_AtualizacaoSupervisor = new JButton("Atualizar Tudo");
+		JButton btnAtualizarSenha = new JButton("Atualizar CPF");
+		btnAtualizarSenha.setBounds(327, 406, 139, 34);
+		panel_update_gerente.add(btnAtualizarSenha);
 
-		btn_atualizar_tudo_AtualizacaoSupervisor.setBounds(359, 429, 106, 34);
-		panel_update_gerente.add(btn_atualizar_tudo_AtualizacaoSupervisor);
+		JButton btnAtualizarSenha_1 = new JButton("Atualizar Senha");
+		btnAtualizarSenha_1.setBounds(178, 406, 139, 34);
+		panel_update_gerente.add(btnAtualizarSenha_1);
 
-		JButton btn_atualizar_cpf_AtualizacaoSupervisor = new JButton("Atualizar CPF");
-
-		btn_atualizar_cpf_AtualizacaoSupervisor.setBounds(243, 429, 106, 34);
-		panel_update_gerente.add(btn_atualizar_cpf_AtualizacaoSupervisor);
-
-		JButton btn_atualizar_senha_AtualizacaoSupervisor = new JButton("Atualizar Senha");
-
-		btn_atualizar_senha_AtualizacaoSupervisor.setBounds(118, 429, 115, 34);
-		panel_update_gerente.add(btn_atualizar_senha_AtualizacaoSupervisor);
-
-		JLayeredPane botao_atualizar_senha_AtualizacaoSupervisor = new JLayeredPane();
-		botao_atualizar_senha_AtualizacaoSupervisor.setBorder(
+		JLayeredPane layeredPane_1 = new JLayeredPane();
+		layeredPane_1.setBorder(
 				new TitledBorder(null, "Dados do Supervisor", TitledBorder.LEFT, TitledBorder.TOP, null, null));
-		botao_atualizar_senha_AtualizacaoSupervisor.setBounds(20, 152, 583, 262);
-		panel_update_gerente.add(botao_atualizar_senha_AtualizacaoSupervisor);
+		layeredPane_1.setBounds(20, 152, 583, 190);
+		panel_update_gerente.add(layeredPane_1);
 
 		JLabel lblPesquisarId = new JLabel("Pesquisar pelo ID:");
 		lblPesquisarId.setBounds(20, 42, 182, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(lblPesquisarId);
+		layeredPane_1.add(lblPesquisarId);
 		// lblPesquisarId.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
 
-		id_pesquisa_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-		id_pesquisa_supervisor_AtualizacaoSupervisor.setBounds(20, 69, 86, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(id_pesquisa_supervisor_AtualizacaoSupervisor);
-		id_pesquisa_supervisor_AtualizacaoSupervisor.setText("0");
-		id_pesquisa_supervisor_AtualizacaoSupervisor.setColumns(10);
+		formattedTextField_1_2 = new JFormattedTextField();
+		formattedTextField_1_2.setBounds(20, 69, 86, 25);
+		layeredPane_1.add(formattedTextField_1_2);
+		formattedTextField_1_2.setText("0");
+		formattedTextField_1_2.setColumns(10);
 		// formattedTextField_1_2.setBackground(SystemColor.controlHighlight);
 
-		JButton buscar_supervisor_AtualizacaoSupervisor = new JButton("Buscar");
-
-		buscar_supervisor_AtualizacaoSupervisor.setBounds(116, 69, 86, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(buscar_supervisor_AtualizacaoSupervisor);
+		JButton btnNewButton_1 = new JButton("Buscar");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				passwordField_1.setEditable(true);
+				c_cpfNovo.setEditable(true);
+			}
+		});
+		btnNewButton_1.setBounds(116, 69, 86, 25);
+		layeredPane_1.add(btnNewButton_1);
 		// passwordField.setBackground(SystemColor.controlHighlight);
 
 		JLabel lblNewLabel_3 = new JLabel("Nova Senha:");
-		lblNewLabel_3.setBounds(20, 150, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(lblNewLabel_3);
+		lblNewLabel_3.setBounds(20, 105, 253, 25);
+		layeredPane_1.add(lblNewLabel_3);
 		// lblNewLabel_3.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
 
-		nova_senha_supervisor_AtualizacaoSupervisor = new JPasswordField();
-		nova_senha_supervisor_AtualizacaoSupervisor.setBounds(20, 175, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(nova_senha_supervisor_AtualizacaoSupervisor);
-		nova_senha_supervisor_AtualizacaoSupervisor.setColumns(10);
-		nova_senha_supervisor_AtualizacaoSupervisor.setEditable(true);
+		passwordField_1 = new JPasswordField();
+		passwordField_1.setEditable(false);
+		passwordField_1.setBounds(20, 131, 253, 25);
+		layeredPane_1.add(passwordField_1);
+		passwordField_1.setColumns(10);
 		// lblNewLabel_5.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
 
 		JLabel lblNewLabel_3_1 = new JLabel("Novo CPF:");
-		lblNewLabel_3_1.setBounds(306, 150, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(lblNewLabel_3_1);
+		lblNewLabel_3_1.setBounds(306, 105, 253, 25);
+		layeredPane_1.add(lblNewLabel_3_1);
 		// lblNewLabel_3_1.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
 
-		novo_cpf_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-		novo_cpf_supervisor_AtualizacaoSupervisor.setBounds(306, 175, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(novo_cpf_supervisor_AtualizacaoSupervisor);
-		novo_cpf_supervisor_AtualizacaoSupervisor.setColumns(10);
-		novo_cpf_supervisor_AtualizacaoSupervisor.setEditable(true);
-
-		cpf_atual_supervisor_AtualizacaoSupervisor.setEditable(false);
-		cpf_atual_supervisor_AtualizacaoSupervisor.setColumns(10);
-		cpf_atual_supervisor_AtualizacaoSupervisor.setBounds(306, 124, 253, 25);
-		try {
-			novo_cpf_supervisor_AtualizacaoSupervisor
-					.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		botao_atualizar_senha_AtualizacaoSupervisor.add(cpf_atual_supervisor_AtualizacaoSupervisor);
-
-		JLabel lblSenhaAtual = new JLabel("Login atual:");
-		lblSenhaAtual.setBounds(20, 97, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(lblSenhaAtual);
-
-		login_atual_supervisor_AtualizacaoSupervisor.setEditable(false);
-		login_atual_supervisor_AtualizacaoSupervisor.setColumns(10);
-		login_atual_supervisor_AtualizacaoSupervisor.setBounds(20, 126, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(login_atual_supervisor_AtualizacaoSupervisor);
-
-		JLabel lblCpfAtual = new JLabel("CPF atual:");
-		lblCpfAtual.setBounds(306, 102, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(lblCpfAtual);
-
-		novo_login_supervisor_AtualizacaoSupervisor.setColumns(10);
-		novo_login_supervisor_AtualizacaoSupervisor.setBounds(20, 226, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(novo_login_supervisor_AtualizacaoSupervisor);
-
-		JLabel lblNovoLogin = new JLabel("Novo Login:");
-		lblNovoLogin.setBounds(20, 203, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(lblNovoLogin);
+		c_cpfNovo = new JFormattedTextField();
+		c_cpfNovo.setEditable(false);
+		c_cpfNovo.setBounds(306, 131, 253, 25);
+		layeredPane_1.add(c_cpfNovo);
+		c_cpfNovo.setColumns(10);
 
 		JLayeredPane layeredPane_2 = new JLayeredPane();
-		layeredPane_2.setBorder(new TitledBorder(null, "Confirme Seus Dados de Gerente", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-		layeredPane_2.setBounds(20, 38, 583, 113);
+		layeredPane_2.setBorder(
+				new TitledBorder(null, "Confirme Seus Dados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2.setBounds(20, 28, 583, 113);
 		panel_update_gerente.add(layeredPane_2);
 
-		senha_gerente_AtualizacaoSupervisor = new JPasswordField();
-		senha_gerente_AtualizacaoSupervisor.setColumns(10);
-		senha_gerente_AtualizacaoSupervisor.setBounds(21, 50, 253, 25);
-		layeredPane_2.add(senha_gerente_AtualizacaoSupervisor);
+		passwordField = new JPasswordField();
+		passwordField.setColumns(10);
+		passwordField.setBounds(21, 50, 253, 25);
+		layeredPane_2.add(passwordField);
 
 		JLabel lblNewLabel_2_1 = new JLabel("Sua Senha:");
 		lblNewLabel_2_1.setBounds(21, 26, 253, 25);
@@ -527,45 +447,29 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_5.setBounds(307, 26, 253, 25);
 		layeredPane_2.add(lblNewLabel_5);
 
-		cpf_gerente_AtualizacaoSupervisor = new JFormattedTextField();
-		cpf_gerente_AtualizacaoSupervisor.setColumns(10);
-		cpf_gerente_AtualizacaoSupervisor.setBounds(307, 50, 253, 25);
-		layeredPane_2.add(cpf_gerente_AtualizacaoSupervisor);
-
-		JButton btn_atualizar_login_AtualizacaoSupervisor = new JButton("Atualizar Login");
-		btn_atualizar_login_AtualizacaoSupervisor.setBounds(475, 429, 128, 34);
-		panel_update_gerente.add(btn_atualizar_login_AtualizacaoSupervisor);
-
-		JLabel lblUsurioAtual = new JLabel("USUÁRIO ATUAL:");
-		lblUsurioAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblUsurioAtual.setForeground(Color.BLACK);
-		lblUsurioAtual.setBounds(20, 11, 106, 25);
-		panel_update_gerente.add(lblUsurioAtual);
-
-		JLabel usuario_atual_atualizar_gerente = new JLabel("");
-		usuario_atual_atualizar_gerente.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		usuario_atual_atualizar_gerente.setBounds(143, 11, 169, 25);
-		panel_update_gerente.add(usuario_atual_atualizar_gerente);
+		c_cpfAtual = new JFormattedTextField();
+		c_cpfAtual.setColumns(10);
+		c_cpfAtual.setBounds(307, 50, 253, 25);
+		layeredPane_2.add(c_cpfAtual);
 		// c_cpfAtual.setBackground(SystemColor.controlHighlight);
-		usuario_atual_atualizar_gerente.setText(GerenteAtual.getGerente().getLogin());
 
 		// ADICIONAR CAMPOS DE DELETAR gerente NESSE PANEL
-		JPanel panel_delete_supervisor = new JPanel();
+		JPanel panel_delete_gerente = new JPanel();
 		tabbedPane_acoes_gerente.addTab("Deletar Supervisor",
-				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_supervisor,
+				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_gerente,
 				null);
-		panel_delete_supervisor.setLayout(null);
+		panel_delete_gerente.setLayout(null);
 
 		JLayeredPane layeredPane_2_2 = new JLayeredPane();
-		layeredPane_2_2.setBorder(new TitledBorder(null, "Confirme Seus Dados de Gerente", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-		layeredPane_2_2.setBounds(20, 39, 583, 113);
-		panel_delete_supervisor.add(layeredPane_2_2);
+		layeredPane_2_2.setBorder(
+				new TitledBorder(null, "Confirme Seus Dados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		layeredPane_2_2.setBounds(20, 28, 583, 113);
+		panel_delete_gerente.add(layeredPane_2_2);
 
-		senha_gerente_deleteSupervisor = new JPasswordField();
-		senha_gerente_deleteSupervisor.setColumns(10);
-		senha_gerente_deleteSupervisor.setBounds(21, 50, 253, 25);
-		layeredPane_2_2.add(senha_gerente_deleteSupervisor);
+		passwordField_3 = new JPasswordField();
+		passwordField_3.setColumns(10);
+		passwordField_3.setBounds(21, 50, 253, 25);
+		layeredPane_2_2.add(passwordField_3);
 
 		JLabel lblNewLabel_2_1_2 = new JLabel("Sua Senha:");
 		lblNewLabel_2_1_2.setBounds(21, 26, 253, 25);
@@ -575,72 +479,62 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_5_2.setBounds(307, 26, 253, 25);
 		layeredPane_2_2.add(lblNewLabel_5_2);
 
-		cpf_gerente_deleteSupervisor = new JFormattedTextField();
-		cpf_gerente_deleteSupervisor.setColumns(10);
-		cpf_gerente_deleteSupervisor.setBounds(307, 50, 253, 25);
-		layeredPane_2_2.add(cpf_gerente_deleteSupervisor);
+		c_cpfAtual_2 = new JFormattedTextField();
+		c_cpfAtual_2.setColumns(10);
+		c_cpfAtual_2.setBounds(307, 50, 253, 25);
+		layeredPane_2_2.add(c_cpfAtual_2);
 
 		JLayeredPane layeredPane_1_1 = new JLayeredPane();
 		layeredPane_1_1.setBorder(
 				new TitledBorder(null, "Dados do Supervisor", TitledBorder.LEFT, TitledBorder.TOP, null, null));
 		layeredPane_1_1.setBounds(20, 152, 583, 190);
-		panel_delete_supervisor.add(layeredPane_1_1);
+		panel_delete_gerente.add(layeredPane_1_1);
 
 		JLabel lblPesquisarId_1 = new JLabel("Pesquisar ID:");
 		lblPesquisarId_1.setBounds(20, 33, 182, 25);
 		layeredPane_1_1.add(lblPesquisarId_1);
 
-		id_pesquisa_deleteSupervisor = new JFormattedTextField();
-		id_pesquisa_deleteSupervisor.setText("0");
-		id_pesquisa_deleteSupervisor.setColumns(10);
-		id_pesquisa_deleteSupervisor.setBounds(20, 69, 86, 25);
-		layeredPane_1_1.add(id_pesquisa_deleteSupervisor);
+		formattedTextField_1_2_1 = new JFormattedTextField();
+		formattedTextField_1_2_1.setText("0");
+		formattedTextField_1_2_1.setColumns(10);
+		formattedTextField_1_2_1.setBounds(20, 69, 86, 25);
+		layeredPane_1_1.add(formattedTextField_1_2_1);
 
-		id_pesquisa_deleteSupervisor.setText("0");
+		JButton btnNewButton_1_1 = new JButton("Buscar");
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_1_1.setBounds(116, 69, 86, 25);
+		layeredPane_1_1.add(btnNewButton_1_1);
 
-		JButton botao_pesquisa_deleteSupervisor = new JButton("Buscar");
-
-		botao_pesquisa_deleteSupervisor.setBounds(116, 69, 86, 25);
-		layeredPane_1_1.add(botao_pesquisa_deleteSupervisor);
-
-		JLabel lblNewLabel_3_2 = new JLabel("Login");
+		JLabel lblNewLabel_3_2 = new JLabel("Nova Senha:");
 		lblNewLabel_3_2.setBounds(20, 103, 253, 27);
 		layeredPane_1_1.add(lblNewLabel_3_2);
 
-		JLabel lblNewLabel_3_1_1 = new JLabel("CPF:");
+		passwordField_4 = new JPasswordField();
+		passwordField_4.setEditable(false);
+		passwordField_4.setColumns(10);
+		passwordField_4.setBounds(20, 131, 253, 25);
+		layeredPane_1_1.add(passwordField_4);
+
+		JLabel lblNewLabel_3_1_1 = new JLabel("Novo CPF:");
 		lblNewLabel_3_1_1.setBounds(306, 103, 253, 27);
 		layeredPane_1_1.add(lblNewLabel_3_1_1);
 
-		cpf_supervisor_deleteSupervisor = new JFormattedTextField();
-		cpf_supervisor_deleteSupervisor.setEditable(false);
-		cpf_supervisor_deleteSupervisor.setColumns(10);
-		cpf_supervisor_deleteSupervisor.setBounds(306, 131, 253, 25);
-		layeredPane_1_1.add(cpf_supervisor_deleteSupervisor);
+		c_cpfNovo_1 = new JFormattedTextField();
+		c_cpfNovo_1.setEditable(false);
+		c_cpfNovo_1.setColumns(10);
+		c_cpfNovo_1.setBounds(306, 131, 253, 25);
+		layeredPane_1_1.add(c_cpfNovo_1);
 
-		login_supervisor_deleteSupervisor.setEditable(false);
-		login_supervisor_deleteSupervisor.setColumns(10);
-		login_supervisor_deleteSupervisor.setBounds(20, 133, 253, 25);
-		layeredPane_1_1.add(login_supervisor_deleteSupervisor);
+		JButton btnLimpar_1_1 = new JButton("Limpar");
+		btnLimpar_1_1.setBounds(383, 406, 105, 34);
+		panel_delete_gerente.add(btnLimpar_1_1);
 
-		botao_limpar_dados_deleteSupervisor.setBounds(383, 406, 105, 34);
-		panel_delete_supervisor.add(botao_limpar_dados_deleteSupervisor);
-
-		JButton botao_deletar_deleteSupervisor = new JButton("Deletar");
-
-		botao_deletar_deleteSupervisor.setBounds(498, 406, 105, 34);
-		panel_delete_supervisor.add(botao_deletar_deleteSupervisor);
-
-		JLabel usuario_atual_deletarSupervisor = new JLabel("");
-		usuario_atual_deletarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		usuario_atual_deletarSupervisor.setBounds(146, 11, 169, 25);
-		usuario_atual_deletarSupervisor.setText(GerenteAtual.getGerente().getLogin());
-		panel_delete_supervisor.add(usuario_atual_deletarSupervisor);
-
-		JLabel label_2 = new JLabel("USUÁRIO ATUAL:");
-		label_2.setForeground(Color.BLACK);
-		label_2.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_2.setBounds(23, 11, 106, 25);
-		panel_delete_supervisor.add(label_2);
+		JButton btnAtualizarSenha_1_1 = new JButton("Deletar");
+		btnAtualizarSenha_1_1.setBounds(498, 406, 105, 34);
+		panel_delete_gerente.add(btnAtualizarSenha_1_1);
 
 		JPanel panel_area_fornecedor = new JPanel();
 		tabbedPane_area.addTab("Área do Fornecedor", null, panel_area_fornecedor, null);
@@ -671,6 +565,7 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_5_1_1_1_1.setBounds(207, 26, 351, 25);
 		layeredPane_2_1_1_1_1.add(lblNewLabel_5_1_1_1_1);
 
+		c_email_cf = new JFormattedTextField();
 		c_email_cf.setColumns(10);
 		c_email_cf.setBounds(207, 50, 351, 25);
 		layeredPane_2_1_1_1_1.add(c_email_cf);
@@ -687,9 +582,9 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_2_1_1_1_1_2_1_1.setBounds(368, 86, 56, 25);
 		layeredPane_2_1_1_1_1.add(lblNewLabel_2_1_1_1_1_2_1_1);
 
-		String[] estados = new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
-				"PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" };
-		JComboBox c_estado_cf = new JComboBox(estados);
+		String[] estados = new String[] {"AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
+				"PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"};
+		c_estado_cf = new JComboBox(estados);
 		c_estado_cf.setBounds(368, 110, 56, 25);
 		layeredPane_2_1_1_1_1.add(c_estado_cf);
 
@@ -720,12 +615,15 @@ public class Janela_principal extends JFrame {
 		lblTelefone_1_1.setBounds(279, 148, 145, 14);
 		layeredPane_2_1_1_1_1.add(lblTelefone_1_1);
 
+		c_telefone_af_1 = new JFormattedTextField();
 		c_telefone_af_1.setBounds(279, 165, 145, 25);
 		layeredPane_2_1_1_1_1.add(c_telefone_af_1);
 
+		c_cnpj_cf = new JFormattedTextField();
 		c_cnpj_cf.setBounds(21, 52, 176, 25);
 		layeredPane_2_1_1_1_1.add(c_cnpj_cf);
 
+		c_cep_cf = new JFormattedTextField();
 		c_cep_cf.setBounds(207, 110, 151, 25);
 		layeredPane_2_1_1_1_1.add(c_cep_cf);
 
@@ -733,6 +631,7 @@ public class Janela_principal extends JFrame {
 		lblBairro_1_1.setBounds(436, 146, 122, 14);
 		layeredPane_2_1_1_1_1.add(lblBairro_1_1);
 
+		c_bairro_cf = new JFormattedTextField();
 		c_bairro_cf.setBounds(434, 165, 124, 25);
 		layeredPane_2_1_1_1_1.add(c_bairro_cf);
 
@@ -768,6 +667,14 @@ public class Janela_principal extends JFrame {
 		panel_add_fornecedor.add(bt_limpar_cf);
 
 		JButton bt_cadastrar_cf = new JButton("Cadastrar");
+		bt_cadastrar_cf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerValidationFornecedor cvf = new ControllerValidationFornecedor();
+				cvf.enviarDadosParaCadastro(c_nome_cf, c_cnpj_cf, c_razaosocial_cf, c_telefone_af_1, c_email_cf,
+						c_cep_cf, c_estado_cf, c_cidade_cf, c_bairro_cf, c_numero_cf, c_logradouro_cf,
+						c_complemento_cf);
+			}
+		});
 		bt_cadastrar_cf.setBounds(504, 406, 99, 34);
 		panel_add_fornecedor.add(bt_cadastrar_cf);
 
@@ -916,12 +823,12 @@ public class Janela_principal extends JFrame {
 		btnNewButton_1_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				c_cnpj_af.setEnabled(true);
-				cpf_supervisor_criarSupervisor.setEnabled(true);
+				c_cpfAtual_1.setEnabled(true);
 				c_telefone_af.setEnabled(true);
 				c_cep_af.setEnabled(true);
 				c_bairro_af.setEnabled(true);
 				c_email_af.setEnabled(true);
-				cpf_supervisor_deleteSupervisor.setEnabled(true);
+				c_cpfNovo_1.setEnabled(true);
 				c_nome_af.setEnabled(true);
 				c_razaosocial_af.setEnabled(true);
 				c_numero_af.setEnabled(true);
@@ -954,6 +861,7 @@ public class Janela_principal extends JFrame {
 		lblPesquisarId_2_1.setBounds(393, 11, 182, 25);
 		panel_delete_fornecedor.add(lblPesquisarId_2_1);
 
+		JFormattedTextField formattedTextField_1_2_2_1 = new JFormattedTextField();
 		formattedTextField_1_2_2_1.setText("0");
 		formattedTextField_1_2_2_1.setColumns(10);
 		formattedTextField_1_2_2_1.setBounds(393, 37, 86, 23);
@@ -977,6 +885,7 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_5_1_1_1_2.setBounds(21, 86, 525, 25);
 		layeredPane_2_1_1_1_2.add(lblNewLabel_5_1_1_1_2);
 
+		JFormattedTextField c_email_af_1 = new JFormattedTextField();
 		c_email_af_1.setEnabled(false);
 		c_email_af_1.setColumns(10);
 		c_email_af_1.setBounds(21, 110, 536, 25);
@@ -992,6 +901,7 @@ public class Janela_principal extends JFrame {
 		textField_1.setBounds(207, 50, 350, 25);
 		layeredPane_2_1_1_1_2.add(textField_1);
 
+		JFormattedTextField c_cnpj_af_1 = new JFormattedTextField();
 		c_cnpj_af_1.setEnabled(false);
 		c_cnpj_af_1.setBounds(21, 52, 176, 25);
 		layeredPane_2_1_1_1_2.add(c_cnpj_af_1);
@@ -1025,33 +935,34 @@ public class Janela_principal extends JFrame {
 		layeredPane_3.setBounds(20, 71, 583, 221);
 		panel_add_produto.add(layeredPane_3);
 
-		dcFabricacaoCadastrarProduto = new JDateChooser();
-		dcFabricacaoCadastrarProduto.setForeground(SystemColor.menu);
-		dcFabricacaoCadastrarProduto.setBounds(397, 106, 140, 24);
-		layeredPane_3.add(dcFabricacaoCadastrarProduto);
+		dcFabricacao_1 = new JDateChooser();
+		dcFabricacao_1.setForeground(SystemColor.menu);
+		dcFabricacao_1.setBounds(397, 106, 140, 24);
+		layeredPane_3.add(dcFabricacao_1);
 
-		dcVencimentoCadastrarProduto = new JDateChooser();
-		dcVencimentoCadastrarProduto.setForeground(SystemColor.menu);
-		dcVencimentoCadastrarProduto.setBounds(397, 165, 140, 24);
-		layeredPane_3.add(dcVencimentoCadastrarProduto);
+		dcVencimento_1 = new JDateChooser();
+		dcVencimento_1.setForeground(SystemColor.menu);
+		dcVencimento_1.setBounds(397, 165, 140, 24);
+		layeredPane_3.add(dcVencimento_1);
 
 		JLabel lblNewLabel_4 = new JLabel("Nome:");
 		lblNewLabel_4.setBounds(48, 33, 189, 20);
 		layeredPane_3.add(lblNewLabel_4);
 
-		tfNomeGrupoCadastrar = new JTextField();
-		tfNomeGrupoCadastrar.setEnabled(false);
-		tfNomeGrupoCadastrar.setColumns(10);
-		tfNomeGrupoCadastrar.setBounds(48, 52, 189, 24);
-		layeredPane_3.add(tfNomeGrupoCadastrar);
+		tfNomeCadastrarProduto = new JTextField();
+		tfNomeCadastrarProduto.setEnabled(false);
+		tfNomeCadastrarProduto.setColumns(10);
+		tfNomeCadastrarProduto.setBounds(48, 52, 189, 24);
+		layeredPane_3.add(tfNomeCadastrarProduto);
 
-		JLabel lblNewLabel_2_3 = new JLabel("Descrição do Produto:");
+		JLabel lblNewLabel_2_3 = new JLabel("Descrição:");
 		lblNewLabel_2_3.setBounds(48, 85, 189, 20);
 		layeredPane_3.add(lblNewLabel_2_3);
 
-		tfCodigoGrupoCadastrar.setEnabled(false);
-		tfCodigoGrupoCadastrar.setBounds(247, 52, 100, 24);
-		layeredPane_3.add(tfCodigoGrupoCadastrar);
+		tfCodigoCadastrarProduto = new JFormattedTextField();
+		tfCodigoCadastrarProduto.setEnabled(false);
+		tfCodigoCadastrarProduto.setBounds(247, 52, 100, 24);
+		layeredPane_3.add(tfCodigoCadastrarProduto);
 
 		JLabel lblCdigo_1 = new JLabel("Código:");
 		lblCdigo_1.setBounds(247, 33, 100, 20);
@@ -1061,20 +972,21 @@ public class Janela_principal extends JFrame {
 		lblPreo_1.setBounds(357, 33, 94, 20);
 		layeredPane_3.add(lblPreo_1);
 
-		tfPrecoCadastrarProduto.setBounds(357, 52, 94, 24);
-		layeredPane_3.add(tfPrecoCadastrarProduto);
+		formattedTextField_1_1 = new JFormattedTextField();
+		formattedTextField_1_1.setBounds(357, 52, 94, 24);
+		layeredPane_3.add(formattedTextField_1_1);
 
 		List<String> vazio = ControllerAuxiliar.preencherGrupos();
 		vazio.add(0, "...");
-		cbGrupoCadastrar = new JComboBox(vazio.toArray());
-		cbGrupoCadastrar.setBounds(247, 106, 140, 24);
-		layeredPane_3.add(cbGrupoCadastrar);
+		comboBox_2 = new JComboBox(vazio.toArray());
+		comboBox_2.setBounds(247, 106, 140, 24);
+		layeredPane_3.add(comboBox_2);
 
-		tfMedidaGrupoCadastrar = new JTextField();
-		tfMedidaGrupoCadastrar.setEnabled(false);
-		tfMedidaGrupoCadastrar.setColumns(10);
-		tfMedidaGrupoCadastrar.setBounds(247, 165, 76, 24);
-		layeredPane_3.add(tfMedidaGrupoCadastrar);
+		tfMedidaCadastrarProduto = new JTextField();
+		tfMedidaCadastrarProduto.setEnabled(false);
+		tfMedidaCadastrarProduto.setColumns(10);
+		tfMedidaCadastrarProduto.setBounds(247, 165, 76, 24);
+		layeredPane_3.add(tfMedidaCadastrarProduto);
 
 		JLabel lblDataDeFabricao_1 = new JLabel("Data de Fabricação:");
 		lblDataDeFabricao_1.setBounds(397, 87, 140, 20);
@@ -1084,18 +996,17 @@ public class Janela_principal extends JFrame {
 		lblPreo_1_1_1.setBounds(397, 141, 140, 20);
 		layeredPane_3.add(lblPreo_1_1_1);
 
-		cbUnidadeGrupoCadastrar = new JComboBox();
-		cbUnidadeGrupoCadastrar.setEnabled(false);
-		cbUnidadeGrupoCadastrar.setBounds(333, 165, 54, 24);
-		layeredPane_3.add(cbUnidadeGrupoCadastrar);
+		cbUnidadeCadastrarProduto = new JComboBox();
+		cbUnidadeCadastrarProduto.setBounds(333, 165, 54, 24);
+		layeredPane_3.add(cbUnidadeCadastrarProduto);
 
-		epDescricaoCadastrarProduto = new JEditorPane();
-		epDescricaoCadastrarProduto.setBounds(48, 108, 187, 81);
-		layeredPane_3.add(epDescricaoCadastrarProduto);
+		editorPane_1 = new JEditorPane();
+		editorPane_1.setBounds(48, 108, 187, 81);
+		layeredPane_3.add(editorPane_1);
 
-		spQuantidadeCadastrarProduto = new JSpinner();
-		spQuantidadeCadastrarProduto.setBounds(473, 52, 64, 24);
-		layeredPane_3.add(spQuantidadeCadastrarProduto);
+		spinner_1 = new JSpinner();
+		spinner_1.setBounds(473, 52, 64, 24);
+		layeredPane_3.add(spinner_1);
 
 		JLabel lblNewLabel_2_2_3 = new JLabel("Grupo:");
 		lblNewLabel_2_2_3.setBounds(247, 85, 140, 20);
@@ -1134,33 +1045,34 @@ public class Janela_principal extends JFrame {
 		layeredPane.setBounds(20, 71, 583, 221);
 		panel_update_produto.add(layeredPane);
 
-		dcFabricacaoAtualizarProduto = new JDateChooser();
-		dcFabricacaoAtualizarProduto.setForeground(SystemColor.control);
-		dcFabricacaoAtualizarProduto.setBounds(397, 106, 140, 24);
-		layeredPane.add(dcFabricacaoAtualizarProduto);
+		dcFabricacao = new JDateChooser();
+		dcFabricacao.setForeground(SystemColor.control);
+		dcFabricacao.setBounds(397, 106, 140, 24);
+		layeredPane.add(dcFabricacao);
 
-		dcVencimentoAtualizarProduto = new JDateChooser();
-		dcVencimentoAtualizarProduto.setForeground(SystemColor.control);
-		dcVencimentoAtualizarProduto.setBounds(397, 165, 140, 24);
-		layeredPane.add(dcVencimentoAtualizarProduto);
+		dcVencimento = new JDateChooser();
+		dcVencimento.setForeground(SystemColor.control);
+		dcVencimento.setBounds(397, 165, 140, 24);
+		layeredPane.add(dcVencimento);
 
 		JLabel lblNewLabel = new JLabel("Nome:");
 		lblNewLabel.setBounds(48, 33, 189, 20);
 		layeredPane.add(lblNewLabel);
 
-		tfNomeGrupoAtualizar = new JTextField();
-		tfNomeGrupoAtualizar.setEnabled(false);
-		tfNomeGrupoAtualizar.setColumns(10);
-		tfNomeGrupoAtualizar.setBounds(48, 52, 189, 24);
-		layeredPane.add(tfNomeGrupoAtualizar);
+		textField = new JTextField();
+		textField.setEnabled(false);
+		textField.setColumns(10);
+		textField.setBounds(48, 52, 189, 24);
+		layeredPane.add(textField);
 
-		JLabel lblNewLabel_2 = new JLabel("Descrição do Produto:");
+		JLabel lblNewLabel_2 = new JLabel("Descrição:");
 		lblNewLabel_2.setBounds(48, 85, 189, 20);
 		layeredPane.add(lblNewLabel_2);
 
-		tfCodigoGrupoAtualizar.setEnabled(false);
-		tfCodigoGrupoAtualizar.setBounds(247, 52, 100, 24);
-		layeredPane.add(tfCodigoGrupoAtualizar);
+		formattedTextField = new JFormattedTextField();
+		formattedTextField.setEnabled(false);
+		formattedTextField.setBounds(247, 52, 100, 24);
+		layeredPane.add(formattedTextField);
 
 		JLabel lblCdigo = new JLabel("Código:");
 		lblCdigo.setBounds(247, 33, 100, 20);
@@ -1169,21 +1081,20 @@ public class Janela_principal extends JFrame {
 		JLabel lblPreo = new JLabel("Preço:");
 		lblPreo.setBounds(357, 33, 94, 20);
 		layeredPane.add(lblPreo);
-		tfPrecoAtualizarProduto.setEnabled(false);
 
-		tfPrecoAtualizarProduto.setBounds(357, 52, 94, 24);
-		layeredPane.add(tfPrecoAtualizarProduto);
+		formattedTextField_1 = new JFormattedTextField();
+		formattedTextField_1.setBounds(357, 52, 94, 24);
+		layeredPane.add(formattedTextField_1);
 
-		cbGrupoAtualizar = new JComboBox(vazio.toArray());
-		cbGrupoAtualizar.setEnabled(false);
-		cbGrupoAtualizar.setBounds(247, 106, 140, 24);
-		layeredPane.add(cbGrupoAtualizar);
+		comboBox = new JComboBox(vazio.toArray());
+		comboBox.setBounds(247, 106, 140, 24);
+		layeredPane.add(comboBox);
 
-		tfMedidaGrupoAtualizar = new JTextField();
-		tfMedidaGrupoAtualizar.setEnabled(false);
-		tfMedidaGrupoAtualizar.setColumns(10);
-		tfMedidaGrupoAtualizar.setBounds(247, 165, 76, 24);
-		layeredPane.add(tfMedidaGrupoAtualizar);
+		textField_2 = new JTextField();
+		textField_2.setEnabled(false);
+		textField_2.setColumns(10);
+		textField_2.setBounds(247, 165, 76, 24);
+		layeredPane.add(textField_2);
 
 		JLabel lblDataDeFabricao = new JLabel("Data de Fabricação:");
 		lblDataDeFabricao.setBounds(397, 87, 140, 20);
@@ -1193,20 +1104,18 @@ public class Janela_principal extends JFrame {
 		lblPreo_1_1.setBounds(397, 141, 140, 20);
 		layeredPane.add(lblPreo_1_1);
 
-		cbUnidadeGrupoAtualizar = new JComboBox();
-		cbUnidadeGrupoAtualizar.setEnabled(false);
-		cbUnidadeGrupoAtualizar.setBounds(333, 165, 54, 24);
-		layeredPane.add(cbUnidadeGrupoAtualizar);
+		comboBox_1 = new JComboBox();
+		comboBox_1.setEnabled(false);
+		comboBox_1.setBounds(333, 165, 54, 24);
+		layeredPane.add(comboBox_1);
 
-		epDescricaoAtualizarProduto = new JEditorPane();
-		epDescricaoAtualizarProduto.setEnabled(false);
-		epDescricaoAtualizarProduto.setBounds(48, 108, 187, 81);
-		layeredPane.add(epDescricaoAtualizarProduto);
+		editorPane = new JEditorPane();
+		editorPane.setBounds(48, 108, 187, 81);
+		layeredPane.add(editorPane);
 
-		spQuantidadeAtualizarProduto = new JSpinner();
-		spQuantidadeAtualizarProduto.setEnabled(false);
-		spQuantidadeAtualizarProduto.setBounds(473, 52, 64, 24);
-		layeredPane.add(spQuantidadeAtualizarProduto);
+		spinner = new JSpinner();
+		spinner.setBounds(473, 52, 64, 24);
+		layeredPane.add(spinner);
 
 		JLabel lblNewLabel_2_2 = new JLabel("Grupo:");
 		lblNewLabel_2_2.setBounds(247, 85, 140, 20);
@@ -1228,29 +1137,23 @@ public class Janela_principal extends JFrame {
 		lblPesquisarId_2_2.setBounds(393, 11, 182, 25);
 		panel_update_produto.add(lblPesquisarId_2_2);
 
-		tfIdAtualizarProduto.setText("0");
-		tfIdAtualizarProduto.setColumns(10);
-		tfIdAtualizarProduto.setBounds(393, 36, 86, 23);
-		panel_update_produto.add(tfIdAtualizarProduto);
+		formattedTextField_1_2_2_2 = new JFormattedTextField();
+		formattedTextField_1_2_2_2.setText("0");
+		formattedTextField_1_2_2_2.setColumns(10);
+		formattedTextField_1_2_2_2.setBounds(393, 36, 86, 23);
+		panel_update_produto.add(formattedTextField_1_2_2_2);
 
-		btnBuscarIdAtualizarProduto = new JButton("Buscar");
-		btnBuscarIdAtualizarProduto.setBounds(489, 35, 86, 25);
-		panel_update_produto.add(btnBuscarIdAtualizarProduto);
+		JButton btnNewButton_1_2_2 = new JButton("Buscar");
+		btnNewButton_1_2_2.setBounds(489, 35, 86, 25);
+		panel_update_produto.add(btnNewButton_1_2_2);
 
-		btnAtualizarProduto = new JButton("Atualizar");
-		btnAtualizarProduto.setEnabled(false);
-		btnAtualizarProduto.setBounds(504, 406, 99, 34);
-		panel_update_produto.add(btnAtualizarProduto);
+		JButton bt_atualizar_af_3 = new JButton("Atualizar");
+		bt_atualizar_af_3.setBounds(504, 406, 99, 34);
+		panel_update_produto.add(bt_atualizar_af_3);
 
-		btnLimparAtualizarProduto = new JButton("Limpar");
-		btnLimparAtualizarProduto.setEnabled(false);
-		btnLimparAtualizarProduto.setBounds(393, 406, 105, 34);
-		panel_update_produto.add(btnLimparAtualizarProduto);
-
-		btnResetarIdAtualizar = new JButton("Resetar");
-		btnResetarIdAtualizar.setEnabled(false);
-		btnResetarIdAtualizar.setBounds(306, 35, 77, 25);
-		panel_update_produto.add(btnResetarIdAtualizar);
+		JButton bt_limpar_af_3 = new JButton("Limpar");
+		bt_limpar_af_3.setBounds(393, 406, 105, 34);
+		panel_update_produto.add(bt_limpar_af_3);
 
 		// ADICIONAR CAMPOS DE DELETAR PRODUTO NESSE PANEL
 		JPanel panel_delete_produto = new JPanel();
@@ -1337,266 +1240,71 @@ public class Janela_principal extends JFrame {
 		progressBar_tabelas_superior.setBounds(799, 21, 385, 10);
 		panel_superior.add(progressBar_tabelas_superior);
 
-		ctb = new ControllerTableModels(table_registros, table_gerentes, table_fornecedores, table_produtos,
-				table_movimentacoes);
-
 		// ControllerTableModels.popularTabelaProdutos(table_produtos);
 		// new ControllerTableModels(table_registros, table_gerentes,
 		// table_fornecedores, table_produtos, table_movimentacoes);
 		// setLocationRelativeTo(null);
+		
+		//Essa instância popula todas as tabelas assim que o programa é iniciado
+		ctb = new ControllerTableModels(table_registros, table_gerentes, table_fornecedores, table_produtos,
+				table_movimentacoes);
 
-		// ----------ActionListeners de Cadastrar o Produto
-		// MÉTODO DE PREENCHER OS DADOS DO GRUPO DA TELA DE CADASTRAR PRODUTOS BASEADO
-		// NO GRUPO ESCOLHIDO
-		cbGrupoCadastrar.addActionListener(new ActionListener() {
+		//----------ActionListeners de Cadastrar o Produto
+		comboBox_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (cbGrupoCadastrar.getSelectedIndex() != 0) {
-					ControllerAuxiliar.preencherCamposGrupo(cbGrupoCadastrar, tfNomeGrupoCadastrar,
-							tfCodigoGrupoCadastrar, tfMedidaGrupoCadastrar, cbUnidadeGrupoCadastrar);
+				if (comboBox_2.getSelectedIndex() != 0) {
+					ControllerAuxiliar.preencherCamposGrupo(comboBox_2, tfNomeCadastrarProduto,
+							tfCodigoCadastrarProduto, tfMedidaCadastrarProduto, cbUnidadeCadastrarProduto);
 				} else {
-					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoCadastrar, tfCodigoGrupoCadastrar,
-							tfMedidaGrupoCadastrar, cbUnidadeGrupoCadastrar);
+					ControllerValidationProduto.resetarCamposGrupoProduto(tfNomeCadastrarProduto,
+							tfCodigoCadastrarProduto, tfMedidaCadastrarProduto, cbUnidadeCadastrarProduto);
 				}
 			}
 		});
 
-		// MÉTODO QUE PEGA OS DADOS DOS INPUTS E CHAMA O CONTROLLER PARA CADASTRAR O
-		// PRODUTO
 		bt_atualizar_af_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ControllerValidationProduto cvp = new ControllerValidationProduto();
-				cvp.enviarDadosParaCadastrar(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
-						epDescricaoCadastrarProduto, dcFabricacaoCadastrarProduto, dcVencimentoCadastrarProduto,
-						cbGrupoCadastrar);
+				cvp.enviarDadosParaCadastrar(formattedTextField_1_1, spinner_1, editorPane_1, dcFabricacao_1,
+						dcVencimento_1, comboBox_2);
 			}
 		});
 
-		// MÉTODO DE LIMPAR OS DADOS DA TELA DE CADASTRAR PRODUTOS
 		bt_limpar_af_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ControllerAuxiliar.resetarTodosOsCampos(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
-						epDescricaoCadastrarProduto, dcFabricacaoCadastrarProduto, dcVencimentoCadastrarProduto,
-						cbGrupoCadastrar);
+				ControllerValidationProduto.resetarTodosOsCampos(formattedTextField_1_1, spinner_1, editorPane_1,
+						dcFabricacao_1, dcVencimento_1, comboBox_2);
 			}
 		});
 
 		// ------------------ActionListeners de Atualizar o Produto
-		// MÉTODO DE PREENCHER OS DADOS DO PRODUTO NA TELA DE ATUALIZAR BASEADO NO ID
-		btnBuscarIdAtualizarProduto.addActionListener(new ActionListener() {
+		btnNewButton_1_2_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
-				cap.buscarProduto(btnBuscarIdAtualizarProduto, btnResetarIdAtualizar, tfIdAtualizarProduto,
-						tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto, epDescricaoAtualizarProduto,
-						cbGrupoAtualizar, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
-						btnLimparAtualizarProduto, btnAtualizarProduto);
+				cap.buscarProduto(formattedTextField_1_2_2_2, formattedTextField_1, spinner, editorPane, comboBox,
+						dcFabricacao, dcVencimento);
 			}
 		});
 
-		// MÉTODO DE PREENCHER DADOS DO GRUPO DA TELA DE ATUALIZAR PRODUTOS BASEADO NO
-		// GRUPO ESCOLHIDO
-		cbGrupoAtualizar.addActionListener(new ActionListener() {
+		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (cbGrupoAtualizar.getSelectedIndex() != 0) {
-					ControllerAuxiliar.preencherCamposGrupo(cbGrupoAtualizar, tfNomeGrupoAtualizar,
-							tfCodigoGrupoAtualizar, tfMedidaGrupoAtualizar, cbUnidadeGrupoAtualizar);
+				if (comboBox.getSelectedIndex() != 0) {
+					ControllerAuxiliar.preencherCamposGrupo(comboBox, textField, formattedTextField, textField_2,
+							comboBox_1);
 				} else {
-					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoAtualizar, tfCodigoGrupoAtualizar,
-							tfMedidaGrupoAtualizar, cbUnidadeGrupoAtualizar);
+					ControllerValidationProduto.resetarCamposGrupoProduto(textField, formattedTextField, textField_2,
+							comboBox_1);
 				}
 			}
 		});
 
-		// BOTÃO DE ATUALIZAR O PRODUTO
-		btnAtualizarProduto.addActionListener(new ActionListener() {
+		bt_atualizar_af_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
-				cap.atualizarProduto(tfIdAtualizarProduto, tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto,
-						epDescricaoAtualizarProduto, cbGrupoAtualizar, dcFabricacaoAtualizarProduto,
-						dcVencimentoAtualizarProduto);
+				cap.atualizarProduto(formattedTextField_1_2_2_2, formattedTextField_1, spinner, editorPane, comboBox,
+						dcFabricacao, dcVencimento);
 			}
 		});
-
-		// BOTÃO DE LIMPAR NA TELA DE ATUALIZAR PRODUTO
-		btnLimparAtualizarProduto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				ControllerAuxiliar.resetarTodosOsCampos(tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto,
-						epDescricaoAtualizarProduto, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
-						cbGrupoAtualizar);
-			}
-		});
-
-		// BOTÃO DE RESETAR O ID E DESABILITAR OS CAMPOS
-		btnResetarIdAtualizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
-				cap.desabilitarAtualizacao(btnBuscarIdAtualizarProduto, btnResetarIdAtualizar, tfIdAtualizarProduto,
-						tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto, epDescricaoAtualizarProduto,
-						cbGrupoAtualizar, dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto,
-						btnLimparAtualizarProduto, btnAtualizarProduto);
-			}
-		});
-
-		// ESSES MÉTODOS IRÃO PERMITIR APENAS NÚMEROS PARA SEUS RESPECTIVOS CAMPOS
-		id_pesquisa_deleteSupervisor.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				id_pesquisa_deleteSupervisor.setText(id_pesquisa_deleteSupervisor.getText().replaceAll("[^0-9]", "0"));
-			}
-		});
-
-		id_pesquisa_supervisor_AtualizacaoSupervisor.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				id_pesquisa_supervisor_AtualizacaoSupervisor
-						.setText(id_pesquisa_supervisor_AtualizacaoSupervisor.getText().replaceAll("[^0-9]", "0"));
-			}
-		});
-
-		// MÉTODO DE MOSTRAR OS DADOS DOS CAMPOS DO PAINEL DE DELEÇÃO DO SUPERVISOR
-
-		botao_pesquisa_deleteSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.mostrarDadosDoSupervisor(id_pesquisa_deleteSupervisor, cpf_supervisor_deleteSupervisor,
-						login_supervisor_deleteSupervisor);
-			}
-		});
-		// MÉTODO DE LIMPAR OS DADOS DOS CAMPOS DO PAINEL DE DELEÇÃO DO SUPERVISOR
-
-		botao_limpar_dados_deleteSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ctrlAux.limparCampos(cpf_gerente_deleteSupervisor, senha_gerente_deleteSupervisor,
-						cpf_supervisor_deleteSupervisor, id_pesquisa_deleteSupervisor,
-						login_supervisor_deleteSupervisor, senha_gerente_deleteSupervisor);
-
-			}
-		});
-
-		// MÉTODO DE DELEÇÃO DO SUPERVISOR
-		botao_deletar_deleteSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.excluirContaSupervisor(id_pesquisa_deleteSupervisor, cpf_gerente_deleteSupervisor.getText(),
-						senha_gerente_deleteSupervisor.getText());
-
-				ctrlAux.limparCampos(cpf_gerente_deleteSupervisor, senha_gerente_deleteSupervisor,
-						cpf_supervisor_deleteSupervisor, id_pesquisa_deleteSupervisor,
-						login_supervisor_deleteSupervisor, senha_gerente_deleteSupervisor);
-
-			}
-		});
-
-		// MÉTODO DE LIMPAR OS CAMPOS NO PAINEL DE CADASTRO DO SUPERVISOR
-
-		limpar_dados_criarSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ctrlAux.limparCampos(cpf_supervisor_criarSupervisor, confirmacaoSenha_supervisor_criarSupervisor,
-						senha_supervisor_criarSupervisor, login_supervisor_criarSupervisor);
-			}
-		});
-
-		// MÉTODO PARA O CADASTRO DE SUPERVISOR
-
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.cadastrarSupervisor(cpf_supervisor_criarSupervisor.getText(),
-						senha_supervisor_criarSupervisor.getText(),
-						confirmacaoSenha_supervisor_criarSupervisor.getText(),
-						login_supervisor_criarSupervisor.getText(), login_supervisor_criarSupervisor,
-						cpf_supervisor_criarSupervisor, senha_supervisor_criarSupervisor,
-						confirmacaoSenha_supervisor_criarSupervisor);
-			}
-		});
-
-		// MÉTODO LIMPAR CAMPOS DO PAINEL DE ATUALIZAÇÃO DO SUPERVISOR
-
-		botao_limpar_dados_AtualizacaoSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor, id_pesquisa_supervisor_AtualizacaoSupervisor,
-						nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-						novo_cpf_supervisor_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
-						login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
-
-			}
-		});
-
-		// MÉTODO QUE MOSTRAr OS DADOS DO SUPERVISOR NO PAINEL DE ATUALIZAÇÃO DE
-		// SUPERVISOR
-
-		buscar_supervisor_AtualizacaoSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.mostrarDadosDoSupervisor(id_pesquisa_supervisor_AtualizacaoSupervisor,
-						cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor);
-			}
-		});
-
-		// MÉTODO DE ATUALIZAÇÃO DE SENHA DO SUPERVISOR DO PAINEL DE ATUALIZAÇÃO DO
-		// SUPERVISOR
-
-		btn_atualizar_senha_AtualizacaoSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (ctrlSuper.atualizarSupervisorSenha(id_pesquisa_supervisor_AtualizacaoSupervisor,
-						nova_senha_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-						senha_gerente_AtualizacaoSupervisor) == true) {
-
-					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor, novo_cpf_supervisor_AtualizacaoSupervisor,
-							cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor);
-				}
-			}
-		});
-
-		// MÉTODO DE ATUALIZAÇÃO DE CPF DO SUPERVISOR
-
-		btn_atualizar_cpf_AtualizacaoSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (ctrlSuper.atualizarSupervisorCpf(id_pesquisa_supervisor_AtualizacaoSupervisor,
-						novo_cpf_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-						senha_gerente_AtualizacaoSupervisor) == true) {
-
-					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor, novo_cpf_supervisor_AtualizacaoSupervisor,
-							cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor);
-				}
-			}
-		});
-
-		// MÉTODO DE ATUALIZAÇÃO DE TODOS OS DADOS DO SUPERVISOR
-		btn_atualizar_tudo_AtualizacaoSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-
-				if (ctrlSuper.atualizarSupervisor(novo_cpf_supervisor_AtualizacaoSupervisor.getText(),
-						nova_senha_supervisor_AtualizacaoSupervisor.getText(),
-						id_pesquisa_supervisor_AtualizacaoSupervisor,
-						novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-						senha_gerente_AtualizacaoSupervisor) == true) {
-
-					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor, novo_cpf_supervisor_AtualizacaoSupervisor,
-							cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor);
-
-				}
-
-			}
-		});
-
-		// MÉTODO DE REGISTRAR A SAÍDA DO USUÁRIO AO CLICAR NO BOTÃO DE SAIR
-
-		btn_sair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ControllerGlobal controllerGlob = new ControllerGlobal();
-				controllerGlob.registrarSaidaUsuario();
-				Janela_login jlogin = new Janela_login();
-				jlogin.setVisible(true);
-				dispose();
-			}
-		});
-
 	}
 
 	public class Atualizar extends Thread {
@@ -1610,13 +1318,10 @@ public class Janela_principal extends JFrame {
 				sleep(500);
 				progressBar_tabelas_superior.setValue(0);
 				progressBar_tabelas_superior.setStringPainted(false);
-
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 
 	@SuppressWarnings("unused")

@@ -1,7 +1,11 @@
 package br.com.projeto.estoque.view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
@@ -9,10 +13,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import br.com.projeto.estoque.controller.ControllerProduto;
-import br.com.projeto.estoque.controller.ControllerViewProduto;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class Janela_exibir_produto extends JInternalFrame {
 
@@ -35,7 +35,7 @@ public class Janela_exibir_produto extends JInternalFrame {
 		JButton btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
+//				ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -76,6 +76,6 @@ public class Janela_exibir_produto extends JInternalFrame {
 		scrollPane.setViewportView(tabelaProduto);
 		getContentPane().setLayout(groupLayout);
 
-		ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
+//		ControllerViewProduto.popularTabelaProdutos(tabelaProduto, cp.encontrarTodosOsProdutos());
 	}
 }

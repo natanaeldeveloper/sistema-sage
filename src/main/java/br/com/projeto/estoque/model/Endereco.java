@@ -3,6 +3,7 @@ package br.com.projeto.estoque.model;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+//Essa classe não tem uma tabela no banco, apenas adiciona suas colunas na tabela necessária (Fornecedor, no caso)
 @Embeddable
 public class Endereco {
 	@Column(nullable = false)

@@ -112,7 +112,7 @@ public class Janela_persist_fornecedor extends JInternalFrame {
 		getContentPane().add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerValidationFornecedor.cadastrarFornecedor(tfCnpj, tfNome, tfSenha, tfConfirmar);
+//				ControllerValidationFornecedor.cadastrarFornecedor(tfCnpj, tfNome, tfSenha, tfConfirmar);
 			}
 		});
 	}
