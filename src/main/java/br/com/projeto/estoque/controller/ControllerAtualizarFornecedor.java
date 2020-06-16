@@ -98,21 +98,51 @@ public class ControllerAtualizarFornecedor {
 						"ID inválido", JOptionPane.ERROR_MESSAGE);
 			}
 
-			try {
-				ControllerFornecedor cf = new ControllerFornecedor();
-				cf.atualizarFornecedor(idAtualizado, cnpj, nome, email, razaoSocial, telefone, endereco);
+			if (conferirFornecedorExistente(idAtualizado, nome, cnpj, email, telefone)) {
+				try {
+					ControllerFornecedor cf = new ControllerFornecedor();
+					cf.atualizarFornecedor(idAtualizado, cnpj, nome, email, razaoSocial, telefone, endereco);
 
-				JOptionPane.showMessageDialog(null, "Fornecedor atualizado com sucesso!", "Fornecedor atualizado",
-						JOptionPane.INFORMATION_MESSAGE);
-				ControllerAuxiliar.limparCamposFornecedor(tfNome, tfCnpj, tfRazaoSocial, tfTelefone, tfEmail, tfCep,
-						cbEstado, tfCidade, tfBairro, tfNumero, tfLogradouro, tfComplemento);
-			} catch (PersistenceException e) {
-				JOptionPane.showMessageDialog(null,
-						"Não foi possível realizar a atualização, verifique se o CNPJ, o e-mail ou o telefone informados já não estão registrados.\nSe o erro persistir, entre em contato.",
-						"Erro inesperado", JOptionPane.ERROR_MESSAGE);
-				System.out.println(e.getMessage());
+					JOptionPane.showMessageDialog(null, "Fornecedor atualizado com sucesso!", "Fornecedor atualizado",
+							JOptionPane.INFORMATION_MESSAGE);
+					ControllerAuxiliar.limparCamposFornecedor(tfNome, tfCnpj, tfRazaoSocial, tfTelefone, tfEmail, tfCep,
+							cbEstado, tfCidade, tfBairro, tfNumero, tfLogradouro, tfComplemento);
+				} catch (PersistenceException e) {
+					JOptionPane.showMessageDialog(null,
+							"Não foi possível realizar a atualização, verifique se o CNPJ, o e-mail ou o telefone informados já não estão registrados.\nSe o erro persistir, entre em contato.",
+							"Erro inesperado", JOptionPane.ERROR_MESSAGE);
+					System.out.println(e.getMessage());
+				}
 			}
 		}
+	}
+
+	public static boolean conferirFornecedorExistente(Integer id, String nomeFornecedor, String cnpjFornecedor,
+			String emailFornecedor, String telefoneFornecedor) {
+		for (Fornecedor fornecedor : ControllerFornecedor.listarFornecedores()) {
+			if (nomeFornecedor.equals(fornecedor.getNome()) && cnpjFornecedor.equals(fornecedor.getCnpj())
+					&& fornecedor.getId() != id) {
+				JOptionPane.showMessageDialog(null,
+						"Esse Fornecedor já existe!\nEle está no registro " + fornecedor.getId() + "!", "CNPJ inválido",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			} else if (cnpjFornecedor.equals(fornecedor.getCnpj()) && fornecedor.getId() != id) {
+				JOptionPane.showMessageDialog(null, "Já existe um Fornecedor com esse CNPJ!", "CNPJ inválido",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			if (emailFornecedor.equals(fornecedor.getEmail()) && fornecedor.getId() != id) {
+				JOptionPane.showMessageDialog(null, "Já existe um Fornecedor com esse e-mail!", "E-mail inválido",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			if (telefoneFornecedor.equals(fornecedor.getTelefone()) && fornecedor.getId() != id) {
+				JOptionPane.showMessageDialog(null, "Já existe um Fornecedor com esse telefone!", "Telefone inválido",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void habilitarAtualizacaoFornecedor(JButton btnBuscarFornecedor, JButton btnResetarFornecedor,

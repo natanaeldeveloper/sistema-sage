@@ -32,6 +32,7 @@ public class ControllerAtualizarProduto {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "O campo de ID precisa estar preenchido e ser coerente!", "ID inválido",
 					JOptionPane.ERROR_MESSAGE);
+			tfId.transferFocus();
 			return;
 		}
 		Produto produto = manager.find(Produto.class, idBuscado);
@@ -72,10 +73,21 @@ public class ControllerAtualizarProduto {
 				System.out.println(e.getMessage());
 				JOptionPane.showMessageDialog(null, "O preço inserido é inválido", "Preço inválido",
 						JOptionPane.ERROR_MESSAGE);
+				tfPreco.transferFocus();
 				return;
 			}
+			
 			int quantidade = (Integer) jsQuantidade.getValue();
+			
+			if (quantidade <= 0) {
+				JOptionPane.showMessageDialog(null, "A quantidade não pode ser nula ou negativa!",
+						"Quantidade inválida", JOptionPane.ERROR_MESSAGE);
+				jsQuantidade.transferFocus();
+				return;
+			}
+			
 			String descricao = epDescricao.getText();
+			
 			// Por padrão, o JDateChooser retorna um objeto do tipo Date, que precisa ser
 			// convertido
 			// com o método auxiliar ".toCalendar" para um objeto do tipo Calendar

@@ -28,9 +28,18 @@ public class ControllerValidationProduto {
 				System.out.println(e.getMessage());
 				JOptionPane.showMessageDialog(null, "O preço inserido é inválido!", "Preço inválido",
 						JOptionPane.ERROR_MESSAGE);
+				tfPreco.transferFocus();
+				return;
 			}
 			// Falta validar se o valor de quantidade inserido é realmente INTEIRO
 			int quantidade = Integer.parseInt(spQuantidade.getValue().toString());
+			
+			if (quantidade <= 0) {
+				JOptionPane.showMessageDialog(null, "A quantidade não pode ser nula ou negativa!",
+						"Quantidade inválida", JOptionPane.ERROR_MESSAGE);
+				spQuantidade.transferFocus();
+				return;
+			}
 			String descricao = epDescricao.getText();
 			Calendar dataFabricacao = ControllerAuxiliar.toCalendar(dcDataFabricacao.getDate());
 			Calendar dataVencimento = ControllerAuxiliar.toCalendar(dcDataVencimento.getDate());

@@ -17,6 +17,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.toedter.calendar.JDateChooser;
 
 import br.com.projeto.estoque.model.Categoria;
@@ -83,10 +85,12 @@ public class ControllerAuxiliar {
 			JTextField tfRazaoSocial, JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep,
 			JComboBox cbEstado, JTextField tfCidade, JTextField tfBairro, JTextField tfNumero,
 			JTextField tfLogradouro) {
-		if (tfNome.getText().isEmpty() || tfCnpj.getText().isEmpty() || tfRazaoSocial.getText().isEmpty()
-				|| tfTelefone.getText().isEmpty() || tfEmail.getText().isEmpty() || tfCep.getText().isEmpty()
-				|| cbEstado.getSelectedIndex() < 0 || tfCidade.getText().isEmpty() || tfBairro.getText().isEmpty()
-				|| tfNumero.getText().isEmpty() || tfLogradouro.getText().isEmpty()) {
+		if (StringUtils.isBlank(tfNome.getText()) || StringUtils.isBlank(tfCnpj.getText())
+				|| StringUtils.isBlank(tfRazaoSocial.getText()) || StringUtils.isBlank(tfTelefone.getText())
+				|| StringUtils.isBlank(tfEmail.getText()) || StringUtils.isBlank(tfCep.getText())
+				|| (cbEstado.getSelectedIndex() < 0 || StringUtils.isBlank(tfCidade.getText())
+						|| StringUtils.isBlank(tfBairro.getText()) || StringUtils.isBlank(tfNumero.getText())
+						|| StringUtils.isBlank(tfLogradouro.getText()))) {
 			JOptionPane.showMessageDialog(null, "Algum dos campos está vazio! Cheque e tente novamente.", "Campo vazio",
 					JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -143,11 +147,21 @@ public class ControllerAuxiliar {
 	// Atualizar os Produtos
 	public static boolean dadosConferem(JFormattedTextField tfPreco, JSpinner spQuantidade, JEditorPane epDescricao,
 			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo) {
-		if (tfPreco.getText().isEmpty() || spQuantidade.getValue().toString().isEmpty()
-				|| epDescricao.getText().isEmpty() || dcDataFabricacao.getDate() == null
-				|| dcDataVencimento.getDate() == null || cbGrupo.getSelectedIndex() == 0) {
+		if (StringUtils.isBlank(tfPreco.getText()) || StringUtils.isBlank(spQuantidade.getValue().toString())
+				|| StringUtils.isBlank(epDescricao.getText()) || cbGrupo.getSelectedIndex() == 0) {
 			JOptionPane.showMessageDialog(null, "Algum dos campos está vazio! Preencha e tente novamente.",
 					"Campo Vazio", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		if (dcDataFabricacao.getDate() == null) {
+			JOptionPane.showMessageDialog(null, "A data de fabricação inserida é inválida!",
+					"Data de fabricação inválida", JOptionPane.ERROR_MESSAGE);
+			dcDataFabricacao.transferFocus();
+			return false;
+		} else if (dcDataVencimento.getDate() == null) {
+			JOptionPane.showMessageDialog(null, "A data de vencimento inserida é inválida!",
+					"Data de vencimento inválida", JOptionPane.ERROR_MESSAGE);
+			dcDataVencimento.transferFocus();
 			return false;
 		} else {
 			return true;
