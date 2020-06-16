@@ -73,7 +73,7 @@ public class Janela_confirmar_delecao extends JFrame {
 		lblNewLabel_2.setBounds(77, 77, 259, 14);
 		panel.add(lblNewLabel_2);
 		
-		JButton btnNewButton = new JButton("cancelar");
+		JButton btnNewButton = new JButton("CANCELAR");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -82,7 +82,7 @@ public class Janela_confirmar_delecao extends JFrame {
 		btnNewButton.setBounds(77, 118, 89, 23);
 		panel.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("deletar");
+		JButton btnNewButton_1 = new JButton("DELETAR");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ctrlSuper.excluirConta(SupervisorDeletado.getId());

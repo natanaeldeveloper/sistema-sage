@@ -24,10 +24,9 @@ import br.com.projeto.estoque.util.JPAUtil;
 public class ControllerTableModels {
 
 	// Méotdo construtor, popula todas as tabelas baseado nos parâmetros
-	public ControllerTableModels(JTable table_registros, JTable table_gerente, JTable table_fornecedores,
+	public ControllerTableModels(JTable table_registros, JTable table_fornecedores,
 			JTable table_produtos, JTable table_movimentacoes) {
 		popularTableRegistrosGerente(table_registros);
-		popularTableGerente(table_gerente);
 		popularTabelaFornecedores(table_fornecedores);
 		popularTabelaProdutos(table_produtos);
 		popularTabelaMovimentacoes(table_movimentacoes);
@@ -54,25 +53,6 @@ public class ControllerTableModels {
 
 		table_registros.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resizeColumnWidth(table_registros, 126);
-	}
-
-	// Método para popular a tabela de gerentes
-	public void popularTableGerente(JTable table_gerente) {
-		Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarGerentes"));
-		List<Gerente> registrosGerente;
-		registrosGerente = Essencial.getQuery().getResultList();
-
-		DefaultTableModel modelo = new DefaultTableModel();
-		table_gerente.setModel(modelo);
-		modelo.addColumn("ID:");
-		modelo.addColumn("CPF:");
-
-		for (Gerente registro : registrosGerente) {
-			modelo.addRow(new Object[] { registro.getId(), registro.getCpf(), });
-		}
-
-		table_gerente.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		resizeColumnWidth(table_gerente, 257);
 	}
 
 	// Método para popular a tabela de fornecedores

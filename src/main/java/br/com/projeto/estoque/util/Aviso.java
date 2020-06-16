@@ -10,7 +10,7 @@ public class Aviso {
 			JOptionPane.showMessageDialog(null, "Preencha todos os campos");
 			break;
 		case 2:
-			JOptionPane.showMessageDialog(null, "CPF ou senha incorretos");
+			JOptionPane.showMessageDialog(null, "Login ou senha incorretos");
 			break;
 		case 3:
 			JOptionPane.showMessageDialog(null, "CPF j� cadastrado no Sistema");
@@ -40,7 +40,7 @@ public class Aviso {
 			JOptionPane.showMessageDialog(null, "O Supervisor a ser modificado não existe no banco de dados");
 			break;
 		case 12:
-			JOptionPane.showMessageDialog(null, "Digite seu novo CPF!");
+			JOptionPane.showMessageDialog(null, "Digite seu novo login!");
 			break;
 		case 13:
 			JOptionPane.showMessageDialog(null, "Digite sua nova SENHA");

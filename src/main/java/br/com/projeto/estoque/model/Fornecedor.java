@@ -12,7 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-//Essa uniqueConstraints significa que as colunas nome e cnpj são, QUANDO COMBINADAS, únicas
+// Essa uniqueConstraints significa que as colunas nome e cnpj são, QUANDO
+// COMBINADAS, únicas
 @Table(name = "fornecedor", uniqueConstraints = { @UniqueConstraint(columnNames = { "nome", "cnpj" }) })
 public class Fornecedor {
 	@Id
@@ -25,7 +26,7 @@ public class Fornecedor {
 	@Column(nullable = false)
 	private String razaoSocial;
 
-	//Mas se o mesmo cnpj já estiver no banco, ele já é único independente do nome
+	// Mas se o mesmo cnpj já estiver no banco, ele já é único independente do nome
 	@Column(nullable = false, unique = true)
 	private String cnpj;
 
@@ -35,7 +36,7 @@ public class Fornecedor {
 	@Embedded
 	private Endereco endereco;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(nullable = false)

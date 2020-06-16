@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
@@ -22,12 +23,29 @@ import com.toedter.calendar.JDateChooser;
 import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.model.Fornecedor;
 import br.com.projeto.estoque.model.Grupo;
+import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
+import br.com.projeto.estoque.util.SupervisorAtual;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ControllerAuxiliar {
 	private static EntityManager manager;
 
+	
+	public void setarLoginUsuarioAtual_na_telaPrincipal(JLabel usuario_atual_cadastrarSupervisor,
+			JLabel usuario_atual_atualizar_gerente, JLabel usuario_atual_deletarSupervisor) {
+		if(GerenteAtual.getGerente() != null) {
+			usuario_atual_cadastrarSupervisor.setText(GerenteAtual.getGerente().getLogin());
+			usuario_atual_atualizar_gerente.setText(GerenteAtual.getGerente().getLogin());
+			usuario_atual_deletarSupervisor.setText(GerenteAtual.getGerente().getLogin());
+		}else {
+			usuario_atual_cadastrarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
+			usuario_atual_atualizar_gerente.setText(SupervisorAtual.getSupervisor().getLogin());
+			usuario_atual_deletarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
+		}
+	}
+	
+	
 	public void limparCampos(JFormattedTextField campoJformattedTextField, JPasswordField campoJpasswordField,
 			JPasswordField campoJpasswordField2, JFormattedTextField campoJformattedTextField2) {
 		campoJformattedTextField.setText("");
@@ -61,7 +79,7 @@ public class ControllerAuxiliar {
 			JFormattedTextField id_pesquisa_supervisor_AtualizacaoSupervisor,
 			JPasswordField nova_senha_supervisor_AtualizacaoSupervisor,
 			JPasswordField senha_gerente_AtualizacaoSupervisor,
-			JFormattedTextField novo_cpf_supervisor_AtualizacaoSupervisor,
+
 			JFormattedTextField cpf_atual_supervisor_AtualizacaoSupervisor,
 			JFormattedTextField login_atual_supervisor_AtualizacaoSupervisor,
 			JFormattedTextField novo_login_supervisor_AtualizacaoSupervisor) {
@@ -70,29 +88,47 @@ public class ControllerAuxiliar {
 		id_pesquisa_supervisor_AtualizacaoSupervisor.setText("");
 		nova_senha_supervisor_AtualizacaoSupervisor.setText("");
 		senha_gerente_AtualizacaoSupervisor.setText("");
-		novo_cpf_supervisor_AtualizacaoSupervisor.setText("");
+
 		cpf_atual_supervisor_AtualizacaoSupervisor.setText("");
 		login_atual_supervisor_AtualizacaoSupervisor.setText("");
 		novo_login_supervisor_AtualizacaoSupervisor.setText("");
 
 	}
 
-	// Preenche as Categorias de uma JComboBox
-	public static List<Categoria> preencherCategorias() {
-		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Categoria c");
-		List<Categoria> categorias = query.getResultList();
-		manager.close();
-		return categorias;
+	// Esse método confere se todos os dados das views de Cadastrar e Atualizar
+	// Fornecedores estão preenchidos
+	public static boolean conferirDadosFornecedor(JTextField tfNome, JFormattedTextField tfCnpj,
+			JTextField tfRazaoSocial, JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep,
+			JComboBox cbEstado, JTextField tfCidade, JTextField tfBairro, JTextField tfNumero,
+			JTextField tfLogradouro) {
+		if (tfNome.getText().isEmpty() || tfCnpj.getText().isEmpty() || tfRazaoSocial.getText().isEmpty()
+				|| tfTelefone.getText().isEmpty() || tfEmail.getText().isEmpty() || tfCep.getText().isEmpty()
+				|| cbEstado.getSelectedIndex() < 0 || tfCidade.getText().isEmpty() || tfBairro.getText().isEmpty()
+				|| tfNumero.getText().isEmpty() || tfLogradouro.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Algum dos campos está vazio! Cheque e tente novamente.", "Campo vazio",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
-	// Preenche os Grupos de uma JComboBox
-	public static List<String> preencherGrupos() {
-		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Grupo g");
-		List<String> grupos = query.getResultList();
-		manager.close();
-		return grupos;
+	// Esse método limpa os dados das views de Cadastrar e Atualizar Fornecedores
+	public static void limparCamposFornecedor(JTextField tfNome, JFormattedTextField tfCnpj, JTextField tfRazaoSocial,
+			JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep, JComboBox cbEstado,
+			JTextField tfCidade, JTextField tfBairro, JTextField tfNumero, JTextField tfLogradouro,
+			JTextField tfComplemento) {
+		tfNome.setText("");
+		tfCnpj.setText("");
+		tfRazaoSocial.setText("");
+		tfTelefone.setText("");
+		tfEmail.setText("");
+		tfCep.setText("");
+		cbEstado.setSelectedIndex(0);
+		tfCidade.setText("");
+		tfBairro.setText("");
+		tfNumero.setText("");
+		tfLogradouro.setText("");
+		tfComplemento.setText("");
 	}
 
 	// Preenche os campos das views de Cadastrar e Atualizar Produtos, baseado no
@@ -150,11 +186,29 @@ public class ControllerAuxiliar {
 		cbGrupo.setSelectedIndex(0);
 	}
 
+	// Preenche as Categorias de uma JComboBox
+	public static List<String> preencherCategorias() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select nome from Categoria c");
+		List<String> categorias = query.getResultList();
+		manager.close();
+		return categorias;
+	}
+
+	// Preenche os Grupos de uma JComboBox
+	public static List<String> preencherGrupos() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select nome from Grupo g");
+		List<String> grupos = query.getResultList();
+		manager.close();
+		return grupos;
+	}
+
 	// Preenche os Fornecedores de uma JComboBox
-	public static List<Fornecedor> preencherFornecedores() {
+	public static List<String> preencherFornecedores() {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select nome from Fornecedor f");
-		List<Fornecedor> fornecedores = query.getResultList();
+		List<String> fornecedores = query.getResultList();
 		manager.close();
 		return fornecedores;
 	}

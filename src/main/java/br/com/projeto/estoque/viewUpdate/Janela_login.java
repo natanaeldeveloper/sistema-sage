@@ -52,7 +52,7 @@ public class Janela_login extends JFrame {
 	 * Create the frame.
 	 */
 	public Janela_login() {
-		setTitle("Login - SAGE");
+		setTitle("SAGE - Login");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 697);
@@ -71,7 +71,7 @@ public class Janela_login extends JFrame {
 		tabbedPane.addTab("Entrar como gerente", null, panel, null);
 		panel.setLayout(null);
 
-		JLabel lblNewLabel_2 = new JLabel("CPF:");
+		JLabel lblNewLabel_2 = new JLabel("LOGIN:");
 		lblNewLabel_2.setBackground(SystemColor.control);
 		lblNewLabel_2.setForeground(SystemColor.controlHighlight);
 		lblNewLabel_2.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
