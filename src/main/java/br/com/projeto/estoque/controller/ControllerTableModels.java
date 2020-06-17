@@ -13,10 +13,10 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
 import br.com.projeto.estoque.model.Fornecedor;
-import br.com.projeto.estoque.model.Gerente;
 import br.com.projeto.estoque.model.Movimentacao;
 import br.com.projeto.estoque.model.Produto;
 import br.com.projeto.estoque.model.RegistroGerente;
+import br.com.projeto.estoque.model.RegistroSupervisor;
 import br.com.projeto.estoque.util.Essencial;
 import br.com.projeto.estoque.util.JPAUtil;
 
@@ -26,28 +26,28 @@ public class ControllerTableModels {
 	// Méotdo construtor, popula todas as tabelas baseado nos parâmetros
 	public ControllerTableModels(JTable table_registros, JTable table_fornecedores,
 			JTable table_produtos, JTable table_movimentacoes) {
-		popularTableRegistrosGerente(table_registros);
+		popularTableRegistrosSupervisor(table_registros);
 		popularTabelaFornecedores(table_fornecedores);
 		popularTabelaProdutos(table_produtos);
 		popularTabelaMovimentacoes(table_movimentacoes);
 	}
 
 	// Método para popular a tabela de registros do gerente
-	public static void popularTableRegistrosGerente(JTable table_registros) {
+	public static void popularTableRegistrosSupervisor(JTable table_registros) {
 		Essencial.setManager(new JPAUtil().getEntityManager());
-		Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistrosGerentes"));
-		List<RegistroGerente> registrosGerente;
-		registrosGerente = Essencial.getQuery().getResultList();
+		Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistrosSupervisores"));
+		List<RegistroSupervisor> registrosSupervisor;
+		registrosSupervisor = Essencial.getQuery().getResultList();
 
 		DefaultTableModel modelo = new DefaultTableModel();
 		table_registros.setModel(modelo);
 		modelo.addColumn("ID:");
-		modelo.addColumn("Gerente:");
+		modelo.addColumn("Supervisor:");
 		modelo.addColumn("Entrada/Saída:");
 		modelo.addColumn("Data e Hora:");
 
-		for (RegistroGerente registro : registrosGerente) {
-			modelo.addRow(new Object[] { registro.getId(), registro.getGerente().getId(),
+		for (RegistroSupervisor registro : registrosSupervisor) {
+			modelo.addRow(new Object[] { registro.getId(), registro.getSupervisor().getId(),
 					registro.getTipoComportamento(), registro.getDataEHora() });
 		}
 

@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.NamedQuery;
+@NamedQuery(name="buscarRegistrosSupervisores", query="select r from RegistroSupervisor r")
 @Entity
 public class RegistroSupervisor {
 	

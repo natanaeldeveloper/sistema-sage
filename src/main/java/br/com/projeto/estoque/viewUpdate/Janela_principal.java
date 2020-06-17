@@ -95,7 +95,7 @@ public class Janela_principal extends JFrame {
 	private JTable table_fornecedores;
 	private JTable table_produtos;
 	private JTable table_movimentacoes;
-	private JTable table_registros;
+	private JTable table_registros_supervisores;
 
 	private JTextField tfCidadeAtualizarFornecedor;
 	private JTextField tfNomeAtualizarFornecedor;
@@ -1336,9 +1336,9 @@ public class Janela_principal extends JFrame {
 		scrollPane_r.setBounds(10, 11, 517, 425);
 		panel_listar_registros.add(scrollPane_r);
 
-		table_registros = new JTable();
-		// ControllerTableModels.popularTableRegistrosGerente(table_registros);
-		scrollPane_r.setViewportView(table_registros);
+		table_registros_supervisores = new JTable();
+		// ControllerTableModels.popularTableRegistrosGerente(table_registros_supervisores_supervisores);
+		scrollPane_r.setViewportView(table_registros_supervisores);
 
 		JSeparator separator_vertical = new JSeparator();
 		separator_vertical.setOrientation(SwingConstants.VERTICAL);
@@ -1348,7 +1348,7 @@ public class Janela_principal extends JFrame {
 		JButton btn_atualizar_tabelas_superior = new JButton("Atualizar listas");
 		btn_atualizar_tabelas_superior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctb = new ControllerTableModels(table_registros, table_fornecedores, table_produtos,
+				ctb = new ControllerTableModels(table_registros_supervisores, table_fornecedores, table_produtos,
 						table_movimentacoes);
 				new Atualizar().start();
 			}
@@ -1359,9 +1359,11 @@ public class Janela_principal extends JFrame {
 		progressBar_tabelas_superior = new JProgressBar();
 		progressBar_tabelas_superior.setBounds(799, 21, 385, 10);
 		panel_superior.add(progressBar_tabelas_superior);
+		
+		new ControllerTableModels(table_registros_supervisores, table_fornecedores, table_produtos, table_movimentacoes);
 
 		// ControllerTableModels.popularTabelaProdutos(table_produtos);
-		// new ControllerTableModels(table_registros, table_gerentes,
+		// new ControllerTableModels(table_registros_supervisores_supervisores, table_gerentes,
 		// table_fornecedores, table_produtos, table_movimentacoes);
 		// setLocationRelativeTo(null);
 
