@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -52,6 +54,10 @@ public class Janela_login extends JFrame {
 	 * Create the frame.
 	 */
 	public Janela_login() {
+		
+		
+
+		
 		setTitle("SAGE - Login");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -177,5 +183,123 @@ public class Janela_login extends JFrame {
 		JLabel lblNewLabel = new JLabel(new ImageIcon(getClass().getResource("/sage_icons/fundo-login.png")));
 		lblNewLabel.setBounds(0, 0, 594, 672);
 		contentPane.add(lblNewLabel);
+		
+		formattedTextField.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					ControllerGerente controller = new ControllerGerente();
+					@SuppressWarnings("deprecation")
+					String senha = passwordField.getText();
+					String cpf = formattedTextField.getText();
+					if (controller.fazerLogin(cpf, senha, TipoComportamento.ENTRADA) == true) {
+						Janela_principal jp = new Janela_principal();
+						jp.setVisible(true);
+						dispose();
+					}
+				}
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {}
+
+			@Override
+			public void keyReleased(KeyEvent e) {}
+			
+		});
+		
+		passwordField.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					ControllerGerente controller = new ControllerGerente();
+					@SuppressWarnings("deprecation")
+					String senha = passwordField.getText();
+					String cpf = formattedTextField.getText();
+					if (controller.fazerLogin(cpf, senha, TipoComportamento.ENTRADA) == true) {
+						Janela_principal jp = new Janela_principal();
+						jp.setVisible(true);
+						dispose();
+					}
+				}
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {}
+
+			@Override
+			public void keyReleased(KeyEvent e) {}
+			
+		});
+
+		passwordField_senha_super.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+					ControllerSupervisor ctrlSuper = new ControllerSupervisor();
+					if (ctrlSuper.fazerLogin(formattedTextField_cpf_super.getText(), passwordField_senha_super.getText(),
+							TipoComportamento.ENTRADA) == true) {
+						Janela_principal jp = new Janela_principal();
+						jp.setVisible(true);
+						dispose();
+					}
+
+
+					}
+				}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		
+		});
+		
+		
+		formattedTextField_cpf_super.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+					ControllerSupervisor ctrlSuper = new ControllerSupervisor();
+					if (ctrlSuper.fazerLogin(formattedTextField_cpf_super.getText(), passwordField_senha_super.getText(),
+							TipoComportamento.ENTRADA) == true) {
+						Janela_principal jp = new Janela_principal();
+						jp.setVisible(true);
+						dispose();
+					}
+
+
+					}
+				}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		
+		});
+
+
+		
 	}
 }
