@@ -14,7 +14,6 @@ import br.com.projeto.estoque.util.Essencial;
 import br.com.projeto.estoque.util.JPAUtil;
 import br.com.projeto.estoque.util.SupervisorAtual;
 import br.com.projeto.estoque.util.SupervisorDeletado;
-import br.com.projeto.estoque.view.Janela_confirmar_delecao;
 
 public class ControllerSupervisor extends ControllerGlobal {
 
@@ -375,9 +374,9 @@ public class ControllerSupervisor extends ControllerGlobal {
 				if (buscarSupervisorPeloId(id) == null) {
 					Aviso.avisar(11);
 				} else {
-					Janela_confirmar_delecao confDell = new Janela_confirmar_delecao();
-					SupervisorDeletado.setId(id);
-					confDell.setVisible(true);
+//					Janela_confirmar_delecao confDell = new Janela_confirmar_delecao();
+//					SupervisorDeletado.setId(id);
+//					confDell.setVisible(true);
 
 				}
 
