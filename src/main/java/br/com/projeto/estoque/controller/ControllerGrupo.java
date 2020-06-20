@@ -16,7 +16,7 @@ public class ControllerGrupo {
 	private static Random rand;
 
 	// Método para cadastrar novos Grupos
-	public Grupo cadastrarGrupo(String nome, String descricao, Integer id_categoria, Double medida, String unidade) {
+	public Grupo cadastrarGrupo(String nome, String descricao, Integer id_categoria, int qtdMinima, int qtdMaxima) {
 		manager = new JPAUtil().getEntityManager();
 		rand = new Random();
 
@@ -26,8 +26,9 @@ public class ControllerGrupo {
 		grupo.setNome(nome);
 		grupo.setDescricao(descricao);
 		grupo.setCategoria(c);
-		grupo.setMedida(medida);
-		grupo.setUnidade(unidade);
+		// O subtotal não é definido até que um Produto desse Grupo seja cadastrado
+		grupo.setQtdMinima(qtdMinima);
+		grupo.setQtdMaxima(qtdMaxima);
 		// Quando um Grupo é inicialmente inserido no banco, ele não possui nenhum
 		// Produto associado, então ainda não está "estocado"
 		grupo.setEstocado(false);

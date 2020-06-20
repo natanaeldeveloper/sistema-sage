@@ -23,8 +23,8 @@ public class ControllerAtualizarProduto {
 
 	// Esse método busca o produto pelo ID inserido no JTextField
 	public void buscarProduto(JButton btnBuscar, JButton btnResetar, JTextField tfId, JFormattedTextField tfPreco,
-			JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo, JDateChooser dcDataFabricacao,
-			JDateChooser dcDataVencimento, JButton btnLimpar, JButton btnAtualizar) {
+			JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo, JTextField tfMedida, JComboBox cbUnidade,
+			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JButton btnLimpar, JButton btnAtualizar) {
 		manager = new JPAUtil().getEntityManager();
 		Integer idBuscado = null;
 		try {
@@ -48,11 +48,13 @@ public class ControllerAtualizarProduto {
 			jsQuantidade.setValue(produto.getQuantidade());
 			epDescricao.setText(produto.getDescricao());
 			cbGrupo.setSelectedItem(ControllerGrupo.encontrarGrupoPeloProduto(produto.getId()));
+			tfMedida.setText(produto.getMedida() + "");
+			cbUnidade.setSelectedItem(produto.getUnidade());
 			dcDataFabricacao.setDate(produto.getDataFabricacao().getTime());
 			dcDataVencimento.setDate(produto.getDataVencimento().getTime());
 			tfId.setEnabled(false);
-			habilitarAtualizacao(btnBuscar, btnResetar, tfId, tfPreco, jsQuantidade, epDescricao, cbGrupo,
-					dcDataFabricacao, dcDataVencimento, btnLimpar, btnAtualizar);
+			habilitarAtualizacao(btnBuscar, btnResetar, tfId, tfPreco, jsQuantidade, epDescricao, cbGrupo, tfMedida,
+					cbUnidade, dcDataFabricacao, dcDataVencimento, btnLimpar, btnAtualizar);
 		}
 		manager.close();
 	}
@@ -60,10 +62,11 @@ public class ControllerAtualizarProduto {
 	// Esse método efetua a atualização do Produto. Ainda não está com todas as
 	// validações
 	public void atualizarProduto(JTextField tfId, JFormattedTextField tfPreco, JSpinner jsQuantidade,
-			JEditorPane epDescricao, JComboBox cbGrupo, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento) {
+			JEditorPane epDescricao, JComboBox cbGrupo, JTextField tfMedida, JComboBox cbUnidade,
+			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento) {
 		manager = new JPAUtil().getEntityManager();
 		if (ControllerAuxiliar.dadosConferem(tfPreco, jsQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento,
-				cbGrupo)) {
+				cbGrupo, tfMedida, cbUnidade)) {
 			Integer idAtualizado = Integer.parseInt(tfId.getText());
 			Integer idGrupo = ControllerAuxiliar.pegarIdGrupoSelecionado(cbGrupo);
 			BigDecimal preco = null;
@@ -76,18 +79,29 @@ public class ControllerAtualizarProduto {
 				tfPreco.transferFocus();
 				return;
 			}
-			
+
 			int quantidade = (Integer) jsQuantidade.getValue();
-			
+
 			if (quantidade <= 0) {
 				JOptionPane.showMessageDialog(null, "A quantidade não pode ser nula ou negativa!",
 						"Quantidade inválida", JOptionPane.ERROR_MESSAGE);
 				jsQuantidade.transferFocus();
 				return;
 			}
-			
+
 			String descricao = epDescricao.getText();
-			
+
+			Double medida = Double.parseDouble(tfMedida.getText());
+
+			if (medida <= 0) {
+				JOptionPane.showMessageDialog(null, "A medida não pode ser nula ou negativa!", "Medida inválida",
+						JOptionPane.ERROR_MESSAGE);
+				tfMedida.transferFocus();
+				return;
+			}
+
+			String unidade = cbUnidade.getSelectedItem().toString();
+
 			// Por padrão, o JDateChooser retorna um objeto do tipo Date, que precisa ser
 			// convertido
 			// com o método auxiliar ".toCalendar" para um objeto do tipo Calendar
@@ -100,14 +114,14 @@ public class ControllerAtualizarProduto {
 			try {
 				if (!ControllerAuxiliar.dataErrada(dcDataFabricacao, dcDataVencimento)) {
 					ControllerProduto cp = new ControllerProduto();
-					cp.atualizarProduto(idAtualizado, preco, quantidade, descricao, dataFabricacao, dataVencimento,
-							idGrupo);
+					cp.atualizarProduto(idAtualizado, preco, quantidade, medida, unidade, descricao, dataFabricacao,
+							dataVencimento, idGrupo);
 
 					JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso!", "Produto atualizado",
 							JOptionPane.INFORMATION_MESSAGE);
 
 					ControllerAuxiliar.resetarTodosOsCampos(tfPreco, jsQuantidade, epDescricao, dcDataFabricacao,
-							dcDataVencimento, cbGrupo);
+							dcDataVencimento, cbGrupo, tfMedida, cbUnidade);
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null,
@@ -123,9 +137,10 @@ public class ControllerAtualizarProduto {
 	// informar o ID, para buscar um novo registro
 	public void desabilitarAtualizacao(JButton btnBuscar, JButton btnResetar, JTextField tfId,
 			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
-			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JButton btnLimpar, JButton btnAtualizar) {
+			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,
+			JButton btnLimpar, JButton btnAtualizar) {
 		ControllerAuxiliar.resetarTodosOsCampos(tfPreco, jsQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento,
-				cbGrupo);
+				cbGrupo, tfMedida, cbUnidade);
 		btnBuscar.setEnabled(true);
 		btnResetar.setEnabled(false);
 		tfId.setEnabled(true);
@@ -133,6 +148,8 @@ public class ControllerAtualizarProduto {
 		jsQuantidade.setEnabled(false);
 		epDescricao.setEnabled(false);
 		cbGrupo.setEnabled(false);
+		tfMedida.setEnabled(false);
+		cbUnidade.setEnabled(false);
 		dcDataFabricacao.setEnabled(false);
 		dcDataVencimento.setEnabled(false);
 		btnLimpar.setEnabled(false);
@@ -143,7 +160,8 @@ public class ControllerAtualizarProduto {
 	// informar o ID, para atualizar o registro atual
 	public void habilitarAtualizacao(JButton btnBuscar, JButton btnResetar, JTextField tfId,
 			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
-			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JButton btnLimpar, JButton btnAtualizar) {
+			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,
+			JButton btnLimpar, JButton btnAtualizar) {
 		btnBuscar.setEnabled(false);
 		btnResetar.setEnabled(true);
 		tfId.setEnabled(false);
@@ -151,6 +169,8 @@ public class ControllerAtualizarProduto {
 		jsQuantidade.setEnabled(true);
 		epDescricao.setEnabled(true);
 		cbGrupo.setEnabled(true);
+		tfMedida.setEnabled(true);
+		cbUnidade.setEnabled(true);
 		dcDataFabricacao.setEnabled(true);
 		dcDataVencimento.setEnabled(true);
 		btnLimpar.setEnabled(true);

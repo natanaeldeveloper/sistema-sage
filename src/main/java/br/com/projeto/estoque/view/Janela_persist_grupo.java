@@ -96,13 +96,13 @@ public class Janela_persist_grupo extends JInternalFrame {
 
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerValidationGrupo.limparDados(tfNome, tfPeso);
+//				ControllerValidationGrupo.limparDados(tfNome, tfPeso);
 			}
 		});
 
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ControllerValidationGrupo.cadastrarGrupo(tfNome, null, cbCategoria, tfPeso, cbUnidade);
+//				ControllerValidationGrupo.cadastrarGrupo(tfNome, null, cbCategoria, tfPeso, cbUnidade);
 			}
 		});
 	}

@@ -37,17 +37,24 @@ public class Produto {
 	@Column(nullable = false)
 	private int quantidade;
 
+	@Column(nullable = false)
+	private Double medida;
+
+	@Column(nullable = false, length = 5)
+	private String unidade;
+
 	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Calendar dataFabricacao;
 
 	@Temporal(TemporalType.DATE)
+	@Column(nullable = false)
 	private Calendar dataVencimento;
 
 	@OneToMany(mappedBy = "produto", fetch = FetchType.LAZY)
 	private List<Movimentacao> movimentacoes;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 10)
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
@@ -89,6 +96,22 @@ public class Produto {
 
 	public void setQuantidade(int quantidade) {
 		this.quantidade = quantidade;
+	}
+
+	public Double getMedida() {
+		return medida;
+	}
+
+	public void setMedida(Double medida) {
+		this.medida = medida;
+	}
+
+	public String getUnidade() {
+		return unidade;
+	}
+
+	public void setUnidade(String unidade) {
+		this.unidade = unidade;
 	}
 
 	public Calendar getDataFabricacao() {

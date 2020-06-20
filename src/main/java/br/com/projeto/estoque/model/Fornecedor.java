@@ -20,26 +20,26 @@ public class Fornecedor {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String nome;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String razaoSocial;
 
 	// Mas se o mesmo cnpj já estiver no banco, ele já é único independente do nome
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 20)
 	private String cnpj;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 20)
 	private String telefone;
 
 	@Embedded
 	private Endereco endereco;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 150)
 	private String email;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 10)
 	@Enumerated(EnumType.STRING)
 	private Status status;
 

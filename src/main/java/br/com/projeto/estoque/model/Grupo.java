@@ -18,17 +18,20 @@ public class Grupo {
 	@Column(nullable = false, unique = true)
 	private String codigo;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, length = 100)
 	private String nome;
 	
 	@Column(nullable = false)
 	private String descricao;
-
-	@Column(nullable = false)
-	private Double medida;
+	
+	@Column(nullable = true)
+	private int subtotal;
 	
 	@Column(nullable = false)
-	private String unidade;
+	private int qtdMaxima;
+	
+	@Column(nullable = false)
+	private int qtdMinima;
 
 	@Column(nullable = false)
 	private boolean estocado;
@@ -67,21 +70,29 @@ public class Grupo {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
-	public Double getMedida() {
-		return medida;
+	
+	public int getSubtotal() {
+		return subtotal;
 	}
 
-	public void setMedida(Double medida) {
-		this.medida = medida;
+	public void setSubtotal(int subtotal) {
+		this.subtotal = subtotal;
 	}
 
-	public String getUnidade() {
-		return unidade;
+	public int getQtdMaxima() {
+		return qtdMaxima;
 	}
 
-	public void setUnidade(String unidade) {
-		this.unidade = unidade;
+	public void setQtdMaxima(int qtdMaxima) {
+		this.qtdMaxima = qtdMaxima;
+	}
+
+	public int getQtdMinima() {
+		return qtdMinima;
+	}
+
+	public void setQtdMinima(int qtdMinima) {
+		this.qtdMinima = qtdMinima;
 	}
 
 	public boolean isEstocado() {

@@ -8,6 +8,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -17,10 +18,11 @@ public class ControllerValidationProduto {
 	// Esse método pega os dados dos campos e coloca em variáveis, que serão
 	// inseridas no método de cadastrar no banco de dados
 	public void enviarDadosParaCadastrar(JFormattedTextField tfPreco, JSpinner spQuantidade, JEditorPane epDescricao,
-			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo) {
+			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo, JTextField tfMedida,
+			JComboBox cbUnidade) {
 		// O código só vai rodar se todos os campos estiverem preenchidos
 		if (ControllerAuxiliar.dadosConferem(tfPreco, spQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento,
-				cbGrupo)) {
+				cbGrupo, tfMedida, cbUnidade)) {
 			BigDecimal preco = null;
 			try {
 				preco = new BigDecimal(tfPreco.getText());
@@ -33,30 +35,43 @@ public class ControllerValidationProduto {
 			}
 			// Falta validar se o valor de quantidade inserido é realmente INTEIRO
 			int quantidade = Integer.parseInt(spQuantidade.getValue().toString());
-			
+
 			if (quantidade <= 0) {
 				JOptionPane.showMessageDialog(null, "A quantidade não pode ser nula ou negativa!",
 						"Quantidade inválida", JOptionPane.ERROR_MESSAGE);
 				spQuantidade.transferFocus();
 				return;
 			}
+
 			String descricao = epDescricao.getText();
 			Calendar dataFabricacao = ControllerAuxiliar.toCalendar(dcDataFabricacao.getDate());
 			Calendar dataVencimento = ControllerAuxiliar.toCalendar(dcDataVencimento.getDate());
 			Integer idGrupo = ControllerAuxiliar.pegarIdGrupoSelecionado(cbGrupo);
+
+			// Falta validar se o valor de medida inserido é realmente DOUBLE
+			Double medida = Double.parseDouble(tfMedida.getText());
+
+			if (medida <= 0) {
+				JOptionPane.showMessageDialog(null, "A medida não pode ser nula ou negativa!", "Medida inválida",
+						JOptionPane.ERROR_MESSAGE);
+				tfMedida.transferFocus();
+				return;
+			}
+
+			String unidade = cbUnidade.getSelectedItem().toString();
 
 			// O comando de cadastrar no banco só será executado se as datas estiverem
 			// coerentes
 			if (!ControllerAuxiliar.dataErrada(dcDataFabricacao, dcDataVencimento)) {
 				try {
 					ControllerProduto cp = new ControllerProduto();
-					cp.cadastrarProduto(idGrupo, descricao, preco, quantidade, dataFabricacao, dataVencimento);
+					cp.cadastrarProduto(idGrupo, descricao, preco, quantidade, medida, unidade, dataFabricacao, dataVencimento);
 
 					JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Produto cadastrado",
 							JOptionPane.INFORMATION_MESSAGE);
 
 					ControllerAuxiliar.resetarTodosOsCampos(tfPreco, spQuantidade, epDescricao, dcDataFabricacao,
-							dcDataVencimento, cbGrupo);
+							dcDataVencimento, cbGrupo, tfMedida, cbUnidade);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null,
 							"Ocorreu um erro ao cadastrar o Produto, cheque os dados e tente novamente.\nSe o erro persistir, entre em contato.",

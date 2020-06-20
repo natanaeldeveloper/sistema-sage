@@ -5,8 +5,11 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import org.apache.commons.lang3.StringUtils;
 
 import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.util.JPAUtil;
@@ -16,49 +19,69 @@ public class ControllerValidationGrupo {
 	private static EntityManager manager;
 
 	// CadastroDoProduto
-	public static void cadastrarGrupo(JTextField tfNome, JTextField tfDescricao, JComboBox cbCategoria,
-			JTextField tfPeso, JComboBox cbUnidade) {
-		if (conferirDados(tfNome, cbCategoria, tfPeso, cbUnidade)) {
+	@SuppressWarnings("null")
+	public static void cadastrarGrupo(JTextField tfNome, JEditorPane tpDescricao, JComboBox cbCategoria,
+			JTextField tfQtdMin, JTextField tfQtdMax) {
+		if (conferirDados(tfNome, tpDescricao, cbCategoria, tfQtdMin, tfQtdMax)) {
 			String nome = tfNome.getText();
-			String descricao = tfDescricao.getText();
+			String descricao = tpDescricao.getText();
 			Integer categoria_id = pegarCategorias(cbCategoria);
-			Double peso = null;
+			int qtdMin = (Integer) null;
 			try {
-				peso = Double.parseDouble(tfPeso.getText());
+				qtdMin = Integer.parseInt(tfQtdMin.getText());
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
-				JOptionPane.showMessageDialog(null, "Preencha o campo corretamente!", "Valor inserido inválido",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Preencha a quantidade mínima corretamente!",
+						"Quantidade mínima inválida", JOptionPane.ERROR_MESSAGE);
+				tfQtdMin.transferFocus();
 				return;
 			}
-			String unidade = cbUnidade.getSelectedItem().toString();
+			int qtdMax = (Integer) null;
+			try {
+				qtdMax = Integer.parseInt(tfQtdMax.getText());
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Preencha a quantidade máxima corretamente!",
+						"Quantidade máxima inválida", JOptionPane.ERROR_MESSAGE);
+				tfQtdMax.transferFocus();
+			}
 
+			// Essa parte do código serve para verificar se não estão tentando cadastrar um
+			// grupo com o nome de um que já existe
 			Query q = manager.createQuery("select nome from Grupo g where g.nome=:nomeDuplicado");
 			q.setParameter("nomeDuplicado", nome);
 			Object testador = null;
 			try {
 				testador = q.getSingleResult();
 				if (testador != null) {
-					JOptionPane.showMessageDialog(null, "Esse Produto já existe!", "Operação inválida",
+					JOptionPane.showMessageDialog(null, "Esse Grupo já existe!", "Operação inválida",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 			} catch (Exception e) {
 			}
-			ControllerGrupo cp = new ControllerGrupo();
-			cp.cadastrarGrupo(nome, descricao, categoria_id, peso, unidade);
 
-			JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Produto cadastrado",
-					JOptionPane.INFORMATION_MESSAGE);
-			limparDados(tfNome, tfPeso);
+			try {
+				ControllerGrupo cp = new ControllerGrupo();
+				cp.cadastrarGrupo(nome, descricao, categoria_id, qtdMin, qtdMax);
+
+				JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!", "Produto cadastrado",
+						JOptionPane.INFORMATION_MESSAGE);
+				limparDados(tfNome, tpDescricao, cbCategoria, tfQtdMin, tfQtdMax);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null,
+						"Ocorreu um erro inesperado ao cadastrar o grupo!\nSe ele persistir, entre em contato!",
+						"Erro desconhecido", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 
 	}
 
-	public static boolean conferirDados(JTextField tfNome, JComboBox cbCategoria, JTextField tfPeso,
-			JComboBox cbUnidade) {
-		if (!(tfNome.getText().isEmpty() || cbCategoria.getItemCount() <= 0 || tfPeso.getText().isEmpty()
-				|| cbUnidade.getItemCount() <= 0)) {
+	// Confere se os dados não estão vazios
+	public static boolean conferirDados(JTextField tfNome, JEditorPane tpDescricao, JComboBox cbCategoria,
+			JTextField tfQtdMin, JTextField tfQtdMax) {
+		if (!(StringUtils.isBlank(tfNome.getText()) || StringUtils.isBlank(tpDescricao.getText())
+				|| cbCategoria.getItemCount() <= 0 || StringUtils.isBlank(tfQtdMin.getText())
+				|| StringUtils.isBlank(tfQtdMax.getText()))) {
 			return true;
 		} else {
 			JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "Campo vazio", JOptionPane.ERROR_MESSAGE);
@@ -80,8 +103,13 @@ public class ControllerValidationGrupo {
 		return idCategoria;
 	}
 
-	public static void limparDados(JTextField tfNome, JTextField tfPeso) {
+	// Limpa os campos da interface
+	public static void limparDados(JTextField tfNome, JEditorPane tpDescricao, JComboBox cbCategoria,
+			JTextField tfQtdMin, JTextField tfQtdMax) {
 		tfNome.setText("");
-		tfPeso.setText("");
+		tpDescricao.setText("");
+		cbCategoria.setSelectedIndex(0);
+		tfQtdMin.setText("");
+		tfQtdMax.setText("");
 	}
 }

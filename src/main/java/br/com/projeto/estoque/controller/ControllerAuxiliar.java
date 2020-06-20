@@ -120,35 +120,37 @@ public class ControllerAuxiliar {
 	// Preenche os campos das views de Cadastrar e Atualizar Produtos, baseado no
 	// grupo escolhido
 	public static void preencherCamposGrupo(JComboBox cbGrupo, JTextField tfNome, JTextField tfCodigo,
-			JTextField tfMedida, JComboBox cbUnidade) {
+			JTextField tfQtdMin, JTextField tfQtdMax) {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select g from Grupo g where g.nome=:nomeGrupo");
 		query.setParameter("nomeGrupo", cbGrupo.getSelectedItem().toString());
 		Grupo grupo = (Grupo) query.getSingleResult();
 		tfNome.setText(grupo.getNome());
 		tfCodigo.setText(grupo.getCodigo());
-		tfMedida.setText(grupo.getMedida() + "");
-		cbUnidade.addItem(grupo.getUnidade().toString());
+		tfQtdMin.setText(grupo.getQtdMinima() + "");
+		tfQtdMax.setText(grupo.getQtdMaxima() + "");
 		manager.close();
 	}
 
 	// Esse método reseta todos os campos referentes ao grupo. É chamado quando o
 	// usuário não seleciona nenhum grupo nas telas de Cadastrar e Atualizar
 	// Produtos
-	public static void resetarCamposGrupoProduto(JTextField tfNome, JTextField tfCodigo, JTextField tfMedida,
-			JComboBox cbUnidade) {
+	public static void resetarCamposGrupoProduto(JTextField tfNome, JTextField tfCodigo, JTextField tfQtdMin,
+			JTextField tfQtdMax) {
 		tfNome.setText("");
 		tfCodigo.setText("");
-		tfMedida.setText("");
-		cbUnidade.removeAllItems();
+		tfQtdMin.setText("");
+		tfQtdMax.setText("");
 	}
 
 	// Esse método checa se existe algum campo vazio nas views de Cadastrar e
 	// Atualizar os Produtos
 	public static boolean dadosConferem(JFormattedTextField tfPreco, JSpinner spQuantidade, JEditorPane epDescricao,
-			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo) {
+			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo, JTextField tfMedida,
+			JComboBox cbUnidade) {
 		if (StringUtils.isBlank(tfPreco.getText()) || StringUtils.isBlank(spQuantidade.getValue().toString())
-				|| StringUtils.isBlank(epDescricao.getText()) || cbGrupo.getSelectedIndex() == 0) {
+				|| StringUtils.isBlank(epDescricao.getText()) || cbGrupo.getSelectedIndex() == 0
+				|| StringUtils.isBlank(tfMedida.getText()) || cbUnidade.getSelectedIndex() < 0) {
 			JOptionPane.showMessageDialog(null, "Algum dos campos está vazio! Preencha e tente novamente.",
 					"Campo Vazio", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -173,13 +175,16 @@ public class ControllerAuxiliar {
 	// o método de resetar os campos do grupo nas interfaces de Cadastrar e
 	// Atualizar Produtos
 	public static void resetarTodosOsCampos(JFormattedTextField tfPreco, JSpinner spQuantidade, JEditorPane epDescricao,
-			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo) {
+			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JComboBox cbGrupo, JTextField tfMedida,
+			JComboBox cbUnidade) {
 		tfPreco.setText("");
 		spQuantidade.setValue(0);
 		epDescricao.setText("");
 		dcDataFabricacao.setDate(null);
 		dcDataVencimento.setDate(null);
 		cbGrupo.setSelectedIndex(0);
+		tfMedida.setText("");
+		cbUnidade.setSelectedIndex(0);
 	}
 
 	// Preenche as Categorias de uma JComboBox

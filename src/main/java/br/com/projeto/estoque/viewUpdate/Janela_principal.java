@@ -55,11 +55,11 @@ import br.com.projeto.estoque.controller.ControllerAtualizarFornecedor;
 import br.com.projeto.estoque.controller.ControllerAtualizarProduto;
 import br.com.projeto.estoque.controller.ControllerAuxiliar;
 import br.com.projeto.estoque.controller.ControllerGlobal;
+import br.com.projeto.estoque.controller.ControllerPermissao;
 import br.com.projeto.estoque.controller.ControllerSupervisor;
 import br.com.projeto.estoque.controller.ControllerTableModels;
 import br.com.projeto.estoque.controller.ControllerValidationFornecedor;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
-import br.com.projeto.estoque.util.GerenteAtual;
 
 @SuppressWarnings({ "deprecation", "unchecked", "rawtypes" })
 public class Janela_principal extends JFrame {
@@ -87,17 +87,15 @@ public class Janela_principal extends JFrame {
 	private JFormattedTextField id_pesquisa_supervisor_AtualizacaoSupervisor;
 	private JPasswordField nova_senha_supervisor_AtualizacaoSupervisor;
 	private JPasswordField senha_gerente_AtualizacaoSupervisor;
-	private JFormattedTextField novo_cpf_supervisor_AtualizacaoSupervisor;
 	private JFormattedTextField cpf_atual_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
 	private JFormattedTextField login_atual_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
 	private JFormattedTextField novo_login_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
 
 	private JPanel contentPane;
-	private JTable table_gerentes;
 	private JTable table_fornecedores;
 	private JTable table_produtos;
 	private JTable table_movimentacoes;
-	private JTable table_registros;
+	private JTable table_registros_supervisores;
 
 	private JTextField tfCidadeAtualizarFornecedor;
 	private JTextField tfNomeAtualizarFornecedor;
@@ -169,8 +167,13 @@ public class Janela_principal extends JFrame {
 	private JButton btnLimparAtualizarFornecedor;
 	private JButton btnAtualizarFornecedor;
 
+	JLabel usuario_atual_atualizar_gerente = new JLabel("");
+	JLabel usuario_atual_deletarSupervisor = new JLabel("");
+	JLabel usuario_atual_cadastrarSupervisor = new JLabel("");
+
 	ControllerSupervisor ctrlSuper = new ControllerSupervisor();
 	ControllerAuxiliar ctrlAux = new ControllerAuxiliar();
+	ControllerPermissao ctrlPermissao = new ControllerPermissao();
 
 	MaskFormatter ms;
 	DefaultFormatterFactory df;
@@ -195,7 +198,11 @@ public class Janela_principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Janela_principal() {
-		setTitle("SAGE - Sistema Administrativo de Gerenciamento de Estoque");
+
+		ctrlAux.setarLoginUsuarioAtual_na_telaPrincipal(usuario_atual_cadastrarSupervisor,
+				usuario_atual_atualizar_gerente, usuario_atual_deletarSupervisor);
+
+		setTitle("SAGE - MENU");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1216, 603);
@@ -327,11 +334,11 @@ public class Janela_principal extends JFrame {
 		contentPane.add(panel_superior);
 		panel_superior.setLayout(null);
 
-		JTabbedPane tabbedPane_area = new JTabbedPane(JTabbedPane.TOP);
+		final JTabbedPane tabbedPane_area = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_area.setBounds(0, 0, 623, 553);
 		panel_superior.add(tabbedPane_area);
 
-		JPanel panel_area_gerente = new JPanel();
+		final JPanel panel_area_gerente = new JPanel();
 		tabbedPane_area.addTab("Área do Supervisor", null, panel_area_gerente, null);
 		panel_area_gerente.setLayout(null);
 
@@ -405,10 +412,8 @@ public class Janela_principal extends JFrame {
 		label.setBounds(20, 11, 106, 25);
 		panel_add_gerente.add(label);
 
-		JLabel usuario_atual_cadastrarSupervisor = new JLabel("");
 		usuario_atual_cadastrarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
 		usuario_atual_cadastrarSupervisor.setBounds(143, 11, 169, 25);
-		usuario_atual_cadastrarSupervisor.setText(GerenteAtual.getGerente().getLogin());
 		panel_add_gerente.add(usuario_atual_cadastrarSupervisor);
 
 		// ADICIONAR CAMPOS DE ATUALIZAR gerente NESSE PANEL
@@ -425,13 +430,8 @@ public class Janela_principal extends JFrame {
 
 		JButton btn_atualizar_tudo_AtualizacaoSupervisor = new JButton("Atualizar Tudo");
 
-		btn_atualizar_tudo_AtualizacaoSupervisor.setBounds(359, 429, 106, 34);
+		btn_atualizar_tudo_AtualizacaoSupervisor.setBounds(385, 429, 106, 34);
 		panel_update_gerente.add(btn_atualizar_tudo_AtualizacaoSupervisor);
-
-		JButton btn_atualizar_cpf_AtualizacaoSupervisor = new JButton("Atualizar CPF");
-
-		btn_atualizar_cpf_AtualizacaoSupervisor.setBounds(243, 429, 106, 34);
-		panel_update_gerente.add(btn_atualizar_cpf_AtualizacaoSupervisor);
 
 		JButton btn_atualizar_senha_AtualizacaoSupervisor = new JButton("Atualizar Senha");
 
@@ -472,29 +472,10 @@ public class Janela_principal extends JFrame {
 		botao_atualizar_senha_AtualizacaoSupervisor.add(nova_senha_supervisor_AtualizacaoSupervisor);
 		nova_senha_supervisor_AtualizacaoSupervisor.setColumns(10);
 		nova_senha_supervisor_AtualizacaoSupervisor.setEditable(true);
-		// lblNewLabel_5.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
-
-		JLabel lblNewLabel_3_1 = new JLabel("Novo CPF:");
-		lblNewLabel_3_1.setBounds(306, 150, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(lblNewLabel_3_1);
-		// lblNewLabel_3_1.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
-
-		novo_cpf_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-		novo_cpf_supervisor_AtualizacaoSupervisor.setBounds(306, 175, 253, 25);
-		botao_atualizar_senha_AtualizacaoSupervisor.add(novo_cpf_supervisor_AtualizacaoSupervisor);
-		novo_cpf_supervisor_AtualizacaoSupervisor.setColumns(10);
-		novo_cpf_supervisor_AtualizacaoSupervisor.setEditable(true);
 
 		cpf_atual_supervisor_AtualizacaoSupervisor.setEditable(false);
 		cpf_atual_supervisor_AtualizacaoSupervisor.setColumns(10);
 		cpf_atual_supervisor_AtualizacaoSupervisor.setBounds(306, 124, 253, 25);
-		try {
-			novo_cpf_supervisor_AtualizacaoSupervisor
-					.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
 		botao_atualizar_senha_AtualizacaoSupervisor.add(cpf_atual_supervisor_AtualizacaoSupervisor);
 
@@ -544,7 +525,8 @@ public class Janela_principal extends JFrame {
 		layeredPane_2.add(cpf_gerente_AtualizacaoSupervisor);
 
 		JButton btn_atualizar_login_AtualizacaoSupervisor = new JButton("Atualizar Login");
-		btn_atualizar_login_AtualizacaoSupervisor.setBounds(475, 429, 128, 34);
+
+		btn_atualizar_login_AtualizacaoSupervisor.setBounds(243, 429, 128, 34);
 		panel_update_gerente.add(btn_atualizar_login_AtualizacaoSupervisor);
 
 		JLabel lblUsurioAtual = new JLabel("USUÁRIO ATUAL:");
@@ -553,15 +535,14 @@ public class Janela_principal extends JFrame {
 		lblUsurioAtual.setBounds(20, 11, 106, 25);
 		panel_update_gerente.add(lblUsurioAtual);
 
-		JLabel usuario_atual_atualizar_gerente = new JLabel("");
 		usuario_atual_atualizar_gerente.setFont(new Font("Tahoma", Font.ITALIC, 11));
 		usuario_atual_atualizar_gerente.setBounds(143, 11, 169, 25);
 		panel_update_gerente.add(usuario_atual_atualizar_gerente);
 		// c_cpfAtual.setBackground(SystemColor.controlHighlight);
-		usuario_atual_atualizar_gerente.setText(GerenteAtual.getGerente().getLogin());
 
 		// ADICIONAR CAMPOS DE DELETAR gerente NESSE PANEL
-		JPanel panel_delete_supervisor = new JPanel();
+		final JPanel panel_delete_supervisor = new JPanel();
+
 		tabbedPane_acoes_gerente.addTab("Deletar Supervisor",
 				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_supervisor,
 				null);
@@ -641,10 +622,8 @@ public class Janela_principal extends JFrame {
 		botao_deletar_deleteSupervisor.setBounds(498, 406, 105, 34);
 		panel_delete_supervisor.add(botao_deletar_deleteSupervisor);
 
-		JLabel usuario_atual_deletarSupervisor = new JLabel("");
 		usuario_atual_deletarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
 		usuario_atual_deletarSupervisor.setBounds(146, 11, 169, 25);
-		usuario_atual_deletarSupervisor.setText(GerenteAtual.getGerente().getLogin());
 		panel_delete_supervisor.add(usuario_atual_deletarSupervisor);
 
 		JLabel label_2 = new JLabel("USUÁRIO ATUAL:");
@@ -1355,20 +1334,9 @@ public class Janela_principal extends JFrame {
 		scrollPane_r.setBounds(10, 11, 517, 425);
 		panel_listar_registros.add(scrollPane_r);
 
-		table_registros = new JTable();
-		// ControllerTableModels.popularTableRegistrosGerente(table_registros);
-		scrollPane_r.setViewportView(table_registros);
-
-		JPanel panel_listar_gerentes = new JPanel();
-		tabbedPane_listagem.addTab("Gerentes", null, panel_listar_gerentes, null);
-		panel_listar_gerentes.setLayout(null);
-
-		JScrollPane scrollPane_s = new JScrollPane();
-		scrollPane_s.setBounds(10, 11, 517, 425);
-		panel_listar_gerentes.add(scrollPane_s);
-
-		table_gerentes = new JTable();
-		scrollPane_s.setViewportView(table_gerentes);
+		table_registros_supervisores = new JTable();
+		// ControllerTableModels.popularTableRegistrosGerente(table_registros_supervisores_supervisores);
+		scrollPane_r.setViewportView(table_registros_supervisores);
 
 		JSeparator separator_vertical = new JSeparator();
 		separator_vertical.setOrientation(SwingConstants.VERTICAL);
@@ -1378,7 +1346,7 @@ public class Janela_principal extends JFrame {
 		JButton btn_atualizar_tabelas_superior = new JButton("Atualizar listas");
 		btn_atualizar_tabelas_superior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctb = new ControllerTableModels(table_registros, table_gerentes, table_fornecedores, table_produtos,
+				ctb = new ControllerTableModels(table_registros_supervisores, table_fornecedores, table_produtos,
 						table_movimentacoes);
 				new Atualizar().start();
 			}
@@ -1390,11 +1358,12 @@ public class Janela_principal extends JFrame {
 		progressBar_tabelas_superior.setBounds(799, 21, 385, 10);
 		panel_superior.add(progressBar_tabelas_superior);
 
-		ctb = new ControllerTableModels(table_registros, table_gerentes, table_fornecedores, table_produtos,
+		new ControllerTableModels(table_registros_supervisores, table_fornecedores, table_produtos,
 				table_movimentacoes);
 
 		// ControllerTableModels.popularTabelaProdutos(table_produtos);
-		// new ControllerTableModels(table_registros, table_gerentes,
+		// new ControllerTableModels(table_registros_supervisores_supervisores,
+		// table_gerentes,
 		// table_fornecedores, table_produtos, table_movimentacoes);
 		// setLocationRelativeTo(null);
 
@@ -1417,10 +1386,13 @@ public class Janela_principal extends JFrame {
 		// PRODUTO
 		bt_atualizar_af_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ControllerValidationProduto cvp = new ControllerValidationProduto();
-				cvp.enviarDadosParaCadastrar(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
-						epDescricaoCadastrarProduto, dcFabricacaoCadastrarProduto, dcVencimentoCadastrarProduto,
-						cbGrupoCadastrar);
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ControllerValidationProduto cvp = new ControllerValidationProduto();
+					cvp.enviarDadosParaCadastrar(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
+							epDescricaoCadastrarProduto, dcFabricacaoCadastrarProduto, dcVencimentoCadastrarProduto,
+							cbGrupoCadastrar);
+				}
+
 			}
 		});
 
@@ -1462,10 +1434,13 @@ public class Janela_principal extends JFrame {
 		// BOTÃO DE ATUALIZAR O PRODUTO
 		btnAtualizarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
-				cap.atualizarProduto(tfIdAtualizarProduto, tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto,
-						epDescricaoAtualizarProduto, cbGrupoAtualizar, dcFabricacaoAtualizarProduto,
-						dcVencimentoAtualizarProduto);
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ControllerAtualizarProduto cap = new ControllerAtualizarProduto();
+					cap.atualizarProduto(tfIdAtualizarProduto, tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto,
+							epDescricaoAtualizarProduto, cbGrupoAtualizar, dcFabricacaoAtualizarProduto,
+							dcVencimentoAtualizarProduto);
+				}
+
 			}
 		});
 
@@ -1494,12 +1469,15 @@ public class Janela_principal extends JFrame {
 		// ESSE BOTÃO CHAMA O MÉTODO DE CADASTRAR O FORNECEDOR
 		btnCadastrarFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerValidationFornecedor cvf = new ControllerValidationFornecedor();
-				cvf.enviarDadosParaCadastro(tfNomeCadastrarFornecedor, tfCnpjCadastrarFornecedor,
-						tfRazaoSocialCadastrarFornecedor, tfTelefoneCadastrarFornecedor, tfEmailCadastrarFornecedor,
-						tfCepCadastrarFornecedor, cbEstadoCadastrarFornecedor, tfCidadeCadastrarFornecedor,
-						tfBairroCadastrarFornecedor, tfNumeroCadastrarFornecedor, tfLogradouroCadastrarFornecedor,
-						tfComplementoCadastrarFornecedor);
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ControllerValidationFornecedor cvf = new ControllerValidationFornecedor();
+					cvf.enviarDadosParaCadastro(tfNomeCadastrarFornecedor, tfCnpjCadastrarFornecedor,
+							tfRazaoSocialCadastrarFornecedor, tfTelefoneCadastrarFornecedor, tfEmailCadastrarFornecedor,
+							tfCepCadastrarFornecedor, cbEstadoCadastrarFornecedor, tfCidadeCadastrarFornecedor,
+							tfBairroCadastrarFornecedor, tfNumeroCadastrarFornecedor, tfLogradouroCadastrarFornecedor,
+							tfComplementoCadastrarFornecedor);
+				}
+
 			}
 		});
 
@@ -1559,12 +1537,15 @@ public class Janela_principal extends JFrame {
 		// ESSE BOTÃO CHAMA O MÉTODO DE ATUALIZAR O FORNECEDOR
 		btnAtualizarFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControllerAtualizarFornecedor caf = new ControllerAtualizarFornecedor();
-				caf.atualizarFornecedor(tfIdAtualizarFornecedor, tfNomeAtualizarFornecedor, tfCnpjAtualizarFornecedor,
-						tfRazaoSocialAtualizarFornecedor, tfTelefoneAtualizarFornecedor, tfEmailAtualizarFornecedor,
-						tfCepAtualizarFornecedor, cbEstadoAtualizarFornecedor, tfCidadeAtualizarFornecedor,
-						tfBairroAtualizarFornecedor, tfNumeroAtualizarFornecedor, tfLogradouroAtualizarFornecedor,
-						tfComplementoAtualizarFornecedor);
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ControllerAtualizarFornecedor caf = new ControllerAtualizarFornecedor();
+					caf.atualizarFornecedor(tfIdAtualizarFornecedor, tfNomeAtualizarFornecedor,
+							tfCnpjAtualizarFornecedor, tfRazaoSocialAtualizarFornecedor, tfTelefoneAtualizarFornecedor,
+							tfEmailAtualizarFornecedor, tfCepAtualizarFornecedor, cbEstadoAtualizarFornecedor,
+							tfCidadeAtualizarFornecedor, tfBairroAtualizarFornecedor, tfNumeroAtualizarFornecedor,
+							tfLogradouroAtualizarFornecedor, tfComplementoAtualizarFornecedor);
+				}
+
 			}
 		});
 
@@ -1588,8 +1569,11 @@ public class Janela_principal extends JFrame {
 
 		botao_pesquisa_deleteSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.mostrarDadosDoSupervisor(id_pesquisa_deleteSupervisor, cpf_supervisor_deleteSupervisor,
-						login_supervisor_deleteSupervisor);
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ctrlSuper.mostrarDadosDoSupervisor(id_pesquisa_deleteSupervisor, cpf_supervisor_deleteSupervisor,
+							login_supervisor_deleteSupervisor);
+				}
+
 			}
 		});
 		// MÉTODO DE LIMPAR OS DADOS DOS CAMPOS DO PAINEL DE DELEÇÃO DO SUPERVISOR
@@ -1606,13 +1590,14 @@ public class Janela_principal extends JFrame {
 		// MÉTODO DE DELEÇÃO DO SUPERVISOR
 		botao_deletar_deleteSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.excluirContaSupervisor(id_pesquisa_deleteSupervisor, cpf_gerente_deleteSupervisor.getText(),
-						senha_gerente_deleteSupervisor.getText());
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ctrlSuper.excluirContaSupervisor(id_pesquisa_deleteSupervisor,
+							cpf_gerente_deleteSupervisor.getText(), senha_gerente_deleteSupervisor.getText());
 
-				ctrlAux.limparCampos(cpf_gerente_deleteSupervisor, senha_gerente_deleteSupervisor,
-						cpf_supervisor_deleteSupervisor, id_pesquisa_deleteSupervisor,
-						login_supervisor_deleteSupervisor, senha_gerente_deleteSupervisor);
-
+					ctrlAux.limparCampos(cpf_gerente_deleteSupervisor, senha_gerente_deleteSupervisor,
+							cpf_supervisor_deleteSupervisor, id_pesquisa_deleteSupervisor,
+							login_supervisor_deleteSupervisor, senha_gerente_deleteSupervisor);
+				}
 			}
 		});
 
@@ -1629,12 +1614,15 @@ public class Janela_principal extends JFrame {
 
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.cadastrarSupervisor(cpf_supervisor_criarSupervisor.getText(),
-						senha_supervisor_criarSupervisor.getText(),
-						confirmacaoSenha_supervisor_criarSupervisor.getText(),
-						login_supervisor_criarSupervisor.getText(), login_supervisor_criarSupervisor,
-						cpf_supervisor_criarSupervisor, senha_supervisor_criarSupervisor,
-						confirmacaoSenha_supervisor_criarSupervisor);
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ctrlSuper.cadastrarSupervisor(cpf_supervisor_criarSupervisor.getText(),
+							senha_supervisor_criarSupervisor.getText(),
+							confirmacaoSenha_supervisor_criarSupervisor.getText(),
+							login_supervisor_criarSupervisor.getText(), login_supervisor_criarSupervisor,
+							cpf_supervisor_criarSupervisor, senha_supervisor_criarSupervisor,
+							confirmacaoSenha_supervisor_criarSupervisor);
+				}
+
 			}
 		});
 
@@ -1645,8 +1633,8 @@ public class Janela_principal extends JFrame {
 
 				ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor, id_pesquisa_supervisor_AtualizacaoSupervisor,
 						nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-						novo_cpf_supervisor_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
-						login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
+						cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor,
+						novo_login_supervisor_AtualizacaoSupervisor);
 
 			}
 		});
@@ -1656,8 +1644,11 @@ public class Janela_principal extends JFrame {
 
 		buscar_supervisor_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlSuper.mostrarDadosDoSupervisor(id_pesquisa_supervisor_AtualizacaoSupervisor,
-						cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor);
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					ctrlSuper.mostrarDadosDoSupervisor(id_pesquisa_supervisor_AtualizacaoSupervisor,
+							cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor);
+				}
+
 			}
 		});
 
@@ -1666,33 +1657,40 @@ public class Janela_principal extends JFrame {
 
 		btn_atualizar_senha_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (ctrlSuper.atualizarSupervisorSenha(id_pesquisa_supervisor_AtualizacaoSupervisor,
-						nova_senha_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-						senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					if (ctrlSuper.atualizarSupervisorSenha(id_pesquisa_supervisor_AtualizacaoSupervisor,
+							nova_senha_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor) == true) {
 
-					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor, novo_cpf_supervisor_AtualizacaoSupervisor,
-							cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor);
+						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+								id_pesquisa_supervisor_AtualizacaoSupervisor,
+								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
+								cpf_atual_supervisor_AtualizacaoSupervisor,
+								login_atual_supervisor_AtualizacaoSupervisor,
+								novo_login_supervisor_AtualizacaoSupervisor);
+					}
 				}
 			}
 		});
 
-		// MÉTODO DE ATUALIZAÇÃO DE CPF DO SUPERVISOR
+		// MÉTODO DE ATUALIZAÇÃO DO LOGIN DO SUPERVISOR
+		btn_atualizar_login_AtualizacaoSupervisor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					if (ctrlSuper.atualizarSupervisorLogin(id_pesquisa_supervisor_AtualizacaoSupervisor,
+							novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor) == true) {
 
-		btn_atualizar_cpf_AtualizacaoSupervisor.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (ctrlSuper.atualizarSupervisorCpf(id_pesquisa_supervisor_AtualizacaoSupervisor,
-						novo_cpf_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-						senha_gerente_AtualizacaoSupervisor) == true) {
+						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+								id_pesquisa_supervisor_AtualizacaoSupervisor,
+								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
+								cpf_atual_supervisor_AtualizacaoSupervisor,
+								login_atual_supervisor_AtualizacaoSupervisor,
+								novo_login_supervisor_AtualizacaoSupervisor);
+					}
 
-					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor, novo_cpf_supervisor_AtualizacaoSupervisor,
-							cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor);
 				}
+
 			}
 		});
 
@@ -1700,20 +1698,22 @@ public class Janela_principal extends JFrame {
 		btn_atualizar_tudo_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (ctrlSuper.atualizarSupervisor(novo_cpf_supervisor_AtualizacaoSupervisor.getText(),
-						nova_senha_supervisor_AtualizacaoSupervisor.getText(),
-						id_pesquisa_supervisor_AtualizacaoSupervisor,
-						novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-						senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					if (ctrlSuper.atualizarSupervisor(nova_senha_supervisor_AtualizacaoSupervisor.getText(),
+							id_pesquisa_supervisor_AtualizacaoSupervisor,
+							novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor) == true) {
 
-					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor, novo_cpf_supervisor_AtualizacaoSupervisor,
-							cpf_atual_supervisor_AtualizacaoSupervisor, login_atual_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor);
+						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+								id_pesquisa_supervisor_AtualizacaoSupervisor,
+								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
+								cpf_atual_supervisor_AtualizacaoSupervisor,
+								login_atual_supervisor_AtualizacaoSupervisor,
+								novo_login_supervisor_AtualizacaoSupervisor);
+
+					}
 
 				}
-
 			}
 		});
 
