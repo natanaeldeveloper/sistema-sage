@@ -343,11 +343,11 @@ public class Janela_principal extends JFrame {
 		contentPane.add(panel_superior);
 		panel_superior.setLayout(null);
 
-		JTabbedPane tabbedPane_area = new JTabbedPane(JTabbedPane.TOP);
+		final JTabbedPane tabbedPane_area = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_area.setBounds(0, 0, 623, 553);
 		panel_superior.add(tabbedPane_area);
 
-		JPanel panel_area_gerente = new JPanel();
+		final JPanel panel_area_gerente = new JPanel();
 		tabbedPane_area.addTab("Área do Supervisor", null, panel_area_gerente, null);
 		panel_area_gerente.setLayout(null);
 
@@ -551,7 +551,8 @@ public class Janela_principal extends JFrame {
 		// c_cpfAtual.setBackground(SystemColor.controlHighlight);
 
 		// ADICIONAR CAMPOS DE DELETAR gerente NESSE PANEL
-		JPanel panel_delete_supervisor = new JPanel();
+		final JPanel panel_delete_supervisor = new JPanel();
+
 		tabbedPane_acoes_gerente.addTab("Deletar Supervisor",
 				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_supervisor,
 				null);
