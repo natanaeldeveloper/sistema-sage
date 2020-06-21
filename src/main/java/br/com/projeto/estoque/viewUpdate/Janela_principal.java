@@ -223,8 +223,8 @@ public class Janela_principal extends JFrame {
 		mntmNewMenuItem = new JMenuItem("Novo");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				Janela_relatorio jr = new Janela_relatorio();
-//				jr.setVisible(true);
+				Janela_relatorio jr = new Janela_relatorio();
+				jr.setVisible(true);
 			}
 		});
 
