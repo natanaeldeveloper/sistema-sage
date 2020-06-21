@@ -217,9 +217,10 @@ public class Janela_principal extends JFrame {
 		setJMenuBar(menuBar);
 		
 		JMenu mnNewMenu_1 = new JMenu("Relatório");
+		mnNewMenu_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		menuBar.add(mnNewMenu_1);
 		
-		mntmNewMenuItem = new JMenuItem("Novo Ctrl+R");
+		mntmNewMenuItem = new JMenuItem("Novo");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 //				Janela_relatorio jr = new Janela_relatorio();
@@ -230,7 +231,7 @@ public class Janela_principal extends JFrame {
 		mnNewMenu_1.add(mntmNewMenuItem);
 
 		JMenu mnNewMenu = new JMenu("Denifições");
-		mnNewMenu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		mnNewMenu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		menuBar.add(mnNewMenu);
 
 		JMenu mnNewMenu_5 = new JMenu("Alterar Tema");
@@ -343,11 +344,11 @@ public class Janela_principal extends JFrame {
 		contentPane.add(panel_superior);
 		panel_superior.setLayout(null);
 
-		final JTabbedPane tabbedPane_area = new JTabbedPane(JTabbedPane.TOP);
+		JTabbedPane tabbedPane_area = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_area.setBounds(0, 0, 623, 553);
 		panel_superior.add(tabbedPane_area);
 
-		final JPanel panel_area_gerente = new JPanel();
+		JPanel panel_area_gerente = new JPanel();
 		tabbedPane_area.addTab("Área do Supervisor", null, panel_area_gerente, null);
 		panel_area_gerente.setLayout(null);
 
@@ -551,8 +552,7 @@ public class Janela_principal extends JFrame {
 		// c_cpfAtual.setBackground(SystemColor.controlHighlight);
 
 		// ADICIONAR CAMPOS DE DELETAR gerente NESSE PANEL
-		final JPanel panel_delete_supervisor = new JPanel();
-
+		JPanel panel_delete_supervisor = new JPanel();
 		tabbedPane_acoes_gerente.addTab("Deletar Supervisor",
 				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), panel_delete_supervisor,
 				null);
