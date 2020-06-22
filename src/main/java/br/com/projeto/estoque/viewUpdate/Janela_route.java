@@ -10,20 +10,22 @@ import javax.swing.filechooser.FileSystemView;
 public class Janela_route {
 	public String route(File arq) {
 		JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		jfc.setDialogTitle("Escolha um local para downloand");
-		jfc.setAcceptAllFileFilterUsed(false);
-//		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		jfc.setSelectedFile(arq);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF", "Relatorio.pdf");
+		jfc.setDialogTitle("Choose a directory to save your file: ");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Formato PDF",".pdf");
 		jfc.addChoosableFileFilter(filter);
-
-		int returnValue = jfc.showOpenDialog(null);
+		jfc.setSelectedFile(arq);
+		int returnValue = jfc.showSaveDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			System.out.println(jfc.getSelectedFile().getPath());
-		}
+			if (jfc.getSelectedFile().isDirectory()) {
+				System.out.println("You selected the directory: " + jfc.getSelectedFile());
+			}
+		}	
 		return jfc.getSelectedFile().getPath();
 	}
-	public static void main(String[] args) {
-	}
+	
+
+			
+
+
 
 }
