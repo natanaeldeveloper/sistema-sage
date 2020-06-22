@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Cherry_Landscape" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a5c9b49-9dc5-422a-ac69-e92cf61ef530">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="gerentes"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+=======
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Cherry_Landscape" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a5c9b49-9dc5-422a-ac69-e92cf61ef530">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables"/>
+>>>>>>> ac0229ce2775f00c58da656859e29a2c5e69d0a3
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
@@ -14,7 +21,22 @@
 		</conditionalStyle>
 	</style>
 	<queryString>
+<<<<<<< HEAD
 		<![CDATA[SELECT *FROM produto]]>
+=======
+		<![CDATA[SELECT estoquetecfour.produto.id,
+	estoquetecfour.produto.preco,
+	estoquetecfour.produto.quantidade,
+	estoquetecfour.grupo.medida,
+	estoquetecfour.grupo.unidade,
+	estoquetecfour.grupo.estocado,
+	estoquetecfour.grupo.codigo,
+	estoquetecfour.grupo.nome,
+	estoquetecfour.produto.descricao
+FROM estoquetecfour.produto
+	INNER JOIN estoquetecfour.grupo ON 
+	 estoquetecfour.produto.grupo_id = estoquetecfour.grupo.id]]>
+>>>>>>> ac0229ce2775f00c58da656859e29a2c5e69d0a3
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.label" value="id"/>
@@ -124,6 +146,18 @@
 				<text><![CDATA[unidade]]></text>
 			</staticText>
 			<staticText>
+<<<<<<< HEAD
+=======
+				<reportElement x="619" y="3" width="60" height="18" uuid="82ea33e3-6c26-42be-9865-2d6e8defee18">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5510c1ba-7021-43a6-9f9d-1d94cffd8b90"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[medida]]></text>
+			</staticText>
+			<staticText>
+>>>>>>> ac0229ce2775f00c58da656859e29a2c5e69d0a3
 				<reportElement x="687" y="3" width="66" height="18" uuid="925f5e80-a080-4ac0-83d4-38724b9c08e4">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f62d240e-8e38-48f3-898b-537dfb41a213"/>
 				</reportElement>
@@ -184,6 +218,15 @@
 					<textFieldExpression><![CDATA[$F{unidade}]]></textFieldExpression>
 				</textField>
 				<textField>
+<<<<<<< HEAD
+=======
+					<reportElement x="620" y="8" width="59" height="18" uuid="a1d18799-502c-4bc4-a956-efbb9213087b">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5510c1ba-7021-43a6-9f9d-1d94cffd8b90"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{medida}]]></textFieldExpression>
+				</textField>
+				<textField>
+>>>>>>> ac0229ce2775f00c58da656859e29a2c5e69d0a3
 					<reportElement x="687" y="8" width="66" height="18" uuid="799c78c3-e48e-418b-9a2c-485fe2ef8d47">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f62d240e-8e38-48f3-898b-537dfb41a213"/>
 					</reportElement>

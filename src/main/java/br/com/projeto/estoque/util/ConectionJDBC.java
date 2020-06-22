@@ -16,7 +16,11 @@ public class ConectionJDBC {
 		public Connection getConnectionJDBC() {
 	        try {
 	            return DriverManager.getConnection(
+
 	                    "jdbc:mysql://localhost:3306/estoquetecfour?serverTimezone=GMT-3", "root", "root");
+
+//	                    "jdbc:mysql://localhost:3306/estoquetecfour?serverTimezone=GMT-3", "root", "root");
+
 	        } catch (SQLException e) {
 	            throw new RuntimeException(e);
 	        }

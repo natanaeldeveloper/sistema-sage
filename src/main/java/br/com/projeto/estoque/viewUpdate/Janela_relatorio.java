@@ -6,9 +6,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import br.com.projeto.estoque.teste.Relatorio;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -24,6 +21,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
+
+import br.com.projeto.estoque.controller.ControllerRelatorios;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class Janela_relatorio extends JFrame {
@@ -62,8 +62,12 @@ public class Janela_relatorio extends JFrame {
 		JButton gerar = new JButton("Gerar");
 		gerar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Relatorio r = new Relatorio();
-				r.gerarRelatorio(nome.getText());
+				ControllerRelatorios cr = new ControllerRelatorios();
+				if(tipo.getSelectedIndex() == 0) {
+					cr.gerarRelatorioMovimentacoes(nome.getText());	
+				}else if(tipo.getSelectedIndex() == 1) {
+					cr.gerarRelatorioProdutos(nome.getText());
+				}
 			}
 		});
 		gerar.setBounds(100, 172, 125, 32);
@@ -80,17 +84,7 @@ public class Janela_relatorio extends JFrame {
 		contentPane.add(separator);
 		
 		tipo = new JComboBox();
-		tipo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(tipo.getSelectedIndex() == 1) {
-//					lblNewLabel_2.setIcon(new ImageIcon(Janela_relatorio.class.getResource("/images/img1.png")));
-				}
-				else if(tipo.getSelectedIndex() == 0){
-//					lblNewLabel_2.setIcon(new ImageIcon(Janela_relatorio.class.getResource("/images/img2.png")));
-				}
-			}
-		});
-		tipo.setModel(new DefaultComboBoxModel(new String[] {"Lista - Produtos", "Lista - Movimentações de Produtos"}));
+		tipo.setModel(new DefaultComboBoxModel(new String[] {"Produtos", "Movimentações"}));
 		tipo.setBounds(134, 84, 181, 27);
 		contentPane.add(tipo);
 		
