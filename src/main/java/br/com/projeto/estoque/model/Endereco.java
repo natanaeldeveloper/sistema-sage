@@ -6,17 +6,17 @@ import javax.persistence.Embeddable;
 //Essa classe não tem uma tabela no banco, apenas adiciona suas colunas na tabela necessária (Fornecedor, no caso)
 @Embeddable
 public class Endereco {
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
 	private String estado;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 30)
 	private String cidade;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 30)
 	private String bairro;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String logradouro;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
 	private String cep;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
 	private String numero;
 	private String complemento;
 	

@@ -18,8 +18,8 @@ public class ControllerProduto {
 	private static EntityManager manager;
 
 	// Método para cadastrar um novo Produto
-	public Produto cadastrarProduto(Integer id_grupo, String descricao, BigDecimal preco,
-			int quantidade, Calendar dataFabricacao, Calendar dataVencimento) {
+	public Produto cadastrarProduto(Integer id_grupo, String descricao, BigDecimal preco, int quantidade, Double medida,
+			String unidade, Calendar dataFabricacao, Calendar dataVencimento) {
 		manager = new JPAUtil().getEntityManager();
 
 		Grupo g = manager.find(Grupo.class, id_grupo);
@@ -29,14 +29,36 @@ public class ControllerProduto {
 		produto.setDescricao(descricao);
 		produto.setPreco(preco);
 		produto.setQuantidade(quantidade);
+		produto.setMedida(medida);
+		produto.setUnidade(unidade);
 		produto.setDataFabricacao(dataFabricacao);
 		produto.setDataVencimento(dataVencimento);
 		// O produto já é altomaticamente definido como ativo, após entrar no banco de
 		// dados
 		produto.setStatus(Status.ATIVO);
 
+		// Esses ifs verificam se a quantidade inserida não ultrapassaria o valor máximo
+		// desse produto no estoque (no Grupo).
+		// Se a quantidade for exatamente o limite ou se for menor, a operação será
+		// permitida, e a quantidade do Produto será
+		// adicionada ao subtotal do Grupo
+		if (quantidade + g.getSubtotal() > g.getQtdMaxima()) {
+			JOptionPane.showMessageDialog(null,
+					"Essa quantidade de produtos excederia a quantidade máxima deles no estoque!",
+					"Quantidade máxima excedida", JOptionPane.ERROR_MESSAGE);
+			return null;
+		} else if (quantidade + g.getSubtotal() == g.getQtdMaxima()) {
+			JOptionPane.showMessageDialog(null, "A quantidade máxima desses produtos no estoque foi atingida!",
+					"Quantidade máxima atingida", JOptionPane.WARNING_MESSAGE);
+			g.setSubtotal(g.getSubtotal() + quantidade);
+		} else {
+			g.setSubtotal(g.getSubtotal() + quantidade);
+		}
+
 		manager.getTransaction().begin();
+
 		manager.persist(produto);
+		manager.merge(g);
 
 		// Esse if verifica se o Grupo desse Produto já está "estocado". Se não estiver,
 		// só pelo fato de um
@@ -63,19 +85,36 @@ public class ControllerProduto {
 	}
 
 	// Método para atualizar o Produto
-	public Produto atualizarProduto(Integer id, BigDecimal preco, int quantidade, String descricao,
-			Calendar dataFabricacao, Calendar dataVencimento, Integer id_grupo) {
+	public Produto atualizarProduto(Integer id, BigDecimal preco, int quantidade, Double medida, String unidade,
+			String descricao, Calendar dataFabricacao, Calendar dataVencimento, Integer id_grupo) {
 		manager = new JPAUtil().getEntityManager();
 		Grupo grupoEncontrado = manager.find(Grupo.class, id_grupo);
 		Produto produtoAtualizado = manager.find(Produto.class, id);
 		produtoAtualizado.setPreco(preco);
 		produtoAtualizado.setQuantidade(quantidade);
+		produtoAtualizado.setMedida(medida);
+		produtoAtualizado.setUnidade(unidade);
 		produtoAtualizado.setDescricao(descricao);
 		produtoAtualizado.setDataFabricacao(dataFabricacao);
 		produtoAtualizado.setDataVencimento(dataVencimento);
 		produtoAtualizado.setGrupo(grupoEncontrado);
+
+		if (quantidade + grupoEncontrado.getSubtotal() > grupoEncontrado.getQtdMaxima()) {
+			JOptionPane.showMessageDialog(null,
+					"Essa quantidade de produtos excederia a quantidade máxima deles no estoque!",
+					"Quantidade máxima excedida", JOptionPane.ERROR_MESSAGE);
+			return null;
+		} else if (quantidade + grupoEncontrado.getSubtotal() == grupoEncontrado.getQtdMaxima()) {
+			JOptionPane.showMessageDialog(null, "A quantidade máxima desses produtos no estoque foi atingida!",
+					"Quantidade máxima atingida", JOptionPane.WARNING_MESSAGE);
+			grupoEncontrado.setSubtotal(grupoEncontrado.getSubtotal() + quantidade);
+		} else {
+			grupoEncontrado.setSubtotal(grupoEncontrado.getSubtotal() + quantidade);
+		}
+
 		manager.getTransaction().begin();
 		manager.merge(produtoAtualizado);
+		manager.merge(grupoEncontrado);
 		manager.getTransaction().commit();
 		manager.close();
 		return produtoAtualizado;
