@@ -5,6 +5,7 @@ import javax.persistence.NoResultException;
 import br.com.projeto.estoque.model.Gerente;
 import br.com.projeto.estoque.model.TipoComportamento;
 import br.com.projeto.estoque.util.Aviso;
+import br.com.projeto.estoque.util.Criptografar;
 import br.com.projeto.estoque.util.Essencial;
 import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
@@ -12,12 +13,12 @@ import br.com.projeto.estoque.util.JPAUtil;
 public class ControllerGerente extends ControllerGlobal {
 	ControllerRegistroGerente controller = new ControllerRegistroGerente();
 
-	public boolean fazerLogin(String cpf, String senha, TipoComportamento tipoComportamento) {
+	public boolean fazerLogin(String login, String senha, TipoComportamento tipoComportamento) {
 		boolean login_efetuado = false;
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.getManager().getTransaction().begin();
-		if (verificarCredenciais(cpf, senha) == true) {
-			GerenteAtual.setGerente(buscarGerentePeloCpf(cpf));
+		if (verificarCredenciais(login, senha) == true) {
+			GerenteAtual.setGerente(buscarGerentePeloLogin(login));
 			controller.criarRegistroGerente(tipoComportamento, GerenteAtual.getGerente());
 			Essencial.getManager().getTransaction().commit();
 			login_efetuado = true;
@@ -26,16 +27,16 @@ public class ControllerGerente extends ControllerGlobal {
 		return login_efetuado;
 	}
 
-	public boolean verificarCredenciais(String cpf, String senha) {
+	public boolean verificarCredenciais(String login, String senha) {
 
 		Gerente gerente = new Gerente();
-		gerente = buscarGerentePeloCpf(cpf);
+		gerente = buscarGerentePeloLogin(login);
 
 		if (gerente == null) {
 			Aviso.avisar(2);
 			return false;
 		} else {
-			if (gerente.getSenha().equals(senha)) {
+			if (gerente.getSenha().equals(Criptografar.encriptografar(senha))) {
 				return true;
 			} else {
 				Aviso.avisar(2);
@@ -48,6 +49,20 @@ public class ControllerGerente extends ControllerGlobal {
 		try {
 			Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarGerente"));
 			Essencial.getQuery().setParameter("Gcpf", cpf);
+			Gerente gerente = (Gerente) Essencial.getQuery().getSingleResult();
+			return gerente;
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+
+		}
+
+	}
+	
+	public Gerente buscarGerentePeloLogin(String login) {
+		try {
+			Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarGerenteLogin"));
+			Essencial.getQuery().setParameter("Glogin", login);
 			Gerente gerente = (Gerente) Essencial.getQuery().getSingleResult();
 			return gerente;
 		} catch (NoResultException e) {

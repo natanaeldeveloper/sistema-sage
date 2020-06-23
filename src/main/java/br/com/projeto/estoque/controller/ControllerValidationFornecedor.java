@@ -42,7 +42,7 @@ public class ControllerValidationFornecedor {
 
 			// O ControllerFornecedor é chamado para efetivar o cadastro do Fornecedor no
 			// banco
-			if (conferirFornecedorExistente(nome, cnpj, email, telefone)) {
+			if (conferirFornecedorExistente(nome, cnpj, email)) {
 				try {
 					ControllerFornecedor cf = new ControllerFornecedor();
 					cf.criarFornecedor(nome, cnpj, razaoSocial, telefone, email, endereco);
@@ -64,7 +64,7 @@ public class ControllerValidationFornecedor {
 	// Esse método confere se já não existe um Fornecedor com os mesmos dados únicos
 	// no banco
 	public static boolean conferirFornecedorExistente(String nomeFornecedor, String cnpjFornecedor,
-			String emailFornecedor, String telefoneFornecedor) {
+			String emailFornecedor) {
 		for (Fornecedor fornecedor : ControllerFornecedor.listarFornecedores()) {
 			if (nomeFornecedor.equals(fornecedor.getNome()) && cnpjFornecedor.equals(fornecedor.getCnpj())) {
 				JOptionPane.showMessageDialog(null,
@@ -78,11 +78,6 @@ public class ControllerValidationFornecedor {
 			}
 			if (emailFornecedor.equals(fornecedor.getEmail())) {
 				JOptionPane.showMessageDialog(null, "Já existe um Fornecedor com esse e-mail!", "E-mail inválido",
-						JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-			if (telefoneFornecedor.equals(fornecedor.getTelefone())) {
-				JOptionPane.showMessageDialog(null, "Já existe um Fornecedor com esse telefone!", "Telefone inválido",
 						JOptionPane.ERROR_MESSAGE);
 				return false;
 			}

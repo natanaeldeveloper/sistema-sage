@@ -62,9 +62,5 @@ public class ControllerGlobal extends ControllerValidacao {
 	//
 	// return criou_usuario;
 	// }
-	public void teste() {
-		@SuppressWarnings("unused")
-		int a = 0;
-	}
 
 }

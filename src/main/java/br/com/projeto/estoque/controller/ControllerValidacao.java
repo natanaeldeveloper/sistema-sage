@@ -2,6 +2,8 @@ package br.com.projeto.estoque.controller;
 
 import javax.swing.JFormattedTextField;
 
+import org.apache.commons.lang3.StringUtils;
+
 import br.com.projeto.estoque.util.Aviso;
 import br.com.projeto.estoque.util.Criptografar;
 import br.com.projeto.estoque.util.GerenteAtual;
@@ -9,7 +11,7 @@ import br.com.projeto.estoque.util.GerenteAtual;
 public class ControllerValidacao {
 
 	public boolean evitarValorVazio(JFormattedTextField campo, int id) {
-		if (campo.getText().equals("")) {
+		if (StringUtils.isBlank(campo.getText())) {
 			Aviso.avisar(9);
 			return false;
 		} else {
@@ -25,8 +27,8 @@ public class ControllerValidacao {
 
 	public boolean testarCamposCadastroSupervisor(String cpf_supervisor, String senha_supervisor,
 			String login_supervisor, String confSenha_supervisor) {
-		if (cpf_supervisor.equals("") || senha_supervisor.equals("") || login_supervisor.equals("")
-				|| confSenha_supervisor.equals("")) {
+		if (StringUtils.isBlank(cpf_supervisor) || StringUtils.isBlank(senha_supervisor) || StringUtils.isBlank(login_supervisor)
+				|| StringUtils.isBlank(confSenha_supervisor)) {
 			return false;
 		} else {
 			return true;
@@ -42,13 +44,22 @@ public class ControllerValidacao {
 	}
 
 	public static boolean testarCampoSenha(String senha) {
-		if (senha.equals("")) {
+		if (StringUtils.isBlank(senha)) {
 			return false;
 		} else {
 			return true;
 		}
 	}
 
+	public static boolean testarCampoLogin(String login) {
+		if (StringUtils.isBlank(login)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	
 	public boolean validarConfirmacaoGerente(String cpf, String senha) {
 		if (cpf.equals(GerenteAtual.getGerente().getCpf())
 				&& Criptografar.encriptografar(senha).equals(GerenteAtual.getGerente().getSenha())) {
@@ -63,10 +74,10 @@ public class ControllerValidacao {
 		return varConfirmacao;
 	}
 
-	public static boolean testarCampos(String novo_cpf_supervisor, String nova_senha_supervisor,
+	public static boolean testarCampos(String nova_senha_supervisor,
 			String novo_login_supervisor) {
-		if (novo_cpf_supervisor.equals("   .   .   -  ") || nova_senha_supervisor.equals("")
-				|| novo_login_supervisor.equals("")) {
+		if (StringUtils.isBlank(nova_senha_supervisor)
+				|| StringUtils.isBlank(novo_login_supervisor)) {
 			return false;
 		} else {
 			return true;

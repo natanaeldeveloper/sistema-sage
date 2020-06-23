@@ -34,9 +34,9 @@ public class Janela_registros extends JInternalFrame {
 		btnGerarRelatrio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (comboBox.getSelectedIndex() == 0) {
-					Relatorio.gerarRelatorio("RelatorioMovimentacoes", "Relatório de Movimentações");
+//					Relatorio.gerarRelatorio("RelatorioMovimentacoes", "Relatório de Movimentações");
 				} else if (comboBox.getSelectedIndex() == 1) {
-					Relatorio.gerarRelatorio("RelatorioCriacaoProdutos", "Relatório de Produtos");
+//					Relatorio.gerarRelatorio("RelatorioCriacaoProdutos", "Relatório de Produtos");
 				}
 			}
 		});

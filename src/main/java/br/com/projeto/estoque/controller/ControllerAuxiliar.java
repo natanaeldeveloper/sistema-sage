@@ -1,4 +1,4 @@
-package br.com.projeto.estoque.controller;
+﻿package br.com.projeto.estoque.controller;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
@@ -24,12 +25,29 @@ import com.toedter.calendar.JDateChooser;
 import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.model.Fornecedor;
 import br.com.projeto.estoque.model.Grupo;
+import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
+import br.com.projeto.estoque.util.SupervisorAtual;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ControllerAuxiliar {
 	private static EntityManager manager;
 
+	
+	public void setarLoginUsuarioAtual_na_telaPrincipal(JLabel usuario_atual_cadastrarSupervisor,
+			JLabel usuario_atual_atualizar_gerente, JLabel usuario_atual_deletarSupervisor) {
+		if(GerenteAtual.getGerente() != null) {
+			usuario_atual_cadastrarSupervisor.setText(GerenteAtual.getGerente().getLogin());
+			usuario_atual_atualizar_gerente.setText(GerenteAtual.getGerente().getLogin());
+			usuario_atual_deletarSupervisor.setText(GerenteAtual.getGerente().getLogin());
+		}else {
+			usuario_atual_cadastrarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
+			usuario_atual_atualizar_gerente.setText(SupervisorAtual.getSupervisor().getLogin());
+			usuario_atual_deletarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
+		}
+	}
+	
+	
 	public void limparCampos(JFormattedTextField campoJformattedTextField, JPasswordField campoJpasswordField,
 			JPasswordField campoJpasswordField2, JFormattedTextField campoJformattedTextField2) {
 		campoJformattedTextField.setText("");
@@ -63,7 +81,7 @@ public class ControllerAuxiliar {
 			JFormattedTextField id_pesquisa_supervisor_AtualizacaoSupervisor,
 			JPasswordField nova_senha_supervisor_AtualizacaoSupervisor,
 			JPasswordField senha_gerente_AtualizacaoSupervisor,
-			JFormattedTextField novo_cpf_supervisor_AtualizacaoSupervisor,
+
 			JFormattedTextField cpf_atual_supervisor_AtualizacaoSupervisor,
 			JFormattedTextField login_atual_supervisor_AtualizacaoSupervisor,
 			JFormattedTextField novo_login_supervisor_AtualizacaoSupervisor) {
@@ -72,14 +90,14 @@ public class ControllerAuxiliar {
 		id_pesquisa_supervisor_AtualizacaoSupervisor.setText("");
 		nova_senha_supervisor_AtualizacaoSupervisor.setText("");
 		senha_gerente_AtualizacaoSupervisor.setText("");
-		novo_cpf_supervisor_AtualizacaoSupervisor.setText("");
+
 		cpf_atual_supervisor_AtualizacaoSupervisor.setText("");
 		login_atual_supervisor_AtualizacaoSupervisor.setText("");
 		novo_login_supervisor_AtualizacaoSupervisor.setText("");
 
 	}
 
-	// Esse método confere se todos os dados das views de Cadastrar e Atualizar
+// Esse método confere se todos os dados das views de Cadastrar e Atualizar
 	// Fornecedores estão preenchidos
 	public static boolean conferirDadosFornecedor(JTextField tfNome, JFormattedTextField tfCnpj,
 			JTextField tfRazaoSocial, JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep,
@@ -120,14 +138,14 @@ public class ControllerAuxiliar {
 	// Preenche os campos das views de Cadastrar e Atualizar Produtos, baseado no
 	// grupo escolhido
 	public static void preencherCamposGrupo(JComboBox cbGrupo, JTextField tfNome, JTextField tfCodigo,
-			JTextField tfQtdMin, JTextField tfQtdMax) {
+			JTextField tfSubtotal, JTextField tfQtdMax) {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select g from Grupo g where g.nome=:nomeGrupo");
 		query.setParameter("nomeGrupo", cbGrupo.getSelectedItem().toString());
 		Grupo grupo = (Grupo) query.getSingleResult();
 		tfNome.setText(grupo.getNome());
 		tfCodigo.setText(grupo.getCodigo());
-		tfQtdMin.setText(grupo.getQtdMinima() + "");
+		tfSubtotal.setText(grupo.getSubtotal() + "");
 		tfQtdMax.setText(grupo.getQtdMaxima() + "");
 		manager.close();
 	}
@@ -135,11 +153,11 @@ public class ControllerAuxiliar {
 	// Esse método reseta todos os campos referentes ao grupo. É chamado quando o
 	// usuário não seleciona nenhum grupo nas telas de Cadastrar e Atualizar
 	// Produtos
-	public static void resetarCamposGrupoProduto(JTextField tfNome, JTextField tfCodigo, JTextField tfQtdMin,
+	public static void resetarCamposGrupoProduto(JTextField tfNome, JTextField tfCodigo, JTextField tfSubtotal,
 			JTextField tfQtdMax) {
 		tfNome.setText("");
 		tfCodigo.setText("");
-		tfQtdMin.setText("");
+		tfSubtotal.setText("");
 		tfQtdMax.setText("");
 	}
 
@@ -208,7 +226,7 @@ public class ControllerAuxiliar {
 	// Preenche os Fornecedores de uma JComboBox
 	public static List<String> preencherFornecedores() {
 		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Fornecedor f");
+		Query query = manager.createQuery("select nome from Fornecedor f order by f.id");
 		List<String> fornecedores = query.getResultList();
 		manager.close();
 		return fornecedores;
@@ -274,6 +292,13 @@ public class ControllerAuxiliar {
 		return false;
 	}
 
+	public static void repopularFornecedores(JComboBox cbFornecedor) {
+		cbFornecedor.removeAllItems();
+		
+		for(String fornecedor : ControllerAuxiliar.preencherFornecedores()) {
+			cbFornecedor.addItem(fornecedor);
+		}
+	}
 	// Converte Date para Calendar
 	public static Calendar toCalendar(Date date) {
 		Calendar cal = Calendar.getInstance();
@@ -286,4 +311,4 @@ public class ControllerAuxiliar {
 		cal.setTime(date);
 		return cal;
 	}
-}
+	}
