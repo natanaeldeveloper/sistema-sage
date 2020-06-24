@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 import br.com.projeto.estoque.model.Produto;
+import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.JPAUtil;
 
 @SuppressWarnings({ "rawtypes" })
@@ -49,6 +50,13 @@ public class ControllerAtualizarProduto {
 		if (produto == null) {
 			JOptionPane.showMessageDialog(null, "Esse registro não existe!", "Registro inexistente",
 					JOptionPane.ERROR_MESSAGE);
+			tfId.transferFocus();
+			return;
+			// Se o Produto estiver inativo, não será possível alterá-lo
+		} else if (produto.getStatus() == Status.INATIVO) {
+			JOptionPane.showMessageDialog(null, "Esse registro está inativo, portanto, não pode ser atualizado!",
+					"Registro inativo", JOptionPane.ERROR_MESSAGE);
+			tfId.transferFocus();
 			return;
 			// Se o Produto existir, os campos serão populados com seus dados
 		} else {

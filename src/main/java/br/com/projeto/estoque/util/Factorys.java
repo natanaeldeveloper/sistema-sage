@@ -14,11 +14,11 @@ public class Factorys {
 	}
 	
 	public void categoriaFactory() {
-		cc.criarCategoria("categoria1");
-		cc.criarCategoria("categoria2");
-		cc.criarCategoria("categoria3");
-		cc.criarCategoria("categoria4");
-		cc.criarCategoria("categoria5");
+//		cc.criarCategoria("categoria1");
+//		cc.criarCategoria("categoria2");
+//		cc.criarCategoria("categoria3");
+//		cc.criarCategoria("categoria4");
+//		cc.criarCategoria("categoria5");
 	}
 	public void grupoFactory() {
 //		cg.cadastrarGrupo("grupo1","descrição grupo 1",1,1.0,"Kg");

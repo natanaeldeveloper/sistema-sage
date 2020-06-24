@@ -1,5 +1,6 @@
 ﻿package br.com.projeto.estoque.controller;
 
+import java.awt.Color;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -145,6 +146,17 @@ public class ControllerAuxiliar {
 		tfCodigo.setText(grupo.getCodigo());
 		tfSubtotal.setText(grupo.getSubtotal() + "");
 		tfQtdMax.setText(grupo.getQtdMaxima() + "");
+
+		if (grupo.getSubtotal() < grupo.getQtdMinima()) {
+			tfSubtotal.setForeground(Color.RED);
+			tfQtdMax.setForeground(new Color(187, 187, 187));
+		} else if (grupo.getSubtotal() == grupo.getQtdMaxima()) {
+			tfSubtotal.setForeground(Color.YELLOW);
+			tfQtdMax.setForeground(Color.YELLOW);
+		} else {
+			tfSubtotal.setForeground(new Color(187, 187, 187));
+			tfQtdMax.setForeground(new Color(187, 187, 187));
+		}
 		manager.close();
 	}
 
@@ -215,7 +227,7 @@ public class ControllerAuxiliar {
 	// Preenche os Grupos de uma JComboBox
 	public static List<String> preencherGrupos() {
 		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Grupo g");
+		Query query = manager.createQuery("select nome from Grupo g order by g.id");
 		List<String> grupos = query.getResultList();
 		manager.close();
 		return grupos;

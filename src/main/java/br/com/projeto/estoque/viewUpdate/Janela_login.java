@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -82,6 +84,13 @@ public class Janela_login extends JFrame {
 		tfLoginGerente.setBackground(SystemColor.control);
 		tfLoginGerente.setBounds(90, 84, 330, 35);
 		painelGerente.add(tfLoginGerente);
+		
+		// Isso serve pro input do CPF do gerente já ser focado assim que a janela abrir
+		addWindowListener(new WindowAdapter() {
+			public void windowOpened(WindowEvent e) {
+				tfLoginGerente.requestFocusInWindow();
+			}
+		});
 
 		JLabel lblSenhaGerente = new JLabel("SENHA:");
 		lblSenhaGerente.setBackground(SystemColor.control);

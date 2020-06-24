@@ -1,5 +1,7 @@
 package br.com.projeto.estoque.controller;
 
+import java.awt.Color;
+
 import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,7 +14,9 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 import br.com.projeto.estoque.model.Produto;
+import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.JPAUtil;
+import br.com.projeto.estoque.viewUpdate.Janela_principal;
 
 @SuppressWarnings("rawtypes")
 public class ControllerInativarProduto {
@@ -21,7 +25,7 @@ public class ControllerInativarProduto {
 	public void buscarProdutoInativado(JButton btnBuscar, JButton btnResetar, JTextField tfId,
 			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
 			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,
-			JButton btnLimpar, JButton btnInativar) {
+			JButton btnInativar) {
 
 		manager = new JPAUtil().getEntityManager();
 
@@ -45,6 +49,10 @@ public class ControllerInativarProduto {
 					JOptionPane.ERROR_MESSAGE);
 			return;
 			// Se o Produto existir, os campos serão populados com seus dados
+		} else if (produto.getStatus() == Status.INATIVO) {
+			JOptionPane.showMessageDialog(null, "Esse Produto já está inativo!", "Produto já inativo",
+					JOptionPane.ERROR_MESSAGE);
+			return;
 		} else {
 			tfPreco.setText(produto.getPreco() + "");
 			jsQuantidade.setValue(produto.getQuantidade());
@@ -58,7 +66,7 @@ public class ControllerInativarProduto {
 			btnBuscar.setEnabled(false);
 			btnResetar.setEnabled(true);
 			btnInativar.setEnabled(true);
-			btnLimpar.setEnabled(true);
+			Janela_principal.lblAviso.setForeground(new Color(250, 140, 0));
 		}
 		manager.close();
 	}
@@ -76,6 +84,8 @@ public class ControllerInativarProduto {
 
 			JOptionPane.showMessageDialog(null, "Produto inativado com sucesso!", "Produto inativado",
 					JOptionPane.INFORMATION_MESSAGE);
+
+			Janela_principal.lblAviso.setForeground(new Color(187, 187, 187));
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
 					"Ocorreu um erro ao inativar o produto.\nSe o erro persistir, entre em contato.",
@@ -87,13 +97,13 @@ public class ControllerInativarProduto {
 	public void desabilitarInativacao(JButton btnBuscar, JButton btnResetar, JTextField tfId,
 			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
 			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,
-			JButton btnLimpar, JButton btnInativar) {
+			JButton btnInativar) {
 		ControllerAuxiliar.resetarTodosOsCampos(tfPreco, jsQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento,
 				cbGrupo, tfMedida, cbUnidade);
 		btnBuscar.setEnabled(true);
 		btnResetar.setEnabled(false);
 		tfId.setEnabled(true);
-		btnLimpar.setEnabled(false);
 		btnInativar.setEnabled(false);
+		Janela_principal.lblAviso.setForeground(new Color(187, 187, 187));
 	}
 }

@@ -2,6 +2,7 @@ package br.com.projeto.estoque.controller;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ControllerProduto {
 	private Date data;
 	private long tempo;
 	private Timestamp ts;
+	public static boolean estoquePrecario = false;
 
 	// Método para cadastrar um novo Produto
 	public Produto cadastrarProduto(Integer id_grupo, String descricao, BigDecimal preco, int quantidade, Double medida,
@@ -111,6 +113,16 @@ public class ControllerProduto {
 		return listaProdutos;
 	}
 
+	// Método que lista os Produtos ativos. Retorna uma List<Produto>
+	public static List<Produto> listarApenasProdutosAtivos() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select p from Produto p where p.status = :statusProduto");
+		query.setParameter("statusProduto", Status.ATIVO);
+		List<Produto> listaProdutos = query.getResultList();
+		manager.close();
+		return listaProdutos;
+	}
+
 	// Método para atualizar o Produto
 	public Produto atualizarProduto(Integer id, BigDecimal preco, Double medida, String unidade, String descricao,
 			Calendar dataFabricacao, Calendar dataVencimento, Integer id_grupo) {
@@ -192,24 +204,47 @@ public class ControllerProduto {
 	// método apenas define o Produto como "INATIVO"
 	public void inativarProduto(Integer id) {
 		manager = new JPAUtil().getEntityManager();
+
 		Produto produtoDesativado = manager.find(Produto.class, id);
+		Grupo grupoDoProduto = produtoDesativado.getGrupo();
+
+		grupoDoProduto.setSubtotal(grupoDoProduto.getSubtotal() - produtoDesativado.getQuantidade());
+
+		JOptionPane.showMessageDialog(null,
+				"O Grupo deste Produto terá seu subtotal recalculado baseado na retirada deste Produto.",
+				"Subtotal do Grupo recalculado", JOptionPane.WARNING_MESSAGE);
+
+		if (grupoDoProduto.getSubtotal() < grupoDoProduto.getQtdMinima()) {
+			JOptionPane.showMessageDialog(null,
+					"O Grupo deste Produto ficou com uma quantidade abaixo do limite mínimo!", "Escassez de Produtos",
+					JOptionPane.WARNING_MESSAGE);
+			estoquePrecario = true;
+		}
+
 		produtoDesativado.setStatus(Status.INATIVO);
+
 		manager.getTransaction().begin();
 		manager.merge(produtoDesativado);
+		manager.merge(grupoDoProduto);
 		manager.getTransaction().commit();
 		manager.close();
 	}
 
 	// Esse método compara as datas de Fabricação e de Vencimento de todos os
 	// Produtos para ver se algum deles está vencido
-	public boolean checarVencimento() {
+	public static boolean checarVencimento() {
 		// o método de listar todos os produtos é chamado aqui, para olhar cada produto
 		// dentro da lista e checar individualmente
-		for (Produto produto : listarProdutos()) {
+		@SuppressWarnings("rawtypes")
+		List<String> produtosVencidos = new ArrayList();
+
+		for (Produto produto : listarApenasProdutosAtivos()) {
 			if (produto.getDataVencimento().getTime().before(Calendar.getInstance().getTime())) {
-				JOptionPane.showMessageDialog(null,
-						"Produto vencido!\nID: " + produto.getId() + "\nNome: " + produto.getGrupo().getNome(),
-						"Item vencido", JOptionPane.WARNING_MESSAGE);
+				produtosVencidos.add("ID: " + produto.getId() + " - Grupo: " + produto.getGrupo().getNome() + "\n");
+
+				JOptionPane.showMessageDialog(null, "Produtos vencidos:\n"
+						+ produtosVencidos.toString().replace("[", "").replace("]", "\nInative-os o quanto antes!"),
+						"Produtos vencidos", JOptionPane.WARNING_MESSAGE);
 				return true;
 			}
 		}

@@ -5,18 +5,21 @@ import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.model.Grupo;
 import br.com.projeto.estoque.util.JPAUtil;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ControllerGrupo {
 	private static EntityManager manager;
 	private static Random rand;
 
 	// Método para cadastrar novos Grupos
-	public Grupo cadastrarGrupo(String nome, String descricao, Integer id_categoria, int qtdMinima, int qtdMaxima) {
+	public Grupo cadastrarGrupo(String nome, String descricao, Integer id_categoria, int qtdMinima, int qtdMaxima,
+			JComboBox[] comboBoxGrupos) {
 		manager = new JPAUtil().getEntityManager();
 		rand = new Random();
 
@@ -43,6 +46,15 @@ public class ControllerGrupo {
 		manager.persist(grupo);
 		manager.getTransaction().commit();
 
+		JOptionPane.showMessageDialog(null, "Grupo cadastrado com sucesso!", "Grupo cadastrado",
+				JOptionPane.INFORMATION_MESSAGE);
+		ControllerValidationGrupo.grupoCadastrado = true;
+
+		// Depois de o grupo ser cadastrado, ele é adicionado na JComboBox da view de CadastrarProdutos
+		comboBoxGrupos[0].addItem(grupo.getNome());
+		comboBoxGrupos[1].addItem(grupo.getNome());
+		comboBoxGrupos[2].addItem(grupo.getNome());
+
 		manager.close();
 		return grupo;
 	}
@@ -55,10 +67,10 @@ public class ControllerGrupo {
 		manager.close();
 		return grupos;
 	}
-	
+
 	public static Object encontrarGrupoPeloProduto(Integer id) {
 		manager = new JPAUtil().getEntityManager();
-		Query query  = manager.createQuery("select grupo.nome from Produto p where p.id=:idProduto");
+		Query query = manager.createQuery("select grupo.nome from Produto p where p.id=:idProduto");
 		query.setParameter("idProduto", id);
 		Object grupo = query.getSingleResult();
 		manager.close();
@@ -99,5 +111,16 @@ public class ControllerGrupo {
 
 		manager.close();
 		return grupoAtualizado;
+	}
+
+	public static boolean checarGrupo(String nome) {
+		for (Grupo grupo : listarGrupos()) {
+			if (grupo.getNome().equals(nome)) {
+				JOptionPane.showMessageDialog(null, "Esse grupo já existe!\nID: " + grupo.getId(), "Grupo existente",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		}
+		return true;
 	}
 }

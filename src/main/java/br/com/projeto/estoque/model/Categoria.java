@@ -8,22 +8,34 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="categoria")
+@Table(name = "categoria")
 public class Categoria {
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(nullable=false, unique = true, length = 100)
+
+	@Column(nullable = false, unique = true, length = 100)
 	private String nome;
-	
+
+	@Column(nullable = false)
+	private String descricao;
+
 	public String getNome() {
 		return this.nome;
 	}
-	
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}

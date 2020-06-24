@@ -28,6 +28,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
@@ -38,7 +39,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -57,12 +57,16 @@ import br.com.projeto.estoque.controller.ControllerAtualizarFornecedor;
 import br.com.projeto.estoque.controller.ControllerAtualizarProduto;
 import br.com.projeto.estoque.controller.ControllerAuxiliar;
 import br.com.projeto.estoque.controller.ControllerGlobal;
+import br.com.projeto.estoque.controller.ControllerInativarFornecedor;
 import br.com.projeto.estoque.controller.ControllerInativarProduto;
 import br.com.projeto.estoque.controller.ControllerMovimentacao;
 import br.com.projeto.estoque.controller.ControllerPermissao;
+import br.com.projeto.estoque.controller.ControllerProduto;
 import br.com.projeto.estoque.controller.ControllerSupervisor;
 import br.com.projeto.estoque.controller.ControllerTableModels;
+import br.com.projeto.estoque.controller.ControllerValidationCategoria;
 import br.com.projeto.estoque.controller.ControllerValidationFornecedor;
+import br.com.projeto.estoque.controller.ControllerValidationGrupo;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
 
 @SuppressWarnings({ "deprecation", "unchecked", "rawtypes" })
@@ -118,7 +122,7 @@ public class Janela_principal extends JFrame {
 	private JFormattedTextField tfEmailAtualizarFornecedor;
 
 	private JComboBox cbEstadoAtualizarFornecedor;
-	private JComboBox cbGrupoCadastrar;
+	private JComboBox cbGrupoCadastrarProduto;
 	private JComboBox cbGrupoAtualizar;
 	private JComboBox cbUnidadeCadastrarProduto;
 	private JComboBox cbFornecedorCadastro;
@@ -126,15 +130,17 @@ public class Janela_principal extends JFrame {
 	private JComboBox cbEstadoCadastrarFornecedor;
 	private JComboBox cbUnidadeInativarProduto;
 	private JComboBox cbGrupoInativar;
+	private JComboBox cbCategoriaCadastrarGrupo;
 
 	private JSpinner spQuantidadeCadastrarProduto;
 	private JSpinner spQuantidadeAtualizarProduto;
 	private JSpinner spQuantidadeInativarProduto;
-
 	private JEditorPane epDescricaoCadastrarProduto;
 	private JEditorPane epDescricaoMovimentacaoCadastro;
 	private JEditorPane epDescricaoAtualizarProduto;
 	private JEditorPane epDescricaoInativarProduto;
+	private JEditorPane epDescricaoCadastrarCategoria;
+	private JEditorPane epDescricaoCadastrarGrupo;
 
 	private JDateChooser dcFabricacaoCadastrarProduto;
 	private JDateChooser dcVencimentoCadastrarProduto;
@@ -151,7 +157,7 @@ public class Janela_principal extends JFrame {
 	private JTextField tfComplementoCadastrarFornecedor;
 	private JButton btnLimparCadastrarFornecedor;
 	private JProgressBar progressBar_tabelas_superior;
-	private JTextField textField_1;
+	private JTextField tfNomeInativarFornecedor;
 	private JTextField tfNomeGrupoAtualizar;
 	private JTextField tfMedidaAtualizarProduto;
 	private JTextField tfNomeGrupoCadastrar;
@@ -162,8 +168,8 @@ public class Janela_principal extends JFrame {
 	private JFormattedTextField tfCnpjCadastrarFornecedor = new JFormattedTextField();
 	private JFormattedTextField tfBairroCadastrarFornecedor = new JFormattedTextField();
 	private JFormattedTextField tfIdInativarFornecedor = new JFormattedTextField();
-	private JFormattedTextField c_email_af_1 = new JFormattedTextField();
-	private JFormattedTextField c_cnpj_af_1 = new JFormattedTextField();
+	private JFormattedTextField tfEmailInativarFornecedor = new JFormattedTextField();
+	private JFormattedTextField tfCnpjInativarFornecedor = new JFormattedTextField();
 	private JFormattedTextField tfCodigoGrupoCadastrar = new JFormattedTextField();
 	private JFormattedTextField tfPrecoCadastrarProduto = new JFormattedTextField();
 	private JFormattedTextField tfCodigoGrupoAtualizar = new JFormattedTextField();
@@ -183,12 +189,17 @@ public class Janela_principal extends JFrame {
 	private JButton btnResetarAtualizarFornecedor;
 	private JButton btnLimparAtualizarFornecedor;
 	private JButton btnAtualizarFornecedor;
+	private JButton btnResetarInativarFornecedor;
+	private JButton btnBuscarInativarFornecedor;
+	private JButton btnInativarFornecedor;
+
 	private JButton btnBuscarProdutoInativar;
 	private JButton btnResetarInativarProduto;
-	private JButton btnLimparInativarProduto;
 	private JButton btnInativarProduto;
 
 	private String[] unidades = new String[] { "mg", "g", "kg", "m", "mL", "L" };
+
+	public static JLabel lblAviso;
 
 	JLabel usuario_atual_atualizar_gerente = new JLabel("");
 	JLabel usuario_atual_deletarSupervisor = new JLabel("");
@@ -208,6 +219,10 @@ public class Janela_principal extends JFrame {
 	private JTextField tfQtdMax;
 	private JTextField tfSubtotalAtualizar;
 	private JTextField tfQtdMaxAtualizar;
+	private JTextField tfNomeCadastrarCategoria;
+	private JTextField tfQtdMinCadastrarGrupo;
+	private JTextField tfQtdMaxCadastrarGrupo;
+	private JTextField tfRazaoSocialInativarFornecedor;
 
 	public Janela_principal() {
 		ctrlAux.setarLoginUsuarioAtual_na_telaPrincipal(usuario_atual_cadastrarSupervisor,
@@ -217,6 +232,11 @@ public class Janela_principal extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1216, 603);
+
+		if (ControllerProduto.estoquePrecario) {
+			JOptionPane.showMessageDialog(null, "Existe um ou mais Grupos com a capacidade abaixo do limite mínimo!",
+					"Produtos escassos", JOptionPane.WARNING_MESSAGE);
+		}
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -989,59 +1009,75 @@ public class Janela_principal extends JFrame {
 				painelInativarFornecedor, null);
 		painelInativarFornecedor.setLayout(null);
 
-		JLabel lblPesquisarId_2_1 = new JLabel("Pesquisar pelo ID:");
-		lblPesquisarId_2_1.setBounds(393, 11, 182, 25);
-		painelInativarFornecedor.add(lblPesquisarId_2_1);
+		JLabel lblPesquisarIdInativarFornecedor = new JLabel("Pesquisar pelo ID:");
+		lblPesquisarIdInativarFornecedor.setBounds(393, 11, 182, 25);
+		painelInativarFornecedor.add(lblPesquisarIdInativarFornecedor);
 
 		tfIdInativarFornecedor.setText("0");
 		tfIdInativarFornecedor.setColumns(10);
-		tfIdInativarFornecedor.setBounds(393, 37, 86, 23);
+		tfIdInativarFornecedor.setBounds(393, 36, 86, 23);
 		painelInativarFornecedor.add(tfIdInativarFornecedor);
 
-		JButton btnBuscarInativarFornecedor = new JButton("Buscar");
+		btnBuscarInativarFornecedor = new JButton("Buscar");
 		btnBuscarInativarFornecedor.setBounds(489, 35, 86, 25);
 		painelInativarFornecedor.add(btnBuscarInativarFornecedor);
 
 		JLayeredPane lpInativarFornecedor = new JLayeredPane();
-		lpInativarFornecedor.setBorder(
-				new TitledBorder(null, "Dados do novo Fornecedor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		lpInativarFornecedor.setBorder(new TitledBorder(null, "Dados importantes deste Fornecedor",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		lpInativarFornecedor.setBounds(20, 71, 583, 173);
 		painelInativarFornecedor.add(lpInativarFornecedor);
 
-		JLabel lblNewLabel_2_1_1_1_2_2 = new JLabel("CNPJ:");
-		lblNewLabel_2_1_1_1_2_2.setBounds(21, 26, 176, 25);
-		lpInativarFornecedor.add(lblNewLabel_2_1_1_1_2_2);
+		JLabel lblCnpjInativarFornecedor = new JLabel("CNPJ:");
+		lblCnpjInativarFornecedor.setBounds(21, 26, 176, 25);
+		lpInativarFornecedor.add(lblCnpjInativarFornecedor);
 
-		JLabel lblNewLabel_5_1_1_1_2 = new JLabel("Email:");
-		lblNewLabel_5_1_1_1_2.setBounds(21, 86, 525, 25);
-		lpInativarFornecedor.add(lblNewLabel_5_1_1_1_2);
+		JLabel lblEmailInativarFornecedor = new JLabel("Email:");
+		lblEmailInativarFornecedor.setBounds(21, 86, 525, 25);
+		lpInativarFornecedor.add(lblEmailInativarFornecedor);
+		tfEmailInativarFornecedor.setEditable(false);
 
-		c_email_af_1.setEnabled(false);
-		c_email_af_1.setColumns(10);
-		c_email_af_1.setBounds(21, 110, 536, 25);
-		lpInativarFornecedor.add(c_email_af_1);
+		tfEmailInativarFornecedor.setEnabled(false);
+		tfEmailInativarFornecedor.setColumns(10);
+		tfEmailInativarFornecedor.setBounds(21, 110, 265, 25);
+		lpInativarFornecedor.add(tfEmailInativarFornecedor);
 
-		JLabel lblNewLabel_2_1_1_1_1_4_2 = new JLabel("Nome:");
-		lblNewLabel_2_1_1_1_1_4_2.setBounds(207, 26, 339, 25);
-		lpInativarFornecedor.add(lblNewLabel_2_1_1_1_1_4_2);
+		JLabel lblNomeInativarFornecedor = new JLabel("Nome:");
+		lblNomeInativarFornecedor.setBounds(207, 26, 339, 25);
+		lpInativarFornecedor.add(lblNomeInativarFornecedor);
 
-		textField_1 = new JTextField();
-		textField_1.setEnabled(false);
-		textField_1.setColumns(10);
-		textField_1.setBounds(207, 50, 350, 25);
-		lpInativarFornecedor.add(textField_1);
+		tfNomeInativarFornecedor = new JTextField();
+		tfNomeInativarFornecedor.setEditable(false);
+		tfNomeInativarFornecedor.setEnabled(false);
+		tfNomeInativarFornecedor.setColumns(10);
+		tfNomeInativarFornecedor.setBounds(207, 50, 350, 25);
+		lpInativarFornecedor.add(tfNomeInativarFornecedor);
+		tfCnpjInativarFornecedor.setEditable(false);
 
-		c_cnpj_af_1.setEnabled(false);
-		c_cnpj_af_1.setBounds(21, 52, 176, 25);
-		lpInativarFornecedor.add(c_cnpj_af_1);
+		tfCnpjInativarFornecedor.setEnabled(false);
+		tfCnpjInativarFornecedor.setBounds(21, 50, 176, 25);
+		lpInativarFornecedor.add(tfCnpjInativarFornecedor);
 
-		JButton btnLimparInativarFornecedor = new JButton("Limpar");
-		btnLimparInativarFornecedor.setBounds(389, 406, 105, 34);
-		painelInativarFornecedor.add(btnLimparInativarFornecedor);
+		JLabel lblRazaoSocialInativarFornecedor = new JLabel("Razão Social:");
+		lblRazaoSocialInativarFornecedor.setBounds(293, 110, 81, 25);
+		lpInativarFornecedor.add(lblRazaoSocialInativarFornecedor);
 
-		JButton btnInativarFornecedor = new JButton("Inativar");
+		tfRazaoSocialInativarFornecedor = new JTextField();
+		tfRazaoSocialInativarFornecedor.setEditable(false);
+		tfRazaoSocialInativarFornecedor.setBounds(381, 110, 176, 25);
+		lpInativarFornecedor.add(tfRazaoSocialInativarFornecedor);
+		tfRazaoSocialInativarFornecedor.setEnabled(false);
+		tfRazaoSocialInativarFornecedor.setColumns(10);
+
+		btnInativarFornecedor = new JButton("Inativar");
+		btnInativarFornecedor.setEnabled(false);
 		btnInativarFornecedor.setBounds(504, 406, 99, 34);
 		painelInativarFornecedor.add(btnInativarFornecedor);
+
+		btnResetarInativarFornecedor = new JButton("Resetar");
+		btnResetarInativarFornecedor.setEnabled(false);
+		btnResetarInativarFornecedor.setBounds(295, 35, 86, 25);
+		painelInativarFornecedor.add(btnResetarInativarFornecedor);
 
 		JPanel painelAreaProduto = new JPanel();
 		tabbedPane_area.addTab("Área do Produto", null, painelAreaProduto, null);
@@ -1101,11 +1137,11 @@ public class Janela_principal extends JFrame {
 		tfPrecoCadastrarProduto.setBounds(357, 52, 94, 24);
 		lpProdutoCadastrarProduto.add(tfPrecoCadastrarProduto);
 
-		List<String> vazio = ControllerAuxiliar.preencherGrupos();
-		vazio.add(0, "...");
-		cbGrupoCadastrar = new JComboBox(vazio.toArray());
-		cbGrupoCadastrar.setBounds(247, 106, 140, 24);
-		lpProdutoCadastrarProduto.add(cbGrupoCadastrar);
+		List<String> arrayGrupos = ControllerAuxiliar.preencherGrupos();
+		arrayGrupos.add(0, "...");
+		cbGrupoCadastrarProduto = new JComboBox(arrayGrupos.toArray());
+		cbGrupoCadastrarProduto.setBounds(247, 106, 140, 24);
+		lpProdutoCadastrarProduto.add(cbGrupoCadastrarProduto);
 
 		tfMedidaGrupoCadastrar = new JTextField();
 		tfMedidaGrupoCadastrar.setColumns(10);
@@ -1123,10 +1159,6 @@ public class Janela_principal extends JFrame {
 		cbUnidadeCadastrarProduto = new JComboBox(unidades);
 		cbUnidadeCadastrarProduto.setBounds(333, 165, 54, 24);
 		lpProdutoCadastrarProduto.add(cbUnidadeCadastrarProduto);
-
-		epDescricaoCadastrarProduto = new JEditorPane();
-		epDescricaoCadastrarProduto.setBounds(48, 108, 187, 81);
-		lpProdutoCadastrarProduto.add(epDescricaoCadastrarProduto);
 
 		spQuantidadeCadastrarProduto = new JSpinner();
 		spQuantidadeCadastrarProduto.setBounds(473, 52, 64, 24);
@@ -1148,6 +1180,13 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_2_2_2_1_1.setBounds(333, 142, 54, 20);
 		lpProdutoCadastrarProduto.add(lblNewLabel_2_2_2_1_1);
 
+		JScrollPane spDescricaoCadastrarProduto = new JScrollPane();
+		spDescricaoCadastrarProduto.setBounds(48, 106, 189, 86);
+		lpProdutoCadastrarProduto.add(spDescricaoCadastrarProduto);
+
+		epDescricaoCadastrarProduto = new JEditorPane();
+		spDescricaoCadastrarProduto.setViewportView(epDescricaoCadastrarProduto);
+
 		JButton btnCadastrarProduto = new JButton("Cadastrar");
 		btnCadastrarProduto.setBounds(504, 437, 99, 34);
 		painelCadastrarProduto.add(btnCadastrarProduto);
@@ -1166,10 +1205,6 @@ public class Janela_principal extends JFrame {
 		label_1.setBounds(12, 25, 69, 24);
 		lpMovimentacaoCadastrarProduto.add(label_1);
 
-		epDescricaoMovimentacaoCadastro = new JEditorPane();
-		epDescricaoMovimentacaoCadastro.setBounds(12, 61, 559, 47);
-		lpMovimentacaoCadastrarProduto.add(epDescricaoMovimentacaoCadastro);
-
 		JLabel label_3 = new JLabel("Fornecedor:");
 		label_3.setBounds(343, 27, 83, 20);
 		lpMovimentacaoCadastrarProduto.add(label_3);
@@ -1183,6 +1218,13 @@ public class Janela_principal extends JFrame {
 		});
 		cbFornecedorCadastro.setBounds(431, 25, 140, 24);
 		lpMovimentacaoCadastrarProduto.add(cbFornecedorCadastro);
+
+		JScrollPane spDescricaoMovimentacaoCadastro = new JScrollPane();
+		spDescricaoMovimentacaoCadastro.setBounds(12, 61, 559, 47);
+		lpMovimentacaoCadastrarProduto.add(spDescricaoMovimentacaoCadastro);
+
+		epDescricaoMovimentacaoCadastro = new JEditorPane();
+		spDescricaoMovimentacaoCadastro.setViewportView(epDescricaoMovimentacaoCadastro);
 
 		tfSubtotal = new JTextField();
 		tfSubtotal.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1256,7 +1298,7 @@ public class Janela_principal extends JFrame {
 		tfPrecoAtualizarProduto.setBounds(357, 52, 94, 24);
 		lpAtualizarProduto.add(tfPrecoAtualizarProduto);
 
-		cbGrupoAtualizar = new JComboBox(vazio.toArray());
+		cbGrupoAtualizar = new JComboBox(arrayGrupos.toArray());
 		cbGrupoAtualizar.setEnabled(false);
 		cbGrupoAtualizar.setBounds(247, 106, 140, 24);
 		lpAtualizarProduto.add(cbGrupoAtualizar);
@@ -1280,11 +1322,6 @@ public class Janela_principal extends JFrame {
 		cbUnidadeAtualizarProduto.setBounds(333, 165, 54, 24);
 		lpAtualizarProduto.add(cbUnidadeAtualizarProduto);
 
-		epDescricaoAtualizarProduto = new JEditorPane();
-		epDescricaoAtualizarProduto.setEnabled(false);
-		epDescricaoAtualizarProduto.setBounds(48, 108, 187, 81);
-		lpAtualizarProduto.add(epDescricaoAtualizarProduto);
-
 		spQuantidadeAtualizarProduto = new JSpinner();
 		spQuantidadeAtualizarProduto.setEnabled(false);
 		spQuantidadeAtualizarProduto.setBounds(473, 52, 64, 24);
@@ -1305,6 +1342,14 @@ public class Janela_principal extends JFrame {
 		JLabel lblNewLabel_2_2_2_1 = new JLabel("Unidade:");
 		lblNewLabel_2_2_2_1.setBounds(333, 142, 54, 20);
 		lpAtualizarProduto.add(lblNewLabel_2_2_2_1);
+
+		JScrollPane spDescricaoAtualizarProduto = new JScrollPane();
+		spDescricaoAtualizarProduto.setBounds(48, 106, 189, 83);
+		lpAtualizarProduto.add(spDescricaoAtualizarProduto);
+
+		epDescricaoAtualizarProduto = new JEditorPane();
+		epDescricaoAtualizarProduto.setEnabled(false);
+		spDescricaoAtualizarProduto.setViewportView(epDescricaoAtualizarProduto);
 
 		JLabel lblPesquisarId_2_2 = new JLabel("Pesquisar pelo ID:");
 		lblPesquisarId_2_2.setBounds(393, 11, 182, 25);
@@ -1415,7 +1460,7 @@ public class Janela_principal extends JFrame {
 		tfPrecoInativarProduto.setBounds(357, 52, 94, 24);
 		lpDeletarProduto.add(tfPrecoInativarProduto);
 
-		cbGrupoInativar = new JComboBox(vazio.toArray());
+		cbGrupoInativar = new JComboBox(arrayGrupos.toArray());
 		cbGrupoInativar.setEnabled(false);
 		cbGrupoInativar.setBounds(247, 106, 140, 24);
 		lpDeletarProduto.add(cbGrupoInativar);
@@ -1440,12 +1485,6 @@ public class Janela_principal extends JFrame {
 		cbUnidadeInativarProduto.setBounds(333, 165, 54, 24);
 		lpDeletarProduto.add(cbUnidadeInativarProduto);
 
-		epDescricaoInativarProduto = new JEditorPane();
-		epDescricaoInativarProduto.setEditable(false);
-		epDescricaoInativarProduto.setEnabled(false);
-		epDescricaoInativarProduto.setBounds(48, 108, 187, 81);
-		lpDeletarProduto.add(epDescricaoInativarProduto);
-
 		spQuantidadeInativarProduto = new JSpinner();
 		spQuantidadeInativarProduto.setEnabled(false);
 		spQuantidadeInativarProduto.setBounds(473, 52, 64, 24);
@@ -1467,6 +1506,15 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_2_2_2_1_2.setBounds(333, 142, 54, 20);
 		lpDeletarProduto.add(lblNewLabel_2_2_2_1_2);
 
+		JScrollPane spDescricaoInativarProduto = new JScrollPane();
+		spDescricaoInativarProduto.setBounds(48, 106, 189, 83);
+		lpDeletarProduto.add(spDescricaoInativarProduto);
+
+		epDescricaoInativarProduto = new JEditorPane();
+		epDescricaoInativarProduto.setEnabled(false);
+		epDescricaoInativarProduto.setEditable(false);
+		spDescricaoInativarProduto.setViewportView(epDescricaoInativarProduto);
+
 		tfIdInativarProduto = new JFormattedTextField();
 		tfIdInativarProduto.setText("0");
 		tfIdInativarProduto.setColumns(10);
@@ -1486,26 +1534,27 @@ public class Janela_principal extends JFrame {
 		btnResetarInativarProduto.setBounds(306, 35, 77, 25);
 		painelInativarProduto.add(btnResetarInativarProduto);
 
-		btnLimparInativarProduto = new JButton("Limpar");
-		btnLimparInativarProduto.setEnabled(false);
-		btnLimparInativarProduto.setBounds(393, 403, 105, 34);
-		painelInativarProduto.add(btnLimparInativarProduto);
-
 		btnInativarProduto = new JButton("Inativar");
 		btnInativarProduto.setEnabled(false);
 		btnInativarProduto.setBounds(504, 403, 99, 34);
 		painelInativarProduto.add(btnInativarProduto);
 
-		JPanel painelAreaGrupo = new JPanel();
-		tabbedPane_area.addTab("Área do Grupo", null, painelAreaGrupo, null);
-		painelAreaGrupo.setLayout(null);
+		lblAviso = new JLabel("*Uma vez inativado, o Produto não pode mais ser reutilizado ou alterado.");
+		lblAviso.setForeground(new Color(187, 187, 187));
+		lblAviso.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblAviso.setBounds(61, 410, 418, 20);
+		painelInativarProduto.add(lblAviso);
 
-		JTabbedPane tpGrupo = new JTabbedPane(JTabbedPane.TOP);
-		tpGrupo.setBounds(0, 0, 618, 525);
-		painelAreaGrupo.add(tpGrupo);
+		JPanel painelAreaGruposECategorias = new JPanel();
+		tabbedPane_area.addTab("Grupos e Categorias", null, painelAreaGruposECategorias, null);
+		painelAreaGruposECategorias.setLayout(null);
+
+		JTabbedPane tpGruposECategorias = new JTabbedPane(JTabbedPane.TOP);
+		tpGruposECategorias.setBounds(0, 0, 618, 525);
+		painelAreaGruposECategorias.add(tpGruposECategorias);
 
 		JPanel painelCadastrarGrupo = new JPanel();
-		tpGrupo.addTab("Cadastrar Grupo", null, painelCadastrarGrupo, null);
+		tpGruposECategorias.addTab("Cadastrar Grupo", null, painelCadastrarGrupo, null);
 		painelCadastrarGrupo.setLayout(null);
 
 		JLayeredPane lpCadastrarGrupo = new JLayeredPane();
@@ -1514,49 +1563,51 @@ public class Janela_principal extends JFrame {
 		lpCadastrarGrupo.setBounds(26, 73, 557, 225);
 		painelCadastrarGrupo.add(lpCadastrarGrupo);
 
-		JLabel lblNewLabel_7 = new JLabel("Nome");
-		lblNewLabel_7.setBounds(28, 33, 227, 14);
-		lpCadastrarGrupo.add(lblNewLabel_7);
+		JLabel lblNomeCadastrarGrupo = new JLabel("Nome");
+		lblNomeCadastrarGrupo.setBounds(28, 33, 227, 14);
+		lpCadastrarGrupo.add(lblNomeCadastrarGrupo);
 
 		tfNomeCadastrarGrupo = new JTextField();
 		tfNomeCadastrarGrupo.setBounds(28, 58, 227, 26);
 		lpCadastrarGrupo.add(tfNomeCadastrarGrupo);
 		tfNomeCadastrarGrupo.setColumns(10);
 
-		JLabel lblNewLabel_7_1 = new JLabel("Quantidade Máxima");
-		lblNewLabel_7_1.setBounds(265, 33, 127, 14);
-		lpCadastrarGrupo.add(lblNewLabel_7_1);
+		JLabel lblQtdMaxCadastrarGrupo = new JLabel("Quantidade Máxima");
+		lblQtdMaxCadastrarGrupo.setBounds(418, 33, 127, 14);
+		lpCadastrarGrupo.add(lblQtdMaxCadastrarGrupo);
 
-		JSpinner spQtdMaxCadastrarGrupo = new JSpinner();
-		spQtdMaxCadastrarGrupo.setBounds(265, 58, 127, 26);
-		lpCadastrarGrupo.add(spQtdMaxCadastrarGrupo);
+		tfQtdMaxCadastrarGrupo = new JTextField();
+		tfQtdMaxCadastrarGrupo.setBounds(418, 58, 127, 26);
+		lpCadastrarGrupo.add(tfQtdMaxCadastrarGrupo);
 
-		JLabel lblNewLabel_7_1_1 = new JLabel("Quantidade Mínima");
-		lblNewLabel_7_1_1.setBounds(402, 33, 127, 14);
-		lpCadastrarGrupo.add(lblNewLabel_7_1_1);
+		JLabel lblQtdMinCadastrarGrupo = new JLabel("Quantidade Mínima");
+		lblQtdMinCadastrarGrupo.setBounds(273, 33, 127, 14);
+		lpCadastrarGrupo.add(lblQtdMinCadastrarGrupo);
 
-		JSpinner spQtdMinCadastrarGrupo = new JSpinner();
-		spQtdMinCadastrarGrupo.setBounds(402, 58, 127, 26);
-		lpCadastrarGrupo.add(spQtdMinCadastrarGrupo);
+		tfQtdMinCadastrarGrupo = new JTextField();
+		tfQtdMinCadastrarGrupo.setBounds(273, 58, 127, 26);
+		lpCadastrarGrupo.add(tfQtdMinCadastrarGrupo);
 
-		JLabel lblNewLabel_7_2 = new JLabel("Descrição");
-		lblNewLabel_7_2.setBounds(28, 95, 227, 14);
-		lpCadastrarGrupo.add(lblNewLabel_7_2);
+		JLabel lblDescricaoCadastrarGrupo = new JLabel("Descrição");
+		lblDescricaoCadastrarGrupo.setBounds(28, 95, 227, 14);
+		lpCadastrarGrupo.add(lblDescricaoCadastrarGrupo);
 
-		JLabel lblNewLabel_7_2_1 = new JLabel("Categoria");
-		lblNewLabel_7_2_1.setBounds(265, 95, 127, 14);
-		lpCadastrarGrupo.add(lblNewLabel_7_2_1);
+		JLabel lblCategoriaCadastrarGrupo = new JLabel("Categoria");
+		lblCategoriaCadastrarGrupo.setBounds(273, 95, 127, 14);
+		lpCadastrarGrupo.add(lblCategoriaCadastrarGrupo);
 
-		JComboBox cbCategoriaCadastrarGrupo = new JComboBox();
-		cbCategoriaCadastrarGrupo.setBounds(265, 115, 127, 26);
+		List<String> arrayCategorias = ControllerAuxiliar.preencherCategorias();
+		arrayCategorias.add(0, "...");
+		cbCategoriaCadastrarGrupo = new JComboBox(arrayCategorias.toArray());
+		cbCategoriaCadastrarGrupo.setBounds(273, 115, 127, 26);
 		lpCadastrarGrupo.add(cbCategoriaCadastrarGrupo);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(28, 115, 227, 87);
-		lpCadastrarGrupo.add(scrollPane);
+		JScrollPane spDescricaoCadastrarGrupo = new JScrollPane();
+		spDescricaoCadastrarGrupo.setBounds(28, 115, 227, 87);
+		lpCadastrarGrupo.add(spDescricaoCadastrarGrupo);
 
-		JTextPane epDescricaoCadastrarGrupo = new JTextPane();
-		scrollPane.setViewportView(epDescricaoCadastrarGrupo);
+		epDescricaoCadastrarGrupo = new JEditorPane();
+		spDescricaoCadastrarGrupo.setViewportView(epDescricaoCadastrarGrupo);
 
 		JButton btnLimparCadastrarGrupo = new JButton("Limpar");
 		btnLimparCadastrarGrupo.setBounds(389, 435, 105, 34);
@@ -1565,6 +1616,44 @@ public class Janela_principal extends JFrame {
 		JButton btnCadastrarGrupo = new JButton("Cadastrar");
 		btnCadastrarGrupo.setBounds(504, 435, 99, 34);
 		painelCadastrarGrupo.add(btnCadastrarGrupo);
+
+		JPanel painelCadastrarCategoria = new JPanel();
+		painelCadastrarCategoria.setLayout(null);
+		tpGruposECategorias.addTab("Cadastrar Categoria", null, painelCadastrarCategoria, null);
+
+		JLayeredPane lpCategoria = new JLayeredPane();
+		lpCategoria.setBorder(
+				new TitledBorder(null, "Dados da categoria", TitledBorder.CENTER, TitledBorder.TOP, null, null));
+		lpCategoria.setBounds(26, 73, 557, 225);
+		painelCadastrarCategoria.add(lpCategoria);
+
+		JLabel lblNomeCategoria = new JLabel("Nome");
+		lblNomeCategoria.setBounds(168, 33, 227, 14);
+		lpCategoria.add(lblNomeCategoria);
+
+		tfNomeCadastrarCategoria = new JTextField();
+		tfNomeCadastrarCategoria.setColumns(10);
+		tfNomeCadastrarCategoria.setBounds(168, 58, 227, 26);
+		lpCategoria.add(tfNomeCadastrarCategoria);
+
+		JLabel lblDescricaoCategoria = new JLabel("Descrição");
+		lblDescricaoCategoria.setBounds(168, 95, 227, 14);
+		lpCategoria.add(lblDescricaoCategoria);
+
+		JScrollPane spDescricaoCadastrarCategoria = new JScrollPane();
+		spDescricaoCadastrarCategoria.setBounds(168, 121, 227, 87);
+		lpCategoria.add(spDescricaoCadastrarCategoria);
+
+		epDescricaoCadastrarCategoria = new JEditorPane();
+		spDescricaoCadastrarCategoria.setViewportView(epDescricaoCadastrarCategoria);
+
+		JButton btnLimparCadastrarCategoria = new JButton("Limpar");
+		btnLimparCadastrarCategoria.setBounds(389, 435, 105, 34);
+		painelCadastrarCategoria.add(btnLimparCadastrarCategoria);
+
+		JButton btnCadastrarCategoria = new JButton("Cadastrar");
+		btnCadastrarCategoria.setBounds(504, 435, 99, 34);
+		painelCadastrarCategoria.add(btnCadastrarCategoria);
 
 		JTabbedPane tabbedPane_listagem = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_listagem.setBounds(652, 49, 548, 475);
@@ -1593,15 +1682,33 @@ public class Janela_principal extends JFrame {
 		JScrollPane spSupervisores = new JScrollPane();
 		spSupervisores.setBounds(10, 11, 517, 425);
 		painelListarSupervisores.add(spSupervisores);
-		table_supervisores = new JTable();
+		table_supervisores = new JTable() {
+			private static final long serialVersionUID = 1L;
+
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
 		spSupervisores.setViewportView(table_supervisores);
 
 		JScrollPane spMovimentacoes = new JScrollPane();
 		spMovimentacoes.setBounds(10, 11, 517, 425);
 		painelListarMovimentacoes.add(spMovimentacoes);
 
-		table_produtos = new JTable();
-		table_movimentacoes = new JTable();
+		table_produtos = new JTable() {
+			private static final long serialVersionUID = 1L;
+
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
+		table_movimentacoes = new JTable() {
+			private static final long serialVersionUID = 1L;
+
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
 		spMovimentacoes.setViewportView(table_movimentacoes);
 		spProdutos.setViewportView(table_produtos);
 
@@ -1620,15 +1727,19 @@ public class Janela_principal extends JFrame {
 				return false;
 			}
 		};
-		// ControllerTableModels.popularTabelaFornecedores(table_fornecedores);
 		spFornecedores.setViewportView(table_fornecedores);
 
 		JScrollPane spRegistroSupervisores = new JScrollPane();
 		spRegistroSupervisores.setBounds(10, 11, 517, 425);
 		painelListarRegistroSupervisores.add(spRegistroSupervisores);
 
-		table_registros_supervisores = new JTable();
-		// ControllerTableModels.popularTableRegistrosGerente(table_registros_supervisores_supervisores);
+		table_registros_supervisores = new JTable() {
+			private static final long serialVersionUID = 1L;
+
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
 		spRegistroSupervisores.setViewportView(table_registros_supervisores);
 
 		JSeparator separator_vertical = new JSeparator();
@@ -1654,20 +1765,14 @@ public class Janela_principal extends JFrame {
 		new ControllerTableModels(table_registros_supervisores, table_fornecedores, table_produtos, table_movimentacoes,
 				table_supervisores);
 
-		// ControllerTableModels.popularTabelaProdutos(table_produtos);
-		// new ControllerTableModels(table_registros_supervisores_supervisores,
-		// table_gerentes,
-		// table_fornecedores, table_produtos, table_movimentacoes);
-		// setLocationRelativeTo(null);
-
 		// ----------ActionListeners de Cadastrar o Produto
 
 		// MÉTODO DE PREENCHER OS DADOS DO GRUPO DA TELA DE CADASTRAR PRODUTOS BASEADO
 		// NO GRUPO ESCOLHIDO
-		cbGrupoCadastrar.addActionListener(new ActionListener() {
+		cbGrupoCadastrarProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (cbGrupoCadastrar.getSelectedIndex() != 0) {
-					ControllerAuxiliar.preencherCamposGrupo(cbGrupoCadastrar, tfNomeGrupoCadastrar,
+				if (cbGrupoCadastrarProduto.getSelectedIndex() != 0) {
+					ControllerAuxiliar.preencherCamposGrupo(cbGrupoCadastrarProduto, tfNomeGrupoCadastrar,
 							tfCodigoGrupoCadastrar, tfSubtotal, tfQtdMax);
 				} else {
 					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoCadastrar, tfCodigoGrupoCadastrar,
@@ -1684,7 +1789,7 @@ public class Janela_principal extends JFrame {
 					ControllerValidationProduto cvp = new ControllerValidationProduto();
 					cvp.enviarDadosParaCadastrar(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
 							epDescricaoCadastrarProduto, dcFabricacaoCadastrarProduto, dcVencimentoCadastrarProduto,
-							cbGrupoCadastrar, tfMedidaGrupoCadastrar, cbUnidadeCadastrarProduto,
+							cbGrupoCadastrarProduto, tfMedidaGrupoCadastrar, cbUnidadeCadastrarProduto,
 							epDescricaoMovimentacaoCadastro, cbFornecedorCadastro);
 				}
 			}
@@ -1695,7 +1800,7 @@ public class Janela_principal extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				ControllerAuxiliar.resetarTodosOsCampos(tfPrecoCadastrarProduto, spQuantidadeCadastrarProduto,
 						epDescricaoCadastrarProduto, dcFabricacaoCadastrarProduto, dcVencimentoCadastrarProduto,
-						cbGrupoCadastrar, tfMedidaGrupoCadastrar, cbUnidadeCadastrarProduto);
+						cbGrupoCadastrarProduto, tfMedidaGrupoCadastrar, cbUnidadeCadastrarProduto);
 				ControllerMovimentacao.limparNoCadastro(epDescricaoMovimentacaoCadastro, cbFornecedorCadastro);
 			}
 		});
@@ -1768,7 +1873,7 @@ public class Janela_principal extends JFrame {
 				cip.buscarProdutoInativado(btnBuscarProdutoInativar, btnResetarInativarProduto, tfIdInativarProduto,
 						tfPrecoInativarProduto, spQuantidadeInativarProduto, epDescricaoInativarProduto,
 						cbGrupoInativar, tfMedidaInativarProduto, cbUnidadeInativarProduto, dcFabricacaoInativarProduto,
-						dcVencimentoInativarProduto, btnLimparInativarProduto, btnInativarProduto);
+						dcVencimentoInativarProduto, btnInativarProduto);
 			}
 		});
 
@@ -1778,7 +1883,7 @@ public class Janela_principal extends JFrame {
 				cip.desabilitarInativacao(btnBuscarProdutoInativar, btnResetarInativarProduto, tfIdInativarProduto,
 						tfPrecoInativarProduto, spQuantidadeInativarProduto, epDescricaoInativarProduto,
 						cbGrupoInativar, tfMedidaInativarProduto, cbUnidadeInativarProduto, dcFabricacaoInativarProduto,
-						dcVencimentoInativarProduto, btnLimparInativarProduto, btnInativarProduto);
+						dcVencimentoInativarProduto, btnInativarProduto);
 			}
 		});
 
@@ -1834,7 +1939,7 @@ public class Janela_principal extends JFrame {
 
 		// ------------------ActionListeners de Atualizar Fornecedores
 
-		// ESSE BOTÃO CHAMA O MÉTODO DE BUSCAR O FORNECEDOR PELO ID
+		// Esse botão chama o método de buscar o Fornecedor pelo ID
 		btnBuscarAtualizarFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAtualizarFornecedor caf = new ControllerAtualizarFornecedor();
@@ -1847,8 +1952,8 @@ public class Janela_principal extends JFrame {
 			}
 		});
 
-		// ESSE BOTÃO CHAMA O MÉTODO DE RESETAR OS INPUTS DA VIEW DE ATUALIZAR O
-		// FORNECEDOR
+		// Esse botão chama o método de resetar os inputs da view de atualizar o
+		// Fornecedor
 		btnResetarAtualizarFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAtualizarFornecedor caf = new ControllerAtualizarFornecedor();
@@ -1861,8 +1966,8 @@ public class Janela_principal extends JFrame {
 			}
 		});
 
-		// ESSE BOTÃO CHAMA O MÉTODO DE LIMPAR OS INPUTS NA TELA DE ATUALIZAR O
-		// FORNECEDOR
+		// Esse botão chama o método de limpar os inputs na tela de atualizar o
+		// Fornecedor
 		btnLimparAtualizarFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerAuxiliar.limparCamposFornecedor(tfNomeAtualizarFornecedor, tfCnpjAtualizarFornecedor,
@@ -1873,7 +1978,7 @@ public class Janela_principal extends JFrame {
 			}
 		});
 
-		// ESSE BOTÃO CHAMA O MÉTODO DE ATUALIZAR O FORNECEDOR
+		// Esse botão chama o método de atualizar o Fornecedor
 		btnAtualizarFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (ctrlPermissao.chamarVerificacao() == true) {
@@ -1887,6 +1992,79 @@ public class Janela_principal extends JFrame {
 
 			}
 		});
+
+		// ------------------ActionListeners de Inativar Fornecedores
+
+		// Botão de buscar o Fornecedor inativado
+		btnBuscarInativarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerInativarFornecedor cif = new ControllerInativarFornecedor();
+				cif.buscarFornecedorInativado(btnResetarInativarFornecedor, btnBuscarInativarFornecedor,
+						btnInativarFornecedor, tfIdInativarFornecedor, tfCnpjInativarFornecedor,
+						tfNomeInativarFornecedor, tfEmailInativarFornecedor, tfRazaoSocialInativarFornecedor);
+			}
+		});
+
+		// Botão de resetar os dados do Fornecedor inativado
+		btnResetarInativarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerInativarFornecedor cif = new ControllerInativarFornecedor();
+				cif.resetarInativar(btnResetarInativarFornecedor, btnBuscarInativarFornecedor, btnInativarFornecedor,
+						tfIdInativarFornecedor, tfCnpjInativarFornecedor, tfNomeInativarFornecedor,
+						tfEmailInativarFornecedor, tfRazaoSocialInativarFornecedor);
+			}
+		});
+
+		// Botão de inativar o Fornecedor
+		btnInativarFornecedor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerInativarFornecedor cif = new ControllerInativarFornecedor();
+				cif.inativarFornecedor(btnResetarInativarFornecedor, btnBuscarInativarFornecedor, btnInativarFornecedor,
+						tfIdInativarFornecedor, tfCnpjInativarFornecedor, tfNomeInativarFornecedor,
+						tfEmailInativarFornecedor, tfRazaoSocialInativarFornecedor);
+			}
+		});
+
+		// ------------------ActionListeners de Cadastrar Grupos
+
+		// Botão de cadastrar o grupo
+		btnCadastrarGrupo.addActionListener(new ActionListener() {
+			JComboBox[] comboBoxGrupos = new JComboBox[] { cbGrupoCadastrarProduto, cbGrupoAtualizar, cbGrupoInativar };
+
+			public void actionPerformed(ActionEvent e) {
+				ControllerValidationGrupo cvg = new ControllerValidationGrupo();
+				cvg.cadastrarGrupo(tfNomeCadastrarGrupo, epDescricaoCadastrarGrupo, cbCategoriaCadastrarGrupo,
+						tfQtdMinCadastrarGrupo, tfQtdMaxCadastrarGrupo, comboBoxGrupos);
+			}
+		});
+
+		// Botão de limpar os inputs da tela de cadastrar grupo
+		btnLimparCadastrarGrupo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerValidationGrupo.limparDados(tfNomeCadastrarGrupo, epDescricaoCadastrarGrupo,
+						cbCategoriaCadastrarGrupo, tfQtdMinCadastrarGrupo, tfQtdMaxCadastrarGrupo);
+			}
+		});
+
+		// ------------------ActionListeners de Cadastrar Categorias
+
+		// Executa o cadastro da Categoria pelo botão
+		btnCadastrarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ControllerValidationCategoria cvc = new ControllerValidationCategoria();
+				cvc.cadastrarCategoria(tfNomeCadastrarCategoria, epDescricaoCadastrarCategoria);
+			}
+		});
+
+		// Executa a limpeza dos campos da tela de Cadastrar Categoria
+		btnLimparCadastrarCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerValidationCategoria cvp = new ControllerValidationCategoria();
+				cvp.limparDados(tfNomeCadastrarCategoria, epDescricaoCadastrarCategoria);
+			}
+		});
+
+		// --------------------------Métodos do Leandro--------------------------
 
 		// ESSES MÉTODOS IRÃO PERMITIR APENAS NÚMEROS PARA SEUS RESPECTIVOS CAMPOS
 		id_pesquisa_deleteSupervisor.addKeyListener(new KeyAdapter() {
