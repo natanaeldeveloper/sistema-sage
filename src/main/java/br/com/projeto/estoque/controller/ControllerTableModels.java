@@ -16,6 +16,7 @@ import br.com.projeto.estoque.model.Fornecedor;
 import br.com.projeto.estoque.model.Movimentacao;
 import br.com.projeto.estoque.model.Produto;
 import br.com.projeto.estoque.model.RegistroSupervisor;
+import br.com.projeto.estoque.model.Supervisor;
 import br.com.projeto.estoque.util.Essencial;
 import br.com.projeto.estoque.util.JPAUtil;
 
@@ -24,11 +25,12 @@ public class ControllerTableModels {
 
 	// Méotdo construtor, popula todas as tabelas baseado nos parâmetros
 	public ControllerTableModels(JTable table_registros, JTable table_fornecedores,
-			JTable table_produtos, JTable table_movimentacoes) {
+			JTable table_produtos, JTable table_movimentacoes, JTable table_supervisores) {
 		popularTableRegistrosSupervisor(table_registros);
 		popularTabelaFornecedores(table_fornecedores);
 		popularTabelaProdutos(table_produtos);
 		popularTabelaMovimentacoes(table_movimentacoes);
+		popularTableSupervisor(table_supervisores);
 	}
 
 	// Método para popular a tabela de registros do gerente
@@ -52,6 +54,25 @@ public class ControllerTableModels {
 
 		table_registros.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resizeColumnWidth(table_registros, 126);
+	}
+	
+	public static void popularTableSupervisor(JTable tableSupervisor) {
+		Essencial.setManager(new JPAUtil().getEntityManager());
+		Essencial.setQuery(Essencial.getManager().createNamedQuery("supervisores"));
+		List<Supervisor> supervisores;
+		supervisores = Essencial.getQuery().getResultList();
+		DefaultTableModel modelo = new DefaultTableModel();
+		tableSupervisor.setModel(modelo);
+		modelo.addColumn("ID:");
+		modelo.addColumn("cpf:");
+		modelo.addColumn("login:");
+			for(Supervisor supervisor: supervisores) {
+				modelo.addRow(new Object[] {supervisor.getId(), supervisor.getCpf(), supervisor.getLogin()});
+			}
+			
+		tableSupervisor.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		resizeColumnWidth(tableSupervisor, 126);
+		
 	}
 
 	// Método para popular a tabela de fornecedores

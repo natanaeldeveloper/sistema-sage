@@ -13,12 +13,16 @@ import br.com.projeto.estoque.util.JPAUtil;
 public class ControllerGerente extends ControllerGlobal {
 	ControllerRegistroGerente controller = new ControllerRegistroGerente();
 
-	public boolean fazerLogin(String login, String senha, TipoComportamento tipoComportamento) {
+	public boolean fazerLogin(String login_ou_cpf, String senha, TipoComportamento tipoComportamento) {
 		boolean login_efetuado = false;
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.getManager().getTransaction().begin();
-		if (verificarCredenciais(login, senha) == true) {
-			GerenteAtual.setGerente(buscarGerentePeloLogin(login));
+		if (verificarCredenciais(login_ou_cpf, senha) == true) {
+			if(buscarGerentePeloLogin(login_ou_cpf)!=null) {
+				GerenteAtual.setGerente(buscarGerentePeloLogin(login_ou_cpf));	
+			}else {
+				GerenteAtual.setGerente(buscarGerentePeloCpf(login_ou_cpf));
+			}
 			controller.criarRegistroGerente(tipoComportamento, GerenteAtual.getGerente());
 			Essencial.getManager().getTransaction().commit();
 			login_efetuado = true;
@@ -27,16 +31,27 @@ public class ControllerGerente extends ControllerGlobal {
 		return login_efetuado;
 	}
 
-	public boolean verificarCredenciais(String login, String senha) {
+	public boolean verificarCredenciais(String login_ou_cpf, String senha) {
 
-		Gerente gerente = new Gerente();
-		gerente = buscarGerentePeloLogin(login);
+		Gerente gerenteCpf = new Gerente();
+		Gerente gerenteLogin = new Gerente();
+		gerenteLogin = buscarGerentePeloLogin(login_ou_cpf);
+		gerenteCpf = buscarGerentePeloCpf(login_ou_cpf);
 
-		if (gerente == null) {
-			Aviso.avisar(2);
-			return false;
+		if (gerenteCpf == null) {
+			if(gerenteLogin == null) {
+				Aviso.avisar(2);
+				return false;	
+			}else {
+				if (gerenteLogin.getSenha().equals(Criptografar.encriptografar(senha))) {
+					return true;
+				}else {
+					Aviso.avisar(2);
+					return false;	
+				}
+			}
 		} else {
-			if (gerente.getSenha().equals(Criptografar.encriptografar(senha))) {
+			if (gerenteCpf.getSenha().equals(Criptografar.encriptografar(senha))) {
 				return true;
 			} else {
 				Aviso.avisar(2);

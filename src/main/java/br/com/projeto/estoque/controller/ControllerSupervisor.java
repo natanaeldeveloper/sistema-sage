@@ -2,7 +2,6 @@ package br.com.projeto.estoque.controller;
 
 import javax.persistence.NoResultException;
 import javax.swing.JFormattedTextField;
-import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
 import br.com.projeto.estoque.model.Status;
@@ -13,6 +12,8 @@ import br.com.projeto.estoque.util.Criptografar;
 import br.com.projeto.estoque.util.Essencial;
 import br.com.projeto.estoque.util.JPAUtil;
 import br.com.projeto.estoque.util.SupervisorAtual;
+import br.com.projeto.estoque.util.SupervisorDeletado;
+import br.com.projeto.estoque.viewUpdate.Janela_confirmar_delecao;
 
 public class ControllerSupervisor extends ControllerGlobal {
 
@@ -355,12 +356,10 @@ public class ControllerSupervisor extends ControllerGlobal {
 
 	
 
-	public void excluirContaSupervisor(JFormattedTextField campoId, String cpf, String senha) {
+	public void excluirContaSupervisor(JFormattedTextField campoId, String login, String senha) {
 
 		int id = 0;
-		JOptionPane.showMessageDialog(null, senha);
-		JOptionPane.showMessageDialog(null, cpf);
-		if (validarConfirmacaoGerente(cpf, senha) == true) {
+		if (validarConfirmacaoGerente(login, senha) == true) {
 			if (evitarValorVazio(campoId, id) == false) {
 				// Só vai executar as demais se for digitado um id
 			} else {
@@ -373,9 +372,9 @@ public class ControllerSupervisor extends ControllerGlobal {
 				if (buscarSupervisorPeloId(id) == null) {
 					Aviso.avisar(11);
 				} else {
-//					Janela_confirmar_delecao confDell = new Janela_confirmar_delecao();
-//					SupervisorDeletado.setId(id);
-//					confDell.setVisible(true);
+					Janela_confirmar_delecao confDell = new Janela_confirmar_delecao();
+					SupervisorDeletado.setId(id);
+					confDell.setVisible(true);
 
 				}
 

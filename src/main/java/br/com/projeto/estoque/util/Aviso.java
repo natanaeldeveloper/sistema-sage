@@ -4,28 +4,28 @@ import javax.swing.JOptionPane;
 
 public class Aviso {
 
-	public static void avisar (int erro) {
+	public static void avisar(int erro) {
 		switch (erro) {
 		case 1:
 			JOptionPane.showMessageDialog(null, "Preencha todos os campos");
 			break;
 		case 2:
-			JOptionPane.showMessageDialog(null, "Login ou senha incorretos");
+			JOptionPane.showMessageDialog(null, "Login ou senha incorretos.");
 			break;
 		case 3:
-			JOptionPane.showMessageDialog(null, "CPF j� cadastrado no Sistema");
+			JOptionPane.showMessageDialog(null, "CPJ já cadastrado no sistema!");
 			break;
 		case 4:
-			JOptionPane.showMessageDialog(null, "Voc� n�o tem permiss�o para fazer isso!");
+			JOptionPane.showMessageDialog(null, "Você não tem permissão para fazer isto!");
 			break;
 		case 5:
-			JOptionPane.showMessageDialog(null, "Usu�rio cadastrado com sucesso!");
+			JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
 			break;
 		case 6:
-			JOptionPane.showMessageDialog(null, "As senhas n�o s�o iguais!");
+			JOptionPane.showMessageDialog(null, "As senhas não são iguais!");
 			break;
 		case 7:
-			JOptionPane.showMessageDialog(null, "O que voc� est� procurando n�o existe no banco de dados");
+			JOptionPane.showMessageDialog(null, "O que você está procurando não existe no banco de dados");
 			break;
 		case 8:
 			JOptionPane.showMessageDialog(null, "O ID tem um valor numérico!");
@@ -49,5 +49,5 @@ public class Aviso {
 			break;
 		}
 	}
-	
+
 }

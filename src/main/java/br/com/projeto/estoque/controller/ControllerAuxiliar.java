@@ -33,21 +33,19 @@ import br.com.projeto.estoque.util.SupervisorAtual;
 public class ControllerAuxiliar {
 	private static EntityManager manager;
 
-	
 	public void setarLoginUsuarioAtual_na_telaPrincipal(JLabel usuario_atual_cadastrarSupervisor,
 			JLabel usuario_atual_atualizar_gerente, JLabel usuario_atual_deletarSupervisor) {
-		if(GerenteAtual.getGerente() != null) {
+		if (GerenteAtual.getGerente() != null) {
 			usuario_atual_cadastrarSupervisor.setText(GerenteAtual.getGerente().getLogin());
 			usuario_atual_atualizar_gerente.setText(GerenteAtual.getGerente().getLogin());
 			usuario_atual_deletarSupervisor.setText(GerenteAtual.getGerente().getLogin());
-		}else {
+		} else {
 			usuario_atual_cadastrarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
 			usuario_atual_atualizar_gerente.setText(SupervisorAtual.getSupervisor().getLogin());
 			usuario_atual_deletarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
 		}
 	}
-	
-	
+
 	public void limparCampos(JFormattedTextField campoJformattedTextField, JPasswordField campoJpasswordField,
 			JPasswordField campoJpasswordField2, JFormattedTextField campoJformattedTextField2) {
 		campoJformattedTextField.setText("");
@@ -97,7 +95,7 @@ public class ControllerAuxiliar {
 
 	}
 
-// Esse método confere se todos os dados das views de Cadastrar e Atualizar
+	// Esse método confere se todos os dados das views de Cadastrar e Atualizar
 	// Fornecedores estão preenchidos
 	public static boolean conferirDadosFornecedor(JTextField tfNome, JFormattedTextField tfCnpj,
 			JTextField tfRazaoSocial, JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep,
@@ -294,11 +292,12 @@ public class ControllerAuxiliar {
 
 	public static void repopularFornecedores(JComboBox cbFornecedor) {
 		cbFornecedor.removeAllItems();
-		
-		for(String fornecedor : ControllerAuxiliar.preencherFornecedores()) {
+
+		for (String fornecedor : ControllerAuxiliar.preencherFornecedores()) {
 			cbFornecedor.addItem(fornecedor);
 		}
 	}
+
 	// Converte Date para Calendar
 	public static Calendar toCalendar(Date date) {
 		Calendar cal = Calendar.getInstance();
@@ -311,4 +310,4 @@ public class ControllerAuxiliar {
 		cal.setTime(date);
 		return cal;
 	}
-	}
+}

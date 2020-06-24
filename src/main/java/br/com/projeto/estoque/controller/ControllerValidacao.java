@@ -60,8 +60,8 @@ public class ControllerValidacao {
 	}
 
 	
-	public boolean validarConfirmacaoGerente(String cpf, String senha) {
-		if (cpf.equals(GerenteAtual.getGerente().getCpf())
+	public boolean validarConfirmacaoGerente(String login, String senha) {
+		if (login.equals(GerenteAtual.getGerente().getLogin())
 				&& Criptografar.encriptografar(senha).equals(GerenteAtual.getGerente().getSenha())) {
 			return true;
 		} else {

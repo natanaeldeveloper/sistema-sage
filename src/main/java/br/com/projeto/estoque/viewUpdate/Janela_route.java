@@ -10,22 +10,15 @@ import javax.swing.filechooser.FileSystemView;
 public class Janela_route {
 	public String route(File arq) {
 		JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		jfc.setDialogTitle("Choose a directory to save your file: ");
+		jfc.setDialogTitle("Escolha um local para salvar o arquivo");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Formato PDF",".pdf");
 		jfc.addChoosableFileFilter(filter);
 		jfc.setSelectedFile(arq);
 		int returnValue = jfc.showSaveDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			if (jfc.getSelectedFile().isDirectory()) {
-				System.out.println("You selected the directory: " + jfc.getSelectedFile());
 			}
 		}	
 		return jfc.getSelectedFile().getPath();
 	}
-	
-
-			
-
-
-
 }
