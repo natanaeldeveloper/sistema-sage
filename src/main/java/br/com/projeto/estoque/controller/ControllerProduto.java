@@ -25,7 +25,6 @@ public class ControllerProduto {
 	private Date data;
 	private long tempo;
 	private Timestamp ts;
-	public static boolean estoquePrecario = false;
 
 	// Método para cadastrar um novo Produto
 	public Produto cadastrarProduto(Integer id_grupo, String descricao, BigDecimal preco, int quantidade, Double medida,
@@ -69,7 +68,7 @@ public class ControllerProduto {
 		tempo = data.getTime();
 		ts = new Timestamp(tempo);
 		m.setData(ts);
-		m.setDescricao(descricao);
+		m.setDescricao(descricaoMovimentacao);
 		m.setFornecedor(fornecedorMovimentacao);
 		m.setProduto(produto);
 		m.setQtdProduto(quantidade);
@@ -119,6 +118,15 @@ public class ControllerProduto {
 		Query query = manager.createQuery("select p from Produto p where p.status = :statusProduto");
 		query.setParameter("statusProduto", Status.ATIVO);
 		List<Produto> listaProdutos = query.getResultList();
+		manager.close();
+		return listaProdutos;
+	}
+
+	public static List<String> listarDescricaoProdutosAtivos() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select descricao from Produto p where p.status = :statusProduto");
+		query.setParameter("statusProduto", Status.ATIVO);
+		List<String> listaProdutos = query.getResultList();
 		manager.close();
 		return listaProdutos;
 	}
@@ -218,7 +226,6 @@ public class ControllerProduto {
 			JOptionPane.showMessageDialog(null,
 					"O Grupo deste Produto ficou com uma quantidade abaixo do limite mínimo!", "Escassez de Produtos",
 					JOptionPane.WARNING_MESSAGE);
-			estoquePrecario = true;
 		}
 
 		produtoDesativado.setStatus(Status.INATIVO);
@@ -248,6 +255,9 @@ public class ControllerProduto {
 				return true;
 			}
 		}
+
+		JOptionPane.showMessageDialog(null, "Todos os Produtos estão em dia!", "Produtos em dia",
+				JOptionPane.INFORMATION_MESSAGE);
 		return false;
 	}
 }

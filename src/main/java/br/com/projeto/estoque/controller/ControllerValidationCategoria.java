@@ -1,6 +1,7 @@
 package br.com.projeto.estoque.controller;
 
 import javax.persistence.EntityManager;
+import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -13,7 +14,8 @@ public class ControllerValidationCategoria {
 	private static EntityManager manager;
 	protected static boolean categoriaCriada = false;
 
-	public void cadastrarCategoria(JTextField tfCategoria, JEditorPane epDescricao) {
+	@SuppressWarnings("rawtypes")
+	public void cadastrarCategoria(JTextField tfCategoria, JEditorPane epDescricao, JComboBox cbCategoriaGrupo) {
 		manager = new JPAUtil().getEntityManager();
 
 		if (StringUtils.isBlank(tfCategoria.getText()) || StringUtils.isBlank(epDescricao.getText())) {
@@ -26,7 +28,7 @@ public class ControllerValidationCategoria {
 
 			try {
 				ControllerCategoria cc = new ControllerCategoria();
-				cc.criarCategoria(nome, descricao);
+				cc.criarCategoria(nome, descricao, cbCategoriaGrupo);
 
 				if (categoriaCriada) {
 					limparDados(tfCategoria, epDescricao);

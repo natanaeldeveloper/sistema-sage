@@ -70,6 +70,7 @@ public class ControllerAtualizarProduto {
 			dcDataVencimento.setDate(produto.getDataVencimento().getTime());
 			tfSubtotal.setText(produto.getGrupo().getSubtotal() + "");
 			tfQtdMax.setText(produto.getGrupo().getQtdMaxima() + "");
+
 			tfId.setEnabled(false);
 			habilitarAtualizacao(btnBuscar, btnResetar, tfId, tfPreco, epDescricao, cbGrupo, tfMedida, cbUnidade,
 					dcDataFabricacao, dcDataVencimento, tfSubtotal, tfQtdMax, btnLimpar, btnAtualizar);

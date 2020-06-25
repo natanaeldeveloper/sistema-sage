@@ -1,5 +1,7 @@
 package br.com.projeto.estoque.controller;
 
+import java.awt.Color;
+
 import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -8,6 +10,7 @@ import javax.swing.JTextField;
 import br.com.projeto.estoque.model.Fornecedor;
 import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.JPAUtil;
+import br.com.projeto.estoque.viewUpdate.Janela_principal;
 
 public class ControllerInativarFornecedor {
 	private static EntityManager manager;
@@ -47,6 +50,7 @@ public class ControllerInativarFornecedor {
 			btnBuscar.setEnabled(false);
 			btnInativar.setEnabled(true);
 			tfId.setEnabled(false);
+			Janela_principal.lblAvisoInativarFornecedor.setForeground(new Color(250, 140, 0));
 		}
 
 		manager.close();
@@ -59,6 +63,7 @@ public class ControllerInativarFornecedor {
 		btnInativar.setEnabled(false);
 		tfId.setEnabled(true);
 		limparDados(tfCnpj, tfNome, tfEmail, tfRazaoSocial);
+		Janela_principal.lblAvisoInativarFornecedor.setForeground(new Color(187, 187, 187));
 	}
 
 	public void inativarFornecedor(JButton btnResetar, JButton btnBuscar, JButton btnInativar, JTextField tfId,
@@ -74,6 +79,7 @@ public class ControllerInativarFornecedor {
 			btnBuscar.setEnabled(true);
 			btnInativar.setEnabled(false);
 			tfId.setEnabled(true);
+			Janela_principal.lblAvisoInativarFornecedor.setForeground(new Color(187, 187, 187));
 			sucessoInativacao = false;
 		}
 	}

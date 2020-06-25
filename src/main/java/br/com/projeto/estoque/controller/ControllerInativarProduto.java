@@ -66,7 +66,7 @@ public class ControllerInativarProduto {
 			btnBuscar.setEnabled(false);
 			btnResetar.setEnabled(true);
 			btnInativar.setEnabled(true);
-			Janela_principal.lblAviso.setForeground(new Color(250, 140, 0));
+			Janela_principal.lblAvisoInativarProduto.setForeground(new Color(250, 140, 0));
 		}
 		manager.close();
 	}
@@ -85,7 +85,7 @@ public class ControllerInativarProduto {
 			JOptionPane.showMessageDialog(null, "Produto inativado com sucesso!", "Produto inativado",
 					JOptionPane.INFORMATION_MESSAGE);
 
-			Janela_principal.lblAviso.setForeground(new Color(187, 187, 187));
+			Janela_principal.lblAvisoInativarProduto.setForeground(new Color(187, 187, 187));
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
 					"Ocorreu um erro ao inativar o produto.\nSe o erro persistir, entre em contato.",
@@ -104,6 +104,6 @@ public class ControllerInativarProduto {
 		btnResetar.setEnabled(false);
 		tfId.setEnabled(true);
 		btnInativar.setEnabled(false);
-		Janela_principal.lblAviso.setForeground(new Color(187, 187, 187));
+		Janela_principal.lblAvisoInativarProduto.setForeground(new Color(187, 187, 187));
 	}
 }

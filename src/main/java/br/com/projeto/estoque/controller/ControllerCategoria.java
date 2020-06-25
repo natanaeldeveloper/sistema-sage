@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import br.com.projeto.estoque.model.Categoria;
@@ -14,7 +15,8 @@ public class ControllerCategoria {
 	private static EntityManager manager;
 
 	// Método para cadastrar novas categorias
-	public Categoria criarCategoria(String nome, String descricao) {
+	@SuppressWarnings("rawtypes")
+	public Categoria criarCategoria(String nome, String descricao, JComboBox cbCategoriaGrupo) {
 		manager = new JPAUtil().getEntityManager();
 
 		Categoria categoria = new Categoria();
@@ -26,6 +28,7 @@ public class ControllerCategoria {
 			manager.persist(categoria);
 			manager.getTransaction().commit();
 
+			cbCategoriaGrupo.addItem(categoria.getNome());
 			JOptionPane.showMessageDialog(null, "Categoria cadastrada com sucesso!", "Categoria criada",
 					JOptionPane.INFORMATION_MESSAGE);
 			ControllerValidationCategoria.categoriaCriada = true;

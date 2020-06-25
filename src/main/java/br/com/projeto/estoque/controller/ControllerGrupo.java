@@ -1,5 +1,6 @@
 package br.com.projeto.estoque.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -50,7 +51,8 @@ public class ControllerGrupo {
 				JOptionPane.INFORMATION_MESSAGE);
 		ControllerValidationGrupo.grupoCadastrado = true;
 
-		// Depois de o grupo ser cadastrado, ele é adicionado na JComboBox da view de CadastrarProdutos
+		// Depois de o grupo ser cadastrado, ele é adicionado na JComboBox da view de
+		// CadastrarProdutos
 		comboBoxGrupos[0].addItem(grupo.getNome());
 		comboBoxGrupos[1].addItem(grupo.getNome());
 		comboBoxGrupos[2].addItem(grupo.getNome());
@@ -122,5 +124,44 @@ public class ControllerGrupo {
 			}
 		}
 		return true;
+	}
+
+	public static boolean problemasNoEstoque() {
+		List<String> estoquesPrecarios = new ArrayList();
+		List<String> estoquesCheios = new ArrayList();
+
+		for (Grupo grupo : listarGrupos()) {
+			if (grupo.getSubtotal() < grupo.getQtdMinima()) {
+
+				estoquesPrecarios.add("ID: " + grupo.getId() + " - Quantidade atual: " + grupo.getSubtotal()
+						+ " - Quantidade mínima: " + grupo.getQtdMinima() + "\n");
+			}
+
+			if (grupo.getSubtotal() == grupo.getQtdMaxima()) {
+				estoquesCheios.add(("ID: " + grupo.getId() + " - Quantidade atual: " + grupo.getSubtotal()
+						+ " - Quantidade máxima: " + grupo.getQtdMaxima() + "\n"));
+			}
+		}
+
+		if (estoquesPrecarios.size() > 0 || estoquesCheios.size() > 0) {
+			if (estoquesPrecarios.size() > 0) {
+				JOptionPane.showMessageDialog(null,
+						"Grupos com estoque abaixo do mínimo:\n\n" + estoquesPrecarios.toString().replace("[", " ")
+								.replace(",", "").replace("]", "\nReabasteça-os assim que possível!"),
+						"Estoques escassos", JOptionPane.WARNING_MESSAGE);
+			}
+
+			if (estoquesCheios.size() > 0) {
+				JOptionPane.showMessageDialog(null,
+						"Grupos com estoque lotado:\n\n" + estoquesCheios.toString().replace("[", " ").replace(",", "")
+								.replace("]", "\nCuidado para a mercadoria não naufragar!"),
+						"Estoques cheios", JOptionPane.WARNING_MESSAGE);
+			}
+
+			return true;
+		}
+
+		JOptionPane.showMessageDialog(null, "Tudo em dia!", "Grupos em dia", JOptionPane.INFORMATION_MESSAGE);
+		return false;
 	}
 }

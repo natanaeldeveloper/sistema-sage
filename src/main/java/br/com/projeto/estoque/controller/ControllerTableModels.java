@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -122,21 +121,31 @@ public class ControllerTableModels {
 		tableModel.addColumn("ID:");
 		tableModel.addColumn("Data:");
 		tableModel.addColumn("Descrição:");
-		tableModel.addColumn("Quantidade Movimentada:");
 		tableModel.addColumn("Tipo de Movimentação:");
+		tableModel.addColumn("Quantidade Movimentada:");
 		tableModel.addColumn("Fornecedor:");
 		tableModel.addColumn("Grupo do Produto:");
 
 		List<Movimentacao> listaTabela = ControllerMovimentacao.listarMovimentacoes();
+
+		// Os três "if"s são para popular as movimentações de formas diferentes caso
+		// elas sejam normais, sejam de um Fornecedor que foi inativado ou sejam do tipo
+		// SAÍDA, onde o Fornecedor é NULO
 		for (Movimentacao movimentacao : listaTabela) {
-			if (movimentacao.getFornecedor().getStatus() == Status.ATIVO) {
+			if (movimentacao.getFornecedor() != null && movimentacao.getFornecedor().getStatus() == Status.ATIVO) {
 				tableModel.addRow(new Object[] { movimentacao.getId(), dateFormat.format(movimentacao.getData()),
-						movimentacao.getDescricao(), movimentacao.getQtdProduto(), movimentacao.getTipoMovimentacao(),
+						movimentacao.getDescricao(), movimentacao.getTipoMovimentacao(), movimentacao.getQtdProduto(),
 						movimentacao.getFornecedor().getNome(), movimentacao.getProduto().getGrupo().getNome() });
-			} else {
+			} else if (movimentacao.getFornecedor() != null
+					&& movimentacao.getFornecedor().getStatus() == Status.INATIVO) {
 				tableModel.addRow(new Object[] { "*" + movimentacao.getId(), dateFormat.format(movimentacao.getData()),
-						movimentacao.getDescricao(), movimentacao.getQtdProduto(), movimentacao.getTipoMovimentacao(),
-						movimentacao.getFornecedor().getNome() + " - inativado", movimentacao.getProduto().getGrupo().getNome() });
+						movimentacao.getDescricao(), movimentacao.getTipoMovimentacao(), movimentacao.getQtdProduto(),
+						movimentacao.getFornecedor().getNome() + " - inativado",
+						movimentacao.getProduto().getGrupo().getNome() });
+			} else if (movimentacao.getFornecedor() == null) {
+				tableModel.addRow(new Object[] { movimentacao.getId(), dateFormat.format(movimentacao.getData()),
+						movimentacao.getDescricao(), movimentacao.getTipoMovimentacao(), movimentacao.getQtdProduto(),
+						"*", movimentacao.getProduto().getGrupo().getNome() });
 			}
 		}
 

@@ -1,6 +1,5 @@
 ﻿package br.com.projeto.estoque.controller;
 
-import java.awt.Color;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +25,8 @@ import com.toedter.calendar.JDateChooser;
 import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.model.Fornecedor;
 import br.com.projeto.estoque.model.Grupo;
+import br.com.projeto.estoque.model.Produto;
+import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
 import br.com.projeto.estoque.util.SupervisorAtual;
@@ -137,36 +138,52 @@ public class ControllerAuxiliar {
 	// Preenche os campos das views de Cadastrar e Atualizar Produtos, baseado no
 	// grupo escolhido
 	public static void preencherCamposGrupo(JComboBox cbGrupo, JTextField tfNome, JTextField tfCodigo,
-			JTextField tfSubtotal, JTextField tfQtdMax) {
+			JTextField tfQtdMin, JTextField tfSubtotal, JTextField tfQtdMax) {
 		manager = new JPAUtil().getEntityManager();
+
 		Query query = manager.createQuery("select g from Grupo g where g.nome=:nomeGrupo");
 		query.setParameter("nomeGrupo", cbGrupo.getSelectedItem().toString());
 		Grupo grupo = (Grupo) query.getSingleResult();
 		tfNome.setText(grupo.getNome());
 		tfCodigo.setText(grupo.getCodigo());
+		tfQtdMin.setText(grupo.getQtdMinima() + "");
 		tfSubtotal.setText(grupo.getSubtotal() + "");
 		tfQtdMax.setText(grupo.getQtdMaxima() + "");
 
-		if (grupo.getSubtotal() < grupo.getQtdMinima()) {
-			tfSubtotal.setForeground(Color.RED);
-			tfQtdMax.setForeground(new Color(187, 187, 187));
-		} else if (grupo.getSubtotal() == grupo.getQtdMaxima()) {
-			tfSubtotal.setForeground(Color.YELLOW);
-			tfQtdMax.setForeground(Color.YELLOW);
-		} else {
-			tfSubtotal.setForeground(new Color(187, 187, 187));
-			tfQtdMax.setForeground(new Color(187, 187, 187));
-		}
+		manager.close();
+	}
+
+	// Preenche os campos do Produto e seu Grupo na view de Movimentação
+	public static void preencherCamposProdutoEGrupo(JComboBox cbProduto, JTextField tfQtdAtual, JTextField tfQtdMin,
+			JTextField tfSubtotal, JTextField tfQtdMax) {
+
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select p from Produto p where p.descricao=:descricaoProduto");
+		query.setParameter("descricaoProduto", cbProduto.getSelectedItem().toString());
+		Produto produto = (Produto) query.getSingleResult();
+		tfQtdAtual.setText(produto.getQuantidade() + "");
+		tfQtdMin.setText(produto.getGrupo().getQtdMinima() + "");
+		tfSubtotal.setText(produto.getGrupo().getSubtotal() + "");
+		tfQtdMax.setText(produto.getGrupo().getQtdMaxima() + "");
 		manager.close();
 	}
 
 	// Esse método reseta todos os campos referentes ao grupo. É chamado quando o
 	// usuário não seleciona nenhum grupo nas telas de Cadastrar e Atualizar
 	// Produtos
-	public static void resetarCamposGrupoProduto(JTextField tfNome, JTextField tfCodigo, JTextField tfSubtotal,
-			JTextField tfQtdMax) {
+	public static void resetarCamposGrupoProduto(JTextField tfNome, JTextField tfCodigo, JTextField tfQtdMin,
+			JTextField tfSubtotal, JTextField tfQtdMax) {
 		tfNome.setText("");
 		tfCodigo.setText("");
+		tfQtdMin.setText("");
+		tfSubtotal.setText("");
+		tfQtdMax.setText("");
+	}
+
+	public static void resetarCamposProdutoEGrupo(JTextField tfQtdAtual, JTextField tfQtdMin, JTextField tfSubtotal,
+			JTextField tfQtdMax) {
+		tfQtdAtual.setText("");
+		tfQtdMin.setText("");
 		tfSubtotal.setText("");
 		tfQtdMax.setText("");
 	}
@@ -236,10 +253,25 @@ public class ControllerAuxiliar {
 	// Preenche os Fornecedores de uma JComboBox
 	public static List<String> preencherFornecedores() {
 		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Fornecedor f order by f.id");
+		Query query = manager.createQuery("select nome from Fornecedor f where f.status = :fAtivo order by f.id");
+		query.setParameter("fAtivo", Status.ATIVO);
 		List<String> fornecedores = query.getResultList();
 		manager.close();
 		return fornecedores;
+	}
+
+	// Pega o ID do Produto de uma JComboBox
+	public static Integer pegarIdProdutoSelecionado(JComboBox cbProduto) {
+		manager = new JPAUtil().getEntityManager();
+		Integer idProduto = 0;
+		Query query = manager.createQuery("select p from Produto p where p.descricao=:descricaoProduto");
+		query.setParameter("descricaoProduto", cbProduto.getSelectedItem());
+		List<Produto> produtos = query.getResultList();
+		for (Produto produto : produtos) {
+			idProduto = produto.getId();
+		}
+		manager.close();
+		return idProduto;
 	}
 
 	// Pega o ID da Categoria de uma JComboBox
@@ -305,8 +337,8 @@ public class ControllerAuxiliar {
 	public static void repopularFornecedores(JComboBox cbFornecedor) {
 		cbFornecedor.removeAllItems();
 
-		for (String fornecedor : ControllerAuxiliar.preencherFornecedores()) {
-			cbFornecedor.addItem(fornecedor);
+		for (Fornecedor fornecedor : ControllerFornecedor.listarApenasFornecedoresAtivos()) {
+			cbFornecedor.addItem(fornecedor.getNome());
 		}
 	}
 

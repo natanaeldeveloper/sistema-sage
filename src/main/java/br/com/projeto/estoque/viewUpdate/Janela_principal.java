@@ -28,7 +28,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
@@ -57,6 +56,7 @@ import br.com.projeto.estoque.controller.ControllerAtualizarFornecedor;
 import br.com.projeto.estoque.controller.ControllerAtualizarProduto;
 import br.com.projeto.estoque.controller.ControllerAuxiliar;
 import br.com.projeto.estoque.controller.ControllerGlobal;
+import br.com.projeto.estoque.controller.ControllerGrupo;
 import br.com.projeto.estoque.controller.ControllerInativarFornecedor;
 import br.com.projeto.estoque.controller.ControllerInativarProduto;
 import br.com.projeto.estoque.controller.ControllerMovimentacao;
@@ -68,6 +68,8 @@ import br.com.projeto.estoque.controller.ControllerValidationCategoria;
 import br.com.projeto.estoque.controller.ControllerValidationFornecedor;
 import br.com.projeto.estoque.controller.ControllerValidationGrupo;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowEvent;
 
 @SuppressWarnings({ "deprecation", "unchecked", "rawtypes" })
 public class Janela_principal extends JFrame {
@@ -199,7 +201,8 @@ public class Janela_principal extends JFrame {
 
 	private String[] unidades = new String[] { "mg", "g", "kg", "m", "mL", "L" };
 
-	public static JLabel lblAviso;
+	public static JLabel lblAvisoInativarProduto;
+	public static JLabel lblAvisoInativarFornecedor;
 
 	JLabel usuario_atual_atualizar_gerente = new JLabel("");
 	JLabel usuario_atual_deletarSupervisor = new JLabel("");
@@ -216,15 +219,27 @@ public class Janela_principal extends JFrame {
 	JMenuItem menuItemNovoRelatorio;
 	private JTextField tfNomeCadastrarGrupo;
 	private JTextField tfSubtotal;
-	private JTextField tfQtdMax;
+	private JTextField tfQtdMaxCadastrarProduto;
 	private JTextField tfSubtotalAtualizar;
 	private JTextField tfQtdMaxAtualizar;
 	private JTextField tfNomeCadastrarCategoria;
 	private JTextField tfQtdMinCadastrarGrupo;
 	private JTextField tfQtdMaxCadastrarGrupo;
 	private JTextField tfRazaoSocialInativarFornecedor;
+	private JTextField tfQtdMinCadastrarProduto;
+	private JTextField tfQtdMinAtualizarProduto;
+	private JTextField tfQtdMinInativar;
+	private JTextField tfSubtotalInativar;
+	private JTextField tfQtdMaxInativar;
 
 	public Janela_principal() {
+		addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent e) {
+			}
+
+			public void windowLostFocus(WindowEvent e) {
+			}
+		});
 		ctrlAux.setarLoginUsuarioAtual_na_telaPrincipal(usuario_atual_cadastrarSupervisor,
 				usuario_atual_atualizar_gerente, usuario_atual_deletarSupervisor);
 
@@ -232,11 +247,6 @@ public class Janela_principal extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1216, 603);
-
-		if (ControllerProduto.estoquePrecario) {
-			JOptionPane.showMessageDialog(null, "Existe um ou mais Grupos com a capacidade abaixo do limite mínimo!",
-					"Produtos escassos", JOptionPane.WARNING_MESSAGE);
-		}
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -358,6 +368,39 @@ public class Janela_principal extends JFrame {
 		JMenuItem menuItemBtnSair = new JMenuItem("Sair");
 
 		menuDefinicoes.add(menuItemBtnSair);
+
+		JMenu menuUtilidades = new JMenu("Utilidades");
+		menuUtilidades.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		menuBar.add(menuUtilidades);
+
+		JMenuItem menuChecarVencimento = new JMenuItem("Checar vencimento de Produtos");
+		menuChecarVencimento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerProduto.checarVencimento();
+			}
+		});
+		menuUtilidades.add(menuChecarVencimento);
+
+		JMenuItem menuChecarEstoque = new JMenuItem("Checar estoque dos Grupos");
+		menuChecarEstoque.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerGrupo.problemasNoEstoque();
+			}
+		});
+		menuUtilidades.add(menuChecarEstoque);
+
+		JMenu menuMovimentacoes = new JMenu("Movimentações");
+		menuMovimentacoes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		menuBar.add(menuMovimentacoes);
+
+		JMenuItem menuItemMovimentar = new JMenuItem("Movimentar produtos");
+		menuItemMovimentar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Janela_movimentacao jme = new Janela_movimentacao();
+				jme.setVisible(true);
+			}
+		});
+		menuMovimentacoes.add(menuItemMovimentar);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -1079,6 +1122,14 @@ public class Janela_principal extends JFrame {
 		btnResetarInativarFornecedor.setBounds(295, 35, 86, 25);
 		painelInativarFornecedor.add(btnResetarInativarFornecedor);
 
+		lblAvisoInativarFornecedor = new JLabel(
+				"*Uma vez inativado, o Fornecedor não pode mais ser reutilizado ou alterado.");
+		lblAvisoInativarFornecedor.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAvisoInativarFornecedor.setForeground(new Color(187, 187, 187));
+		lblAvisoInativarFornecedor.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblAvisoInativarFornecedor.setBounds(20, 415, 459, 20);
+		painelInativarFornecedor.add(lblAvisoInativarFornecedor);
+
 		JPanel painelAreaProduto = new JPanel();
 		tabbedPane_area.addTab("Área do Produto", null, painelAreaProduto, null);
 		painelAreaProduto.setLayout(null);
@@ -1230,20 +1281,27 @@ public class Janela_principal extends JFrame {
 		tfSubtotal.setHorizontalAlignment(SwingConstants.CENTER);
 		tfSubtotal.setEditable(false);
 		tfSubtotal.setColumns(10);
-		tfSubtotal.setBounds(371, 34, 76, 24);
+		tfSubtotal.setBounds(381, 35, 76, 24);
 		painelCadastrarProduto.add(tfSubtotal);
 
-		JLabel lblSubtotalQuantidade = new JLabel("Subtotal / Quantidade máxima do grupo");
-		lblSubtotalQuantidade.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSubtotalQuantidade.setBounds(308, 11, 295, 20);
-		painelCadastrarProduto.add(lblSubtotalQuantidade);
+		JLabel lblSubtotalQuantidades = new JLabel("Quantidade mínima / Subtotal / Quantidade máxima");
+		lblSubtotalQuantidades.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSubtotalQuantidades.setBounds(259, 11, 320, 20);
+		painelCadastrarProduto.add(lblSubtotalQuantidades);
 
-		tfQtdMax = new JTextField();
-		tfQtdMax.setHorizontalAlignment(SwingConstants.CENTER);
-		tfQtdMax.setEditable(false);
-		tfQtdMax.setColumns(10);
-		tfQtdMax.setBounds(469, 34, 76, 24);
-		painelCadastrarProduto.add(tfQtdMax);
+		tfQtdMaxCadastrarProduto = new JTextField();
+		tfQtdMaxCadastrarProduto.setHorizontalAlignment(SwingConstants.CENTER);
+		tfQtdMaxCadastrarProduto.setEditable(false);
+		tfQtdMaxCadastrarProduto.setColumns(10);
+		tfQtdMaxCadastrarProduto.setBounds(469, 35, 76, 24);
+		painelCadastrarProduto.add(tfQtdMaxCadastrarProduto);
+
+		tfQtdMinCadastrarProduto = new JTextField();
+		tfQtdMinCadastrarProduto.setHorizontalAlignment(SwingConstants.CENTER);
+		tfQtdMinCadastrarProduto.setEditable(false);
+		tfQtdMinCadastrarProduto.setColumns(10);
+		tfQtdMinCadastrarProduto.setBounds(293, 35, 76, 24);
+		painelCadastrarProduto.add(tfQtdMinCadastrarProduto);
 
 		// ADICIONAR CAMPOS DE ALTERAR PRODUTO NESSE PANEL
 		JPanel painelAtualizarProduto = new JPanel();
@@ -1379,17 +1437,17 @@ public class Janela_principal extends JFrame {
 		btnResetarAtualizarProduto.setBounds(306, 35, 77, 25);
 		painelAtualizarProduto.add(btnResetarAtualizarProduto);
 
-		JLabel label_4 = new JLabel("Subtotal / Quantidade máxima do grupo");
-		label_4.setHorizontalAlignment(SwingConstants.CENTER);
-		label_4.setBounds(306, 305, 295, 20);
-		painelAtualizarProduto.add(label_4);
+		JLabel lblQuantidadeMnima = new JLabel("Quantidade mínima / Subtotal / Quantidade máxima");
+		lblQuantidadeMnima.setHorizontalAlignment(SwingConstants.CENTER);
+		lblQuantidadeMnima.setBounds(270, 305, 295, 20);
+		painelAtualizarProduto.add(lblQuantidadeMnima);
 
 		tfSubtotalAtualizar = new JTextField();
 		tfSubtotalAtualizar.setHorizontalAlignment(SwingConstants.CENTER);
 		tfSubtotalAtualizar.setEnabled(false);
 		tfSubtotalAtualizar.setEditable(false);
 		tfSubtotalAtualizar.setColumns(10);
-		tfSubtotalAtualizar.setBounds(369, 328, 76, 24);
+		tfSubtotalAtualizar.setBounds(379, 328, 76, 24);
 		painelAtualizarProduto.add(tfSubtotalAtualizar);
 
 		tfQtdMaxAtualizar = new JTextField();
@@ -1399,6 +1457,14 @@ public class Janela_principal extends JFrame {
 		tfQtdMaxAtualizar.setColumns(10);
 		tfQtdMaxAtualizar.setBounds(467, 328, 76, 24);
 		painelAtualizarProduto.add(tfQtdMaxAtualizar);
+
+		tfQtdMinAtualizarProduto = new JTextField();
+		tfQtdMinAtualizarProduto.setHorizontalAlignment(SwingConstants.CENTER);
+		tfQtdMinAtualizarProduto.setEnabled(false);
+		tfQtdMinAtualizarProduto.setEditable(false);
+		tfQtdMinAtualizarProduto.setColumns(10);
+		tfQtdMinAtualizarProduto.setBounds(291, 328, 76, 24);
+		painelAtualizarProduto.add(tfQtdMinAtualizarProduto);
 
 		// ADICIONAR CAMPOS DE DELETAR PRODUTO NESSE PANEL
 		JPanel painelInativarProduto = new JPanel();
@@ -1539,11 +1605,37 @@ public class Janela_principal extends JFrame {
 		btnInativarProduto.setBounds(504, 403, 99, 34);
 		painelInativarProduto.add(btnInativarProduto);
 
-		lblAviso = new JLabel("*Uma vez inativado, o Produto não pode mais ser reutilizado ou alterado.");
-		lblAviso.setForeground(new Color(187, 187, 187));
-		lblAviso.setFont(new Font("Dialog", Font.BOLD, 12));
-		lblAviso.setBounds(61, 410, 418, 20);
-		painelInativarProduto.add(lblAviso);
+		lblAvisoInativarProduto = new JLabel(
+				"*Uma vez inativado, o Produto não pode mais ser reutilizado ou alterado.");
+		lblAvisoInativarProduto.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAvisoInativarProduto.setForeground(new Color(187, 187, 187));
+		lblAvisoInativarProduto.setFont(new Font("Dialog", Font.BOLD, 12));
+		lblAvisoInativarProduto.setBounds(20, 410, 459, 20);
+		painelInativarProduto.add(lblAvisoInativarProduto);
+
+		tfQtdMinInativar = new JTextField();
+		tfQtdMinInativar.setHorizontalAlignment(SwingConstants.CENTER);
+		tfQtdMinInativar.setEditable(false);
+		tfQtdMinInativar.setColumns(10);
+		tfQtdMinInativar.setBounds(61, 304, 76, 24);
+		painelInativarProduto.add(tfQtdMinInativar);
+		tfQtdMinInativar.setVisible(false);
+
+		tfSubtotalInativar = new JTextField();
+		tfSubtotalInativar.setHorizontalAlignment(SwingConstants.CENTER);
+		tfSubtotalInativar.setEditable(false);
+		tfSubtotalInativar.setColumns(10);
+		tfSubtotalInativar.setBounds(149, 304, 76, 24);
+		painelInativarProduto.add(tfSubtotalInativar);
+		tfSubtotalInativar.setVisible(false);
+
+		tfQtdMaxInativar = new JTextField();
+		tfQtdMaxInativar.setHorizontalAlignment(SwingConstants.CENTER);
+		tfQtdMaxInativar.setEditable(false);
+		tfQtdMaxInativar.setColumns(10);
+		tfQtdMaxInativar.setBounds(237, 304, 76, 24);
+		painelInativarProduto.add(tfQtdMaxInativar);
+		tfQtdMaxInativar.setVisible(false);
 
 		JPanel painelAreaGruposECategorias = new JPanel();
 		tabbedPane_area.addTab("Grupos e Categorias", null, painelAreaGruposECategorias, null);
@@ -1773,10 +1865,10 @@ public class Janela_principal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (cbGrupoCadastrarProduto.getSelectedIndex() != 0) {
 					ControllerAuxiliar.preencherCamposGrupo(cbGrupoCadastrarProduto, tfNomeGrupoCadastrar,
-							tfCodigoGrupoCadastrar, tfSubtotal, tfQtdMax);
+							tfCodigoGrupoCadastrar, tfQtdMinCadastrarProduto, tfSubtotal, tfQtdMaxCadastrarProduto);
 				} else {
 					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoCadastrar, tfCodigoGrupoCadastrar,
-							tfSubtotal, tfQtdMax);
+							tfQtdMinCadastrarProduto, tfSubtotal, tfQtdMaxCadastrarProduto);
 				}
 			}
 		});
@@ -1824,10 +1916,10 @@ public class Janela_principal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (cbGrupoAtualizar.getSelectedIndex() != 0) {
 					ControllerAuxiliar.preencherCamposGrupo(cbGrupoAtualizar, tfNomeGrupoAtualizar,
-							tfCodigoGrupoAtualizar, tfSubtotalAtualizar, tfQtdMaxAtualizar);
+							tfCodigoGrupoAtualizar, tfQtdMinAtualizarProduto, tfSubtotalAtualizar, tfQtdMaxAtualizar);
 				} else {
 					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoAtualizar, tfCodigoGrupoAtualizar,
-							tfSubtotalAtualizar, tfQtdMaxAtualizar);
+							tfQtdMinAtualizarProduto, tfSubtotalAtualizar, tfQtdMaxAtualizar);
 				}
 			}
 		});
@@ -1861,8 +1953,8 @@ public class Janela_principal extends JFrame {
 				cap.desabilitarAtualizacao(btnBuscarProduto, btnResetarAtualizarProduto, tfIdAtualizarProduto,
 						tfPrecoAtualizarProduto, spQuantidadeAtualizarProduto, epDescricaoAtualizarProduto,
 						cbGrupoAtualizar, tfMedidaAtualizarProduto, cbUnidadeAtualizarProduto,
-						dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto, tfSubtotal, tfQtdMax,
-						btnLimparAtualizarProduto, btnAtualizarProduto);
+						dcFabricacaoAtualizarProduto, dcVencimentoAtualizarProduto, tfSubtotal,
+						tfQtdMaxCadastrarProduto, btnLimparAtualizarProduto, btnAtualizarProduto);
 			}
 		});
 
@@ -1891,10 +1983,10 @@ public class Janela_principal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (cbGrupoInativar.getSelectedIndex() != 0) {
 					ControllerAuxiliar.preencherCamposGrupo(cbGrupoInativar, tfNomeGrupoInativar, tfCodigoGrupoInativar,
-							tfSubtotalAtualizar, tfQtdMaxAtualizar);
+							tfQtdMinInativar, tfSubtotalInativar, tfQtdMaxInativar);
 				} else {
 					ControllerAuxiliar.resetarCamposGrupoProduto(tfNomeGrupoInativar, tfCodigoGrupoInativar,
-							tfSubtotalAtualizar, tfQtdMaxAtualizar);
+							tfQtdMinInativar, tfSubtotalInativar, tfQtdMaxInativar);
 				}
 			}
 		});
@@ -2052,7 +2144,8 @@ public class Janela_principal extends JFrame {
 		btnCadastrarCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ControllerValidationCategoria cvc = new ControllerValidationCategoria();
-				cvc.cadastrarCategoria(tfNomeCadastrarCategoria, epDescricaoCadastrarCategoria);
+				cvc.cadastrarCategoria(tfNomeCadastrarCategoria, epDescricaoCadastrarCategoria,
+						cbCategoriaCadastrarGrupo);
 			}
 		});
 

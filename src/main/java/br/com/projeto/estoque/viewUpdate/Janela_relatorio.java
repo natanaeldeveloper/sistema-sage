@@ -1,7 +1,6 @@
 package br.com.projeto.estoque.viewUpdate;
 
 import java.awt.Cursor;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,19 +25,6 @@ public class Janela_relatorio extends JFrame {
 	private JPanel contentPane;
 	private JTextField nome;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Janela_relatorio frame = new Janela_relatorio();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	@SuppressWarnings("unchecked")
 	public Janela_relatorio() {
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -48,6 +34,7 @@ public class Janela_relatorio extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setResizable(false);
 		contentPane.setLayout(null);
 
 		JButton gerar = new JButton("Gerar");
