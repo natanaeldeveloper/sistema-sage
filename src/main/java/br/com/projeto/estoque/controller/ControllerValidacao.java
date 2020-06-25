@@ -13,12 +13,10 @@ public class ControllerValidacao {
 
 	public boolean evitarValorVazio(JFormattedTextField campo, int id) {
 		if (StringUtils.isBlank(campo.getText())) {
-			Aviso.avisar(9);
 			return false;
 		} else {
 			id = Integer.valueOf(campo.getText());
 			if (id == 0) {
-				Aviso.avisar(9);
 				return false;
 			} else {
 				return true;
@@ -62,11 +60,15 @@ public class ControllerValidacao {
 
 	
 	public boolean validarConfirmacaoGerente(String cpf, String senha) {
+		try {
 		if (cpf.equals(GerenteAtual.getGerente().getCpf())
 				&& Criptografar.encriptografar(senha).equals(GerenteAtual.getGerente().getSenha())) {
 			return true;
 		} else {
 			Aviso.avisar(2);
+			return false;
+		}
+		}catch(NullPointerException e) {
 			return false;
 		}
 	}

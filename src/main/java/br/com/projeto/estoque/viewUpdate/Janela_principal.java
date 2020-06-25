@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,8 +16,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.text.ParseException;
 import java.util.List;
 
@@ -84,6 +86,7 @@ public class Janela_principal extends JFrame {
 
 	@SuppressWarnings("unused")
 	private ControllerTableModels ctb;
+	JMenuItem menuItemBtnSair = new JMenuItem("Sair");
 
 	// CAMPOS DO PAINEL DE DELEÇÃO DO SUPERVISOR
 	private JFormattedTextField cpf_usuarioAtual_deleteSupervisor;
@@ -257,23 +260,27 @@ public class Janela_principal extends JFrame {
 	}
 
 	public Janela_principal() {
-		addWindowFocusListener(new WindowFocusListener() {
-			public void windowGainedFocus(WindowEvent e) {
-			}
 
-			public void windowLostFocus(WindowEvent e) {
-			}
-		});
 		ctrlAux.setarLoginUsuarioAtual_na_telaPrincipal(usuario_atual_cadastrarSupervisor,
 				usuario_atual_atualizar_gerente, usuario_atual_deletarSupervisor);
 
 		setTitle("SAGE - Menu Principal");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1216, 603);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				ControllerGlobal controllerGlob = new ControllerGlobal();
+				controllerGlob.registrarSaidaUsuario();
+				Janela_login jlogin = new Janela_login();
+				jlogin.setVisible(true);
+				dispose();
+			}
+		});
 
 		JMenu menuRelatorio = new JMenu("Relatório");
 		menuRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -389,7 +396,6 @@ public class Janela_principal extends JFrame {
 		});
 		menuItemAlterarTema.add(temaDarker);
 
-		JMenuItem menuItemBtnSair = new JMenuItem("Sair");
 
 		menuDefinicoes.add(menuItemBtnSair);
 
@@ -556,18 +562,22 @@ public class Janela_principal extends JFrame {
 		JLabel lblPesquisarId = new JLabel("Pesquisar pelo ID:");
 		lblPesquisarId.setBounds(20, 42, 182, 25);
 		botao_atualizar_senha_AtualizacaoSupervisor.add(lblPesquisarId);
+
 		// lblPesquisarId.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
 
 		id_pesquisa_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-		id_pesquisa_supervisor_AtualizacaoSupervisor.setBounds(20, 69, 86, 25);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			id_pesquisa_supervisor_AtualizacaoSupervisor.setBounds(20, 69, 86, 25);
+		}
 		botao_atualizar_senha_AtualizacaoSupervisor.add(id_pesquisa_supervisor_AtualizacaoSupervisor);
 		id_pesquisa_supervisor_AtualizacaoSupervisor.setText("0");
 		id_pesquisa_supervisor_AtualizacaoSupervisor.setColumns(10);
 		// formattedTextField_1_2.setBackground(SystemColor.controlHighlight);
 
 		JButton buscar_supervisor_AtualizacaoSupervisor = new JButton("Buscar");
-
-		buscar_supervisor_AtualizacaoSupervisor.setBounds(116, 69, 86, 25);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			buscar_supervisor_AtualizacaoSupervisor.setBounds(116, 69, 86, 25);
+		}
 		botao_atualizar_senha_AtualizacaoSupervisor.add(buscar_supervisor_AtualizacaoSupervisor);
 		// passwordField.setBackground(SystemColor.controlHighlight);
 
@@ -595,6 +605,13 @@ public class Janela_principal extends JFrame {
 		login_atual_supervisor_AtualizacaoSupervisor.setEditable(false);
 		login_atual_supervisor_AtualizacaoSupervisor.setColumns(10);
 		login_atual_supervisor_AtualizacaoSupervisor.setBounds(20, 126, 253, 25);
+
+		if (ctrlPermissao.chamarVerificacao() == false) {
+			login_atual_supervisor_AtualizacaoSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
+			cpf_atual_supervisor_AtualizacaoSupervisor.setText("RESTRITO");
+			}
+
+
 		botao_atualizar_senha_AtualizacaoSupervisor.add(login_atual_supervisor_AtualizacaoSupervisor);
 
 		JLabel lblCpfAtual = new JLabel("CPF atual:");
@@ -747,7 +764,7 @@ public class Janela_principal extends JFrame {
 
 		if (ctrlPermissao.chamarVerificacao() == false) {
 			login_supervisor_deleteSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
-			login_supervisor_deleteSupervisor.setText(SupervisorAtual.getSupervisor().getCpf());
+			cpf_supervisor_deleteSupervisor.setText("RESTRITO");
 		}
 
 		botao_limpar_dados_deleteSupervisor.setBounds(383, 406, 105, 34);
@@ -2340,18 +2357,15 @@ public class Janela_principal extends JFrame {
 
 		btn_atualizar_senha_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (ctrlPermissao.chamarVerificacao() == true) {
-					if (ctrlSuper.atualizarSupervisorSenha(id_pesquisa_supervisor_AtualizacaoSupervisor,
-							nova_senha_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlSuper.atualizarSupervisorSenha(id_pesquisa_supervisor_AtualizacaoSupervisor,
+						nova_senha_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+						senha_gerente_AtualizacaoSupervisor) == true) {
 
-						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-								id_pesquisa_supervisor_AtualizacaoSupervisor,
-								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-								cpf_atual_supervisor_AtualizacaoSupervisor,
-								login_atual_supervisor_AtualizacaoSupervisor,
-								novo_login_supervisor_AtualizacaoSupervisor);
-					}
+					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
+							login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
+
 				}
 			}
 		});
@@ -2359,19 +2373,14 @@ public class Janela_principal extends JFrame {
 		// MÉTODO DE ATUALIZAÇÃO DO LOGIN DO SUPERVISOR
 		btn_atualizar_login_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (ctrlPermissao.chamarVerificacao() == true) {
-					if (ctrlSuper.atualizarSupervisorLogin(id_pesquisa_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlSuper.atualizarSupervisorLogin(id_pesquisa_supervisor_AtualizacaoSupervisor,
+						novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+						senha_gerente_AtualizacaoSupervisor) == true) {
 
-						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-								id_pesquisa_supervisor_AtualizacaoSupervisor,
-								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-								cpf_atual_supervisor_AtualizacaoSupervisor,
-								login_atual_supervisor_AtualizacaoSupervisor,
-								novo_login_supervisor_AtualizacaoSupervisor);
-					}
-
+					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
+							login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
 				}
 
 			}
@@ -2381,28 +2390,28 @@ public class Janela_principal extends JFrame {
 		btn_atualizar_tudo_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (ctrlPermissao.chamarVerificacao() == true) {
-					if (ctrlSuper.atualizarSupervisor(nova_senha_supervisor_AtualizacaoSupervisor.getText(),
-							id_pesquisa_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlSuper.atualizarSupervisor(nova_senha_supervisor_AtualizacaoSupervisor.getText(),
+						id_pesquisa_supervisor_AtualizacaoSupervisor,
+						novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+						senha_gerente_AtualizacaoSupervisor) == true) {
 
-						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-								id_pesquisa_supervisor_AtualizacaoSupervisor,
-								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-								cpf_atual_supervisor_AtualizacaoSupervisor,
-								login_atual_supervisor_AtualizacaoSupervisor,
-								novo_login_supervisor_AtualizacaoSupervisor);
-
-					}
+					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
+							login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
 
 				}
 			}
 		});
 
-		InputMap inputMap = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "forward");
-		this.getRootPane().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
+		
+		//ATALHO DE LIMPAR CAMPOS DE QUALQUER PAINEL
+		//ATALHO = F1
+		//Atalho para gerar relatório clicando na tecla F2
+		
+		InputMap inputMap_limpar = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap_limpar.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "forward");
+		this.getRootPane().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap_limpar);
 		this.getRootPane().getActionMap().put("forward", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 
@@ -2419,6 +2428,30 @@ public class Janela_principal extends JFrame {
 			}
 		});
 
+
+		KeyboardFocusManager
+        .getCurrentKeyboardFocusManager()
+        .addKeyEventDispatcher(new KeyEventDispatcher() {
+
+		@Override
+          public boolean dispatchKeyEvent(KeyEvent e) {
+            System.out.println(e);
+            if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F10) {
+            	menuItemBtnSair.doClick();
+              return true;
+            }else if (e.getID() == e.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F2) {
+            	menuItemNovoRelatorio.doClick();
+                return true;
+            }
+            return false;
+          }
+        });
+		
+		
+		
+
+		
+		
 		// MÉTODO DE REGISTRAR A SAÍDA DO USUÁRIO AO CLICAR NO BOTÃO DE SAIR
 
 		menuItemBtnSair.addActionListener(new ActionListener() {
@@ -2432,7 +2465,7 @@ public class Janela_principal extends JFrame {
 		});
 
 	}
-
+	
 	public class Atualizar extends Thread {
 		public void run() {
 			try {

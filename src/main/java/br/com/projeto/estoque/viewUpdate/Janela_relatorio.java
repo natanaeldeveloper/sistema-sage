@@ -2,8 +2,11 @@ package br.com.projeto.estoque.viewUpdate;
 
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -24,6 +27,7 @@ public class Janela_relatorio extends JFrame {
 	private JComboBox tipo;
 	private JPanel contentPane;
 	private JTextField nome;
+	private JButton gerar = new JButton("Gerar");
 
 	@SuppressWarnings("unchecked")
 	public Janela_relatorio() {
@@ -37,14 +41,14 @@ public class Janela_relatorio extends JFrame {
 		setResizable(false);
 		contentPane.setLayout(null);
 
-		JButton gerar = new JButton("Gerar");
+		
 		gerar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ControllerRelatorios cr = new ControllerRelatorios();
 				if (tipo.getSelectedIndex() == 0) {
 					cr.gerarRelatorioProdutos(nome.getText());
 				} else if (tipo.getSelectedIndex() == 1) {
-					cr.gerarRelatorioProdutos(nome.getText());
+					cr.gerarRelatorioMovimentacoes(nome.getText());
 				}
 			}
 		});
@@ -83,5 +87,7 @@ public class Janela_relatorio extends JFrame {
 		lblNewLabel_2.setBounds(274, 122, 41, 27);
 		contentPane.add(lblNewLabel_2);
 		setLocationRelativeTo(null);
+		
+		
 	}
 }
