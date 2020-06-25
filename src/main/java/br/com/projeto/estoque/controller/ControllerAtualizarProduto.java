@@ -15,18 +15,25 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 import br.com.projeto.estoque.model.Produto;
+import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.JPAUtil;
 
 @SuppressWarnings({ "rawtypes" })
 public class ControllerAtualizarProduto {
 	private static EntityManager manager;
 
+	protected static int atualizou = 0;
+
 	// Esse método busca o produto pelo ID inserido no JTextField
 	public void buscarProduto(JButton btnBuscar, JButton btnResetar, JTextField tfId, JFormattedTextField tfPreco,
 			JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo, JTextField tfMedida, JComboBox cbUnidade,
-			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JButton btnLimpar, JButton btnAtualizar) {
+			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JTextField tfSubtotal, JTextField tfQtdMax,
+			JButton btnLimpar, JButton btnAtualizar) {
+
 		manager = new JPAUtil().getEntityManager();
+
 		Integer idBuscado = null;
+
 		try {
 			idBuscado = Integer.parseInt(tfId.getText());
 		} catch (Exception e) {
@@ -35,12 +42,21 @@ public class ControllerAtualizarProduto {
 			tfId.transferFocus();
 			return;
 		}
+
 		Produto produto = manager.find(Produto.class, idBuscado);
+
 		// Se o EntityManager não encontrar nenhum Produto com esse ID, o programa para
 		// e exibe esse erro
 		if (produto == null) {
 			JOptionPane.showMessageDialog(null, "Esse registro não existe!", "Registro inexistente",
 					JOptionPane.ERROR_MESSAGE);
+			tfId.transferFocus();
+			return;
+			// Se o Produto estiver inativo, não será possível alterá-lo
+		} else if (produto.getStatus() == Status.INATIVO) {
+			JOptionPane.showMessageDialog(null, "Esse registro está inativo, portanto, não pode ser atualizado!",
+					"Registro inativo", JOptionPane.ERROR_MESSAGE);
+			tfId.transferFocus();
 			return;
 			// Se o Produto existir, os campos serão populados com seus dados
 		} else {
@@ -52,9 +68,12 @@ public class ControllerAtualizarProduto {
 			cbUnidade.setSelectedItem(produto.getUnidade());
 			dcDataFabricacao.setDate(produto.getDataFabricacao().getTime());
 			dcDataVencimento.setDate(produto.getDataVencimento().getTime());
+			tfSubtotal.setText(produto.getGrupo().getSubtotal() + "");
+			tfQtdMax.setText(produto.getGrupo().getQtdMaxima() + "");
+
 			tfId.setEnabled(false);
-			habilitarAtualizacao(btnBuscar, btnResetar, tfId, tfPreco, jsQuantidade, epDescricao, cbGrupo, tfMedida,
-					cbUnidade, dcDataFabricacao, dcDataVencimento, btnLimpar, btnAtualizar);
+			habilitarAtualizacao(btnBuscar, btnResetar, tfId, tfPreco, epDescricao, cbGrupo, tfMedida, cbUnidade,
+					dcDataFabricacao, dcDataVencimento, tfSubtotal, tfQtdMax, btnLimpar, btnAtualizar);
 		}
 		manager.close();
 	}
@@ -77,15 +96,6 @@ public class ControllerAtualizarProduto {
 				JOptionPane.showMessageDialog(null, "O preço inserido é inválido", "Preço inválido",
 						JOptionPane.ERROR_MESSAGE);
 				tfPreco.transferFocus();
-				return;
-			}
-
-			int quantidade = (Integer) jsQuantidade.getValue();
-
-			if (quantidade <= 0) {
-				JOptionPane.showMessageDialog(null, "A quantidade não pode ser nula ou negativa!",
-						"Quantidade inválida", JOptionPane.ERROR_MESSAGE);
-				jsQuantidade.transferFocus();
 				return;
 			}
 
@@ -114,14 +124,14 @@ public class ControllerAtualizarProduto {
 			try {
 				if (!ControllerAuxiliar.dataErrada(dcDataFabricacao, dcDataVencimento)) {
 					ControllerProduto cp = new ControllerProduto();
-					cp.atualizarProduto(idAtualizado, preco, quantidade, medida, unidade, descricao, dataFabricacao,
-							dataVencimento, idGrupo);
+					cp.atualizarProduto(idAtualizado, preco, medida, unidade, descricao, dataFabricacao, dataVencimento,
+							idGrupo);
 
-					JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso!", "Produto atualizado",
-							JOptionPane.INFORMATION_MESSAGE);
-
-					ControllerAuxiliar.resetarTodosOsCampos(tfPreco, jsQuantidade, epDescricao, dcDataFabricacao,
-							dcDataVencimento, cbGrupo, tfMedida, cbUnidade);
+					if (atualizou == 1) {
+						ControllerAuxiliar.resetarTodosOsCampos(tfPreco, jsQuantidade, epDescricao, dcDataFabricacao,
+								dcDataVencimento, cbGrupo, tfMedida, cbUnidade);
+						atualizou = 0;
+					}
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null,
@@ -138,20 +148,21 @@ public class ControllerAtualizarProduto {
 	public void desabilitarAtualizacao(JButton btnBuscar, JButton btnResetar, JTextField tfId,
 			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
 			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,
-			JButton btnLimpar, JButton btnAtualizar) {
+			JTextField tfSubtotal, JTextField tfQtdMax, JButton btnLimpar, JButton btnAtualizar) {
 		ControllerAuxiliar.resetarTodosOsCampos(tfPreco, jsQuantidade, epDescricao, dcDataFabricacao, dcDataVencimento,
 				cbGrupo, tfMedida, cbUnidade);
 		btnBuscar.setEnabled(true);
 		btnResetar.setEnabled(false);
 		tfId.setEnabled(true);
 		tfPreco.setEnabled(false);
-		jsQuantidade.setEnabled(false);
 		epDescricao.setEnabled(false);
 		cbGrupo.setEnabled(false);
 		tfMedida.setEnabled(false);
 		cbUnidade.setEnabled(false);
 		dcDataFabricacao.setEnabled(false);
 		dcDataVencimento.setEnabled(false);
+		tfSubtotal.setEnabled(false);
+		tfQtdMax.setEnabled(false);
 		btnLimpar.setEnabled(false);
 		btnAtualizar.setEnabled(false);
 	}
@@ -159,20 +170,21 @@ public class ControllerAtualizarProduto {
 	// Esse método habilita todos os campos, com excessão do de buscar e do de
 	// informar o ID, para atualizar o registro atual
 	public void habilitarAtualizacao(JButton btnBuscar, JButton btnResetar, JTextField tfId,
-			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
-			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,
-			JButton btnLimpar, JButton btnAtualizar) {
+			JFormattedTextField tfPreco, JEditorPane epDescricao, JComboBox cbGrupo, JTextField tfMedida,
+			JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento, JTextField tfSubtotal,
+			JTextField tfQtdMax, JButton btnLimpar, JButton btnAtualizar) {
 		btnBuscar.setEnabled(false);
 		btnResetar.setEnabled(true);
 		tfId.setEnabled(false);
 		tfPreco.setEnabled(true);
-		jsQuantidade.setEnabled(true);
 		epDescricao.setEnabled(true);
 		cbGrupo.setEnabled(true);
 		tfMedida.setEnabled(true);
 		cbUnidade.setEnabled(true);
 		dcDataFabricacao.setEnabled(true);
 		dcDataVencimento.setEnabled(true);
+		tfSubtotal.setEnabled(true);
+		tfQtdMax.setEnabled(true);
 		btnLimpar.setEnabled(true);
 		btnAtualizar.setEnabled(true);
 	}

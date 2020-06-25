@@ -103,7 +103,7 @@
 						<!-- DEFINE QUAL É A CLASSE MAIN DA APLICAÇÃO -->
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>br.com.projeto.estoque.view.Janela_conexao</mainClass>
+							<mainClass>br.com.projeto.estoque.viewUpdate.Janela_inicial</mainClass>
 						</manifest>
 					</archive>
 

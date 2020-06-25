@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import br.com.projeto.estoque.util.Aviso;
 import br.com.projeto.estoque.util.Criptografar;
 import br.com.projeto.estoque.util.GerenteAtual;
+import br.com.projeto.estoque.util.SupervisorAtual;
 
 public class ControllerValidacao {
 
@@ -63,6 +64,16 @@ public class ControllerValidacao {
 	public boolean validarConfirmacaoGerente(String cpf, String senha) {
 		if (cpf.equals(GerenteAtual.getGerente().getCpf())
 				&& Criptografar.encriptografar(senha).equals(GerenteAtual.getGerente().getSenha())) {
+			return true;
+		} else {
+			Aviso.avisar(2);
+			return false;
+		}
+	}
+	
+	public boolean validarConfirmacaoSupervisor(String cpf, String senha) {
+		if (cpf.equals(SupervisorAtual.getSupervisor().getCpf())
+				&& Criptografar.encriptografar(senha).equals(SupervisorAtual.getSupervisor().getSenha())) {
 			return true;
 		} else {
 			Aviso.avisar(2);

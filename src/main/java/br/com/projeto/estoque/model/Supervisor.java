@@ -18,6 +18,8 @@ import org.hibernate.annotations.NamedQuery;
 //busca todos os supervisores ativos
 @NamedQuery(name = "supervisores", query = "select s from Supervisor s where s.status='ATIVO'")
 @NamedQuery(name = "buscarSupervisorLogin", query = "select s from Supervisor s where s.login=:Slogin")
+//busca todos os supervisores ativos pelo login
+@NamedQuery(name = "buscarSupervisorAtivoLogin", query = "select s from Supervisor s where s.login=:Slogin and s.status='ATIVO'")
 //busca supervisor pelo cpf (qualquer supervisor)
 @NamedQuery(name = "buscarSupervisorComCpf", query = "select s from Supervisor s where s.cpf=:Scpf")
 @Entity

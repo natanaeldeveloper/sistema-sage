@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 import br.com.projeto.estoque.model.Endereco;
 import br.com.projeto.estoque.model.Fornecedor;
@@ -14,7 +15,7 @@ import br.com.projeto.estoque.util.JPAUtil;
 public class ControllerFornecedor {
 	private static EntityManager manager;
 
-	//Método para criar fornecedores
+	// Método para criar fornecedores
 	public Fornecedor criarFornecedor(String nome, String cnpj, String razaoSocial, String telefone, String email,
 			Endereco endereco) {
 		manager = new JPAUtil().getEntityManager();
@@ -23,11 +24,11 @@ public class ControllerFornecedor {
 		fornecedor.setCnpj(cnpj);
 		fornecedor.setNome(nome);
 		fornecedor.setEmail(email);
-		//O endereço precisa ser criado previamente
+		// O endereço precisa ser criado previamente
 		fornecedor.setEndereco(endereco);
 		fornecedor.setRazaoSocial(razaoSocial);
 		fornecedor.setTelefone(telefone);
-		//Quando um fornecedor é cadastrado no banco, ele já entra definido como ATIVO
+		// Quando um fornecedor é cadastrado no banco, ele já entra definido como ATIVO
 		fornecedor.setStatus(Status.ATIVO);
 
 		manager.getTransaction().begin();
@@ -42,6 +43,16 @@ public class ControllerFornecedor {
 	public static List<Fornecedor> listarFornecedores() {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select f from Fornecedor f");
+		List<Fornecedor> fornecedores = query.getResultList();
+		manager.close();
+		return fornecedores;
+	}
+
+	// Método para listar os Fornecedores ativos, retorna uma List<Fornecedor>
+	public static List<Fornecedor> listarApenasFornecedoresAtivos() {
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select f from Fornecedor f where f.status = :fornecedorAtivo");
+		query.setParameter("fornecedorAtivo", Status.ATIVO);
 		List<Fornecedor> fornecedores = query.getResultList();
 		manager.close();
 		return fornecedores;
@@ -64,14 +75,22 @@ public class ControllerFornecedor {
 		manager.close();
 	}
 
-	//Método para inativar um fornecedor
+	// Método para inativar um fornecedor
 	public void inativarFornecedor(Integer id) {
 		manager = new JPAUtil().getEntityManager();
+
 		Fornecedor fornecedorInativo = manager.find(Fornecedor.class, id);
+
 		fornecedorInativo.setStatus(Status.INATIVO);
+
 		manager.getTransaction().begin();
 		manager.merge(fornecedorInativo);
 		manager.getTransaction().commit();
+
+		JOptionPane.showMessageDialog(null, "Fornecedor inativado com sucesso!", "Fornecedor inativado",
+				JOptionPane.INFORMATION_MESSAGE);
+		ControllerInativarFornecedor.sucessoInativacao = true;
+
 		manager.close();
 	}
 }

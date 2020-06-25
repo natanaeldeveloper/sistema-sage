@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,16 +28,14 @@ import br.com.projeto.estoque.controller.ControllerGerente;
 import br.com.projeto.estoque.controller.ControllerSupervisor;
 import br.com.projeto.estoque.model.TipoComportamento;
 
+@SuppressWarnings("deprecation")
 public class Janela_login extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
-	private JPasswordField passwordField;
-	private JPasswordField passwordField_senha_super;
+	private JPasswordField pfSenhaGerente;
+	private JPasswordField pfSenhaSupervisor;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -50,14 +50,8 @@ public class Janela_login extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Janela_login() {
-		
-		
 
-		
 		setTitle("SAGE - Login");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,51 +67,57 @@ public class Janela_login extends JFrame {
 		tabbedPane.setBounds(37, 290, 520, 349);
 		contentPane.add(tabbedPane);
 
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Entrar como gerente", null, panel, null);
-		panel.setLayout(null);
+		JPanel painelGerente = new JPanel();
+		tabbedPane.addTab("Entrar como Gerente", null, painelGerente, null);
+		painelGerente.setLayout(null);
 
-		JLabel lblNewLabel_2 = new JLabel("LOGIN:");
-		lblNewLabel_2.setBackground(SystemColor.control);
-		lblNewLabel_2.setForeground(SystemColor.controlHighlight);
-		lblNewLabel_2.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
-		lblNewLabel_2.setBounds(90, 63, 330, 14);
-		panel.add(lblNewLabel_2);
+		JLabel lblLoginGerente = new JLabel("LOGIN ou CPF:");
+		lblLoginGerente.setBackground(SystemColor.control);
+		lblLoginGerente.setForeground(SystemColor.controlHighlight);
+		lblLoginGerente.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+		lblLoginGerente.setBounds(90, 63, 330, 14);
+		painelGerente.add(lblLoginGerente);
 
 		// cpf gerente
-		final JFormattedTextField formattedTextField = new JFormattedTextField();
-		formattedTextField.setForeground(Color.BLACK);
-		formattedTextField.setBackground(SystemColor.control);
-		formattedTextField.setBounds(90, 84, 330, 35);
-		panel.add(formattedTextField);
+		final JFormattedTextField tfLoginGerente = new JFormattedTextField();
+		tfLoginGerente.setForeground(Color.BLACK);
+		tfLoginGerente.setBackground(SystemColor.control);
+		tfLoginGerente.setBounds(90, 84, 330, 35);
+		painelGerente.add(tfLoginGerente);
+		
+		// Isso serve pro input do CPF do gerente já ser focado assim que a janela abrir
+		addWindowListener(new WindowAdapter() {
+			public void windowOpened(WindowEvent e) {
+				tfLoginGerente.requestFocusInWindow();
+			}
+		});
 
-		JLabel lblNewLabel_2_1 = new JLabel("SENHA:");
-		lblNewLabel_2_1.setBackground(SystemColor.control);
-		lblNewLabel_2_1.setForeground(SystemColor.controlHighlight);
-		lblNewLabel_2_1.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
-		lblNewLabel_2_1.setBounds(90, 130, 330, 14);
-		panel.add(lblNewLabel_2_1);
+		JLabel lblSenhaGerente = new JLabel("SENHA:");
+		lblSenhaGerente.setBackground(SystemColor.control);
+		lblSenhaGerente.setForeground(SystemColor.controlHighlight);
+		lblSenhaGerente.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+		lblSenhaGerente.setBounds(90, 130, 330, 14);
+		painelGerente.add(lblSenhaGerente);
 
 		// senha gerente
-		passwordField = new JPasswordField();
-		passwordField.setForeground(Color.BLACK);
-		passwordField.setBackground(SystemColor.control);
-		passwordField.setBounds(90, 152, 330, 35);
-		panel.add(passwordField);
+		pfSenhaGerente = new JPasswordField();
+		pfSenhaGerente.setForeground(Color.BLACK);
+		pfSenhaGerente.setBackground(SystemColor.control);
+		pfSenhaGerente.setBounds(90, 152, 330, 35);
+		painelGerente.add(pfSenhaGerente);
 
-		JButton btnVoltar = new JButton("Voltar");
+		JButton btnVoltarGerente = new JButton("Voltar");
 		// btnVoltar.setBackground(SystemColor.menu);
-		btnVoltar.setBounds(115, 216, 135, 35);
-		panel.add(btnVoltar);
+		btnVoltarGerente.setBounds(115, 216, 135, 35);
+		painelGerente.add(btnVoltarGerente);
 
-		JButton btnNewButton = new JButton("Entrar");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnEntrarGerente = new JButton("Entrar");
+		btnEntrarGerente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				ControllerGerente controller = new ControllerGerente();
-				@SuppressWarnings("deprecation")
-				String senha = passwordField.getText();
-				String cpf = formattedTextField.getText();
+				String senha = pfSenhaGerente.getText();
+				String cpf = tfLoginGerente.getText();
 				if (controller.fazerLogin(cpf, senha, TipoComportamento.ENTRADA) == true) {
 					Janela_principal jp = new Janela_principal();
 					jp.setVisible(true);
@@ -127,48 +127,47 @@ public class Janela_login extends JFrame {
 			}
 		});
 		// btnNewButton.setBackground(SystemColor.menu);
-		btnNewButton.setBounds(273, 216, 135, 35);
-		panel.add(btnNewButton);
+		btnEntrarGerente.setBounds(273, 216, 135, 35);
+		painelGerente.add(btnEntrarGerente);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		tabbedPane.addTab("Entrar como supervisor", null, panel_1, null);
+		JPanel painelSupervisor = new JPanel();
+		painelSupervisor.setLayout(null);
+		tabbedPane.addTab("Entrar como Supervisor", null, painelSupervisor, null);
 
-		JLabel lblNewLabel_2_2 = new JLabel("CPF:");
-		lblNewLabel_2_2.setForeground(SystemColor.controlHighlight);
-		lblNewLabel_2_2.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
-		lblNewLabel_2_2.setBounds(90, 63, 330, 14);
-		panel_1.add(lblNewLabel_2_2);
+		JLabel lblCpfSupervisor = new JLabel("CPF:");
+		lblCpfSupervisor.setForeground(SystemColor.controlHighlight);
+		lblCpfSupervisor.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+		lblCpfSupervisor.setBounds(90, 63, 330, 14);
+		painelSupervisor.add(lblCpfSupervisor);
 
-		final JFormattedTextField formattedTextField_cpf_super = new JFormattedTextField();
-		formattedTextField_cpf_super.setForeground(Color.BLACK);
-		formattedTextField_cpf_super.setBackground(SystemColor.control);
-		formattedTextField_cpf_super.setBounds(90, 84, 330, 35);
-		panel_1.add(formattedTextField_cpf_super);
+		final JFormattedTextField tfCpfSupervisor = new JFormattedTextField();
+		tfCpfSupervisor.setForeground(Color.BLACK);
+		tfCpfSupervisor.setBackground(SystemColor.control);
+		tfCpfSupervisor.setBounds(90, 84, 330, 35);
+		painelSupervisor.add(tfCpfSupervisor);
 
-		JLabel lblNewLabel_2_1_1 = new JLabel("SENHA:");
-		lblNewLabel_2_1_1.setForeground(SystemColor.controlHighlight);
-		lblNewLabel_2_1_1.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
-		lblNewLabel_2_1_1.setBounds(90, 130, 330, 14);
-		panel_1.add(lblNewLabel_2_1_1);
+		JLabel lblSenhaSupervisor = new JLabel("SENHA:");
+		lblSenhaSupervisor.setForeground(SystemColor.controlHighlight);
+		lblSenhaSupervisor.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
+		lblSenhaSupervisor.setBounds(90, 130, 330, 14);
+		painelSupervisor.add(lblSenhaSupervisor);
 
-		passwordField_senha_super = new JPasswordField();
-		passwordField_senha_super.setForeground(Color.BLACK);
-		passwordField_senha_super.setBackground(SystemColor.control);
-		passwordField_senha_super.setBounds(90, 152, 330, 35);
-		panel_1.add(passwordField_senha_super);
+		pfSenhaSupervisor = new JPasswordField();
+		pfSenhaSupervisor.setForeground(Color.BLACK);
+		pfSenhaSupervisor.setBackground(SystemColor.control);
+		pfSenhaSupervisor.setBounds(90, 152, 330, 35);
+		painelSupervisor.add(pfSenhaSupervisor);
 
-		JButton btnVoltar_1 = new JButton("Voltar");
+		JButton btnVoltarSupervisor = new JButton("Voltar");
 		// btnVoltar_1.setBackground(SystemColor.menu);
-		btnVoltar_1.setBounds(115, 216, 135, 35);
-		panel_1.add(btnVoltar_1);
+		btnVoltarSupervisor.setBounds(115, 216, 135, 35);
+		painelSupervisor.add(btnVoltarSupervisor);
 
-		JButton btnNewButton_1 = new JButton("Entrar");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
+		JButton btnEntrarSupervisor = new JButton("Entrar");
+		btnEntrarSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ControllerSupervisor ctrlSuper = new ControllerSupervisor();
-				if (ctrlSuper.fazerLogin(formattedTextField_cpf_super.getText(), passwordField_senha_super.getText(),
+				if (ctrlSuper.fazerLogin(tfCpfSupervisor.getText(), pfSenhaSupervisor.getText(),
 						TipoComportamento.ENTRADA) == true) {
 					Janela_principal jp = new Janela_principal();
 					jp.setVisible(true);
@@ -178,21 +177,20 @@ public class Janela_login extends JFrame {
 			}
 		});
 		// btnNewButton_1.setBackground(SystemColor.menu);
-		btnNewButton_1.setBounds(273, 216, 135, 35);
-		panel_1.add(btnNewButton_1);
-		JLabel lblNewLabel = new JLabel(new ImageIcon(getClass().getResource("/sage_icons/fundo-login.png")));
-		lblNewLabel.setBounds(0, 0, 594, 672);
-		contentPane.add(lblNewLabel);
-		
-		formattedTextField.addKeyListener(new KeyListener() {
+		btnEntrarSupervisor.setBounds(273, 216, 135, 35);
+		painelSupervisor.add(btnEntrarSupervisor);
+		JLabel imagemFundo = new JLabel(new ImageIcon(getClass().getResource("/sage_icons/fundo-login.png")));
+		imagemFundo.setBounds(0, 0, 594, 672);
+		contentPane.add(imagemFundo);
+
+		tfLoginGerente.addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					ControllerGerente controller = new ControllerGerente();
-					@SuppressWarnings("deprecation")
-					String senha = passwordField.getText();
-					String cpf = formattedTextField.getText();
+					String senha = pfSenhaGerente.getText();
+					String cpf = tfLoginGerente.getText();
 					if (controller.fazerLogin(cpf, senha, TipoComportamento.ENTRADA) == true) {
 						Janela_principal jp = new Janela_principal();
 						jp.setVisible(true);
@@ -202,22 +200,23 @@ public class Janela_login extends JFrame {
 			}
 
 			@Override
-			public void keyTyped(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {
+			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {}
-			
+			public void keyReleased(KeyEvent e) {
+			}
+
 		});
-		
-		passwordField.addKeyListener(new KeyListener() {
+
+		pfSenhaGerente.addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					ControllerGerente controller = new ControllerGerente();
-					@SuppressWarnings("deprecation")
-					String senha = passwordField.getText();
-					String cpf = formattedTextField.getText();
+					String senha = pfSenhaGerente.getText();
+					String cpf = tfLoginGerente.getText();
 					if (controller.fazerLogin(cpf, senha, TipoComportamento.ENTRADA) == true) {
 						Janela_principal jp = new Janela_principal();
 						jp.setVisible(true);
@@ -227,79 +226,70 @@ public class Janela_login extends JFrame {
 			}
 
 			@Override
-			public void keyTyped(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {
+			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {}
-			
+			public void keyReleased(KeyEvent e) {
+			}
+
 		});
 
-		passwordField_senha_super.addKeyListener(new KeyListener() {
+		pfSenhaSupervisor.addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 					ControllerSupervisor ctrlSuper = new ControllerSupervisor();
-					if (ctrlSuper.fazerLogin(formattedTextField_cpf_super.getText(), passwordField_senha_super.getText(),
+					if (ctrlSuper.fazerLogin(tfCpfSupervisor.getText(), pfSenhaSupervisor.getText(),
 							TipoComportamento.ENTRADA) == true) {
 						Janela_principal jp = new Janela_principal();
 						jp.setVisible(true);
 						dispose();
 					}
 
-
-					}
 				}
+			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
-		
-		});
-		
-		
-		formattedTextField_cpf_super.addKeyListener(new KeyListener() {
 
+		});
+
+		tfCpfSupervisor.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
 					ControllerSupervisor ctrlSuper = new ControllerSupervisor();
-					if (ctrlSuper.fazerLogin(formattedTextField_cpf_super.getText(), passwordField_senha_super.getText(),
+					if (ctrlSuper.fazerLogin(tfCpfSupervisor.getText(), pfSenhaSupervisor.getText(),
 							TipoComportamento.ENTRADA) == true) {
 						Janela_principal jp = new Janela_principal();
 						jp.setVisible(true);
 						dispose();
 					}
 
-
-					}
 				}
+			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
-		
 		});
 
-
-		
 	}
 }

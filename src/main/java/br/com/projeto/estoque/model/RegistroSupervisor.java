@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.NamedQuery;
 @NamedQuery(name="buscarRegistrosSupervisores", query="select r from RegistroSupervisor r")
+@NamedQuery(name="buscarRegistroPorSuper", query="select r from RegistroSupervisor r where r.supervisor=:supervisor")
 @Entity
 public class RegistroSupervisor {
 	

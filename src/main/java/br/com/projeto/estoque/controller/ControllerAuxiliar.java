@@ -25,6 +25,8 @@ import com.toedter.calendar.JDateChooser;
 import br.com.projeto.estoque.model.Categoria;
 import br.com.projeto.estoque.model.Fornecedor;
 import br.com.projeto.estoque.model.Grupo;
+import br.com.projeto.estoque.model.Produto;
+import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
 import br.com.projeto.estoque.util.SupervisorAtual;
@@ -33,21 +35,19 @@ import br.com.projeto.estoque.util.SupervisorAtual;
 public class ControllerAuxiliar {
 	private static EntityManager manager;
 
-	
 	public void setarLoginUsuarioAtual_na_telaPrincipal(JLabel usuario_atual_cadastrarSupervisor,
 			JLabel usuario_atual_atualizar_gerente, JLabel usuario_atual_deletarSupervisor) {
-		if(GerenteAtual.getGerente() != null) {
+		if (GerenteAtual.getGerente() != null) {
 			usuario_atual_cadastrarSupervisor.setText(GerenteAtual.getGerente().getLogin());
 			usuario_atual_atualizar_gerente.setText(GerenteAtual.getGerente().getLogin());
 			usuario_atual_deletarSupervisor.setText(GerenteAtual.getGerente().getLogin());
-		}else {
+		} else {
 			usuario_atual_cadastrarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
 			usuario_atual_atualizar_gerente.setText(SupervisorAtual.getSupervisor().getLogin());
 			usuario_atual_deletarSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
 		}
 	}
-	
-	
+
 	public void limparCampos(JFormattedTextField campoJformattedTextField, JPasswordField campoJpasswordField,
 			JPasswordField campoJpasswordField2, JFormattedTextField campoJformattedTextField2) {
 		campoJformattedTextField.setText("");
@@ -97,7 +97,7 @@ public class ControllerAuxiliar {
 
 	}
 
-// Esse método confere se todos os dados das views de Cadastrar e Atualizar
+	// Esse método confere se todos os dados das views de Cadastrar e Atualizar
 	// Fornecedores estão preenchidos
 	public static boolean conferirDadosFornecedor(JTextField tfNome, JFormattedTextField tfCnpj,
 			JTextField tfRazaoSocial, JTextField tfTelefone, JTextField tfEmail, JFormattedTextField tfCep,
@@ -138,15 +138,33 @@ public class ControllerAuxiliar {
 	// Preenche os campos das views de Cadastrar e Atualizar Produtos, baseado no
 	// grupo escolhido
 	public static void preencherCamposGrupo(JComboBox cbGrupo, JTextField tfNome, JTextField tfCodigo,
-			JTextField tfQtdMin, JTextField tfQtdMax) {
+			JTextField tfQtdMin, JTextField tfSubtotal, JTextField tfQtdMax) {
 		manager = new JPAUtil().getEntityManager();
+
 		Query query = manager.createQuery("select g from Grupo g where g.nome=:nomeGrupo");
 		query.setParameter("nomeGrupo", cbGrupo.getSelectedItem().toString());
 		Grupo grupo = (Grupo) query.getSingleResult();
 		tfNome.setText(grupo.getNome());
 		tfCodigo.setText(grupo.getCodigo());
 		tfQtdMin.setText(grupo.getQtdMinima() + "");
+		tfSubtotal.setText(grupo.getSubtotal() + "");
 		tfQtdMax.setText(grupo.getQtdMaxima() + "");
+
+		manager.close();
+	}
+
+	// Preenche os campos do Produto e seu Grupo na view de Movimentação
+	public static void preencherCamposProdutoEGrupo(JComboBox cbProduto, JTextField tfQtdAtual, JTextField tfQtdMin,
+			JTextField tfSubtotal, JTextField tfQtdMax) {
+
+		manager = new JPAUtil().getEntityManager();
+		Query query = manager.createQuery("select p from Produto p where p.descricao=:descricaoProduto");
+		query.setParameter("descricaoProduto", cbProduto.getSelectedItem().toString());
+		Produto produto = (Produto) query.getSingleResult();
+		tfQtdAtual.setText(produto.getQuantidade() + "");
+		tfQtdMin.setText(produto.getGrupo().getQtdMinima() + "");
+		tfSubtotal.setText(produto.getGrupo().getSubtotal() + "");
+		tfQtdMax.setText(produto.getGrupo().getQtdMaxima() + "");
 		manager.close();
 	}
 
@@ -154,10 +172,19 @@ public class ControllerAuxiliar {
 	// usuário não seleciona nenhum grupo nas telas de Cadastrar e Atualizar
 	// Produtos
 	public static void resetarCamposGrupoProduto(JTextField tfNome, JTextField tfCodigo, JTextField tfQtdMin,
-			JTextField tfQtdMax) {
+			JTextField tfSubtotal, JTextField tfQtdMax) {
 		tfNome.setText("");
 		tfCodigo.setText("");
 		tfQtdMin.setText("");
+		tfSubtotal.setText("");
+		tfQtdMax.setText("");
+	}
+
+	public static void resetarCamposProdutoEGrupo(JTextField tfQtdAtual, JTextField tfQtdMin, JTextField tfSubtotal,
+			JTextField tfQtdMax) {
+		tfQtdAtual.setText("");
+		tfQtdMin.setText("");
+		tfSubtotal.setText("");
 		tfQtdMax.setText("");
 	}
 
@@ -217,7 +244,7 @@ public class ControllerAuxiliar {
 	// Preenche os Grupos de uma JComboBox
 	public static List<String> preencherGrupos() {
 		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Grupo g");
+		Query query = manager.createQuery("select nome from Grupo g order by g.id");
 		List<String> grupos = query.getResultList();
 		manager.close();
 		return grupos;
@@ -226,10 +253,25 @@ public class ControllerAuxiliar {
 	// Preenche os Fornecedores de uma JComboBox
 	public static List<String> preencherFornecedores() {
 		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select nome from Fornecedor f");
+		Query query = manager.createQuery("select nome from Fornecedor f where f.status = :fAtivo order by f.id");
+		query.setParameter("fAtivo", Status.ATIVO);
 		List<String> fornecedores = query.getResultList();
 		manager.close();
 		return fornecedores;
+	}
+
+	// Pega o ID do Produto de uma JComboBox
+	public static Integer pegarIdProdutoSelecionado(JComboBox cbProduto) {
+		manager = new JPAUtil().getEntityManager();
+		Integer idProduto = 0;
+		Query query = manager.createQuery("select p from Produto p where p.descricao=:descricaoProduto");
+		query.setParameter("descricaoProduto", cbProduto.getSelectedItem());
+		List<Produto> produtos = query.getResultList();
+		for (Produto produto : produtos) {
+			idProduto = produto.getId();
+		}
+		manager.close();
+		return idProduto;
 	}
 
 	// Pega o ID da Categoria de uma JComboBox
@@ -292,6 +334,14 @@ public class ControllerAuxiliar {
 		return false;
 	}
 
+	public static void repopularFornecedores(JComboBox cbFornecedor) {
+		cbFornecedor.removeAllItems();
+
+		for (Fornecedor fornecedor : ControllerFornecedor.listarApenasFornecedoresAtivos()) {
+			cbFornecedor.addItem(fornecedor.getNome());
+		}
+	}
+
 	// Converte Date para Calendar
 	public static Calendar toCalendar(Date date) {
 		Calendar cal = Calendar.getInstance();
@@ -304,4 +354,4 @@ public class ControllerAuxiliar {
 		cal.setTime(date);
 		return cal;
 	}
-	}
+}

@@ -52,32 +52,32 @@ public class ControllerRelatorios {
 		JOptionPane.showMessageDialog(null, "Relatório criado com sucesso!", "Relatório criado",JOptionPane.INFORMATION_MESSAGE);
 		
 	}
-	public void gerarRelatorioMovimentacoes(String nome) {	
-		try {
-			jasper = new File("jasper/relatorio_movimentacoes.jasper").getCanonicalPath();
-			relatorio = (JasperReport) JRLoader.loadObjectFromFile(jasper);
-			arq = new File(nome + ".pdf");
-			caminho = jr.route(arq);
-			arquivo = new File(caminho);
-			bytes = JasperRunManager.runReportToPdf(relatorio, null, new Banco().getConnection());
-			if (arquivo.exists()) {
-				arquivo.delete();
-			}
-			fos = new FileOutputStream(arquivo);
-			fos.write(bytes);
-			fos.flush();
-			fos.close();
-		} catch (JRException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		JOptionPane.showMessageDialog(null, "Relatório criado com sucesso!", "Relatório criado",JOptionPane.INFORMATION_MESSAGE);
-		
-	}
+//	public void gerarRelatorioMovimentacoes(String nome) {	
+//		try {
+//			jasper = new File("jasper/relatorio_movimentacoes.jasper").getCanonicalPath();
+//			relatorio = (JasperReport) JRLoader.loadObjectFromFile(jasper);
+//			arq = new File(nome + ".pdf");
+//			caminho = jr.route(arq);
+//			arquivo = new File(caminho);
+//			bytes = JasperRunManager.runReportToPdf(relatorio, null, new Banco().getConnection());
+//			if (arquivo.exists()) {
+//				arquivo.delete();
+//			}
+//			fos = new FileOutputStream(arquivo);
+//			fos.write(bytes);
+//			fos.flush();
+//			fos.close();
+//		} catch (JRException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		JOptionPane.showMessageDialog(null, "Relatório criado com sucesso!", "Relatório criado",JOptionPane.INFORMATION_MESSAGE);
+//		
+//	}
 }
