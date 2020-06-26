@@ -109,6 +109,13 @@ public class Janela_login extends JFrame {
 		painelGerente.add(pfSenhaGerente);
 
 		JButton btnVoltarGerente = new JButton("Voltar");
+		btnVoltarGerente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Janela_inicial ji = new Janela_inicial();
+				ji.setVisible(true);
+				dispose();
+			}
+		});
 		// btnVoltar.setBackground(SystemColor.menu);
 		btnVoltarGerente.setBounds(115, 216, 135, 35);
 		painelGerente.add(btnVoltarGerente);
@@ -161,6 +168,13 @@ public class Janela_login extends JFrame {
 		painelSupervisor.add(pfSenhaSupervisor);
 
 		JButton btnVoltarSupervisor = new JButton("Voltar");
+		btnVoltarSupervisor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Janela_inicial ji = new Janela_inicial(); 
+				ji.setVisible(true);
+				dispose();
+			}
+		});
 		// btnVoltar_1.setBackground(SystemColor.menu);
 		btnVoltarSupervisor.setBounds(115, 216, 135, 35);
 		painelSupervisor.add(btnVoltarSupervisor);

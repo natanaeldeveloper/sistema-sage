@@ -79,7 +79,7 @@ public class Janela_conexao extends JFrame {
 
 		JLabel lblEeepProfessoraLuiza = new JLabel("E.E.E.P. Professora Luiza de Teodoro Vieira");
 		lblEeepProfessoraLuiza.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEeepProfessoraLuiza.setBounds(10, 11, 575, 14);
+		lblEeepProfessoraLuiza.setBounds(10, 24, 575, 14);
 		lblEeepProfessoraLuiza.setForeground(Color.LIGHT_GRAY);
 		contentPane.add(lblEeepProfessoraLuiza);
 		btnContinuar.setEnabled(false);
@@ -103,7 +103,7 @@ public class Janela_conexao extends JFrame {
 
 		JLabel imgFundo = new JLabel("");
 		imgFundo.setIcon(new ImageIcon(getClass().getResource("/sage_icons/fundo-carregamento.png")));
-		imgFundo.setBounds(0, 0, 598, 452);
+		imgFundo.setBounds(0, 0, 595, 452);
 		contentPane.add(imgFundo);
 		new loanding().start();
 		new temporizador().start();

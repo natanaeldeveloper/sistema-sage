@@ -39,7 +39,7 @@ public class Janela_inicial extends JFrame {
 	 */
 	public Janela_inicial() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 615, 284);
+		setBounds(100, 100, 615, 282);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -55,12 +55,12 @@ public class Janela_inicial extends JFrame {
 				jc.setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(236, 198, 140, 30);
+		btnNewButton.setBounds(236, 194, 140, 35);
 		contentPane.add(btnNewButton);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(Janela_inicial.class.getResource("/sage_icons/bem-vindo.png")));
-		lblNewLabel.setBounds(0, 0, 613, 253);
+		lblNewLabel.setBounds(0, 0, 609, 253);
 		contentPane.add(lblNewLabel);
 	}
 
