@@ -13,7 +13,7 @@ import br.com.projeto.estoque.util.Essencial;
 import br.com.projeto.estoque.util.JPAUtil;
 import br.com.projeto.estoque.util.SupervisorAtual;
 import br.com.projeto.estoque.util.SupervisorDeletado;
-import br.com.projeto.estoque.viewUpdate.Janela_confirmar_delecao;
+import br.com.projeto.estoque.view.Janela_confirmar_delecao;
 
 public class ControllerSupervisor extends ControllerGlobal {
 	private static int erros = 0;

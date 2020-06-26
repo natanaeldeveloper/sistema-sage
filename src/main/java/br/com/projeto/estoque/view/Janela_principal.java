@@ -1,4 +1,4 @@
-package br.com.projeto.estoque.viewUpdate;
+package br.com.projeto.estoque.view;
 
 import java.awt.Color;
 import java.awt.Component;

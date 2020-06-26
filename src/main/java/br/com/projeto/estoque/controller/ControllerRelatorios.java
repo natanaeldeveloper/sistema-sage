@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.projeto.estoque.util.Banco;
-import br.com.projeto.estoque.viewUpdate.Janela_route;
+import br.com.projeto.estoque.view.Janela_route;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;

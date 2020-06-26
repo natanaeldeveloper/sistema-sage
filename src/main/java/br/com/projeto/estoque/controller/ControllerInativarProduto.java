@@ -16,7 +16,7 @@ import com.toedter.calendar.JDateChooser;
 import br.com.projeto.estoque.model.Produto;
 import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.JPAUtil;
-import br.com.projeto.estoque.viewUpdate.Janela_principal;
+import br.com.projeto.estoque.view.Janela_principal;
 
 @SuppressWarnings("rawtypes")
 public class ControllerInativarProduto {

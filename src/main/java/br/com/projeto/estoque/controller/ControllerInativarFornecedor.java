@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 import br.com.projeto.estoque.model.Fornecedor;
 import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.util.JPAUtil;
-import br.com.projeto.estoque.viewUpdate.Janela_principal;
+import br.com.projeto.estoque.view.Janela_principal;
 
 public class ControllerInativarFornecedor {
 	private static EntityManager manager;

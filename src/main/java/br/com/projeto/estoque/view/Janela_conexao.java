@@ -1,4 +1,4 @@
-package br.com.projeto.estoque.viewUpdate;
+package br.com.projeto.estoque.view;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -28,7 +28,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 
 import br.com.projeto.estoque.util.JPAUtil;
 
-public class Janela_inicial extends JFrame {
+public class Janela_conexao extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ public class Janela_inicial extends JFrame {
 		});
 	}
 
-	public Janela_inicial() {
+	public Janela_conexao() {
 		setIconImage(Toolkit.getDefaultToolkit()
 				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
 		setTitle("SAGE - Inicialização");
