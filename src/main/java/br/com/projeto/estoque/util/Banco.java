@@ -12,7 +12,7 @@ public class Banco {
 		String host = "localhost";
 		String str_conn = "jdbc:mysql://" + host + ":3306/" + banco + "?serverTimezone=GMT-3"; // URL de conexão
 		String usuario = "root";
-		String senha = "";
+		String senha = "root";
 
 		try {
 			Class.forName(driver); // Carrega o driver

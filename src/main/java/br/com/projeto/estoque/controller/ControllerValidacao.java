@@ -64,7 +64,7 @@ public class ControllerValidacao {
 					&& Criptografar.encriptografar(senha).equals(GerenteAtual.getGerente().getSenha())) {
 				return true;
 			} else {
-				Aviso.avisar(2);
+				Aviso.avisar(18);
 				return false;
 			}
 		} catch (NullPointerException e) {
@@ -77,7 +77,7 @@ public class ControllerValidacao {
 				&& Criptografar.encriptografar(senha).equals(SupervisorAtual.getSupervisor().getSenha())) {
 			return true;
 		} else {
-			Aviso.avisar(2);
+			Aviso.avisar(18);
 			return false;
 		}
 	}

@@ -452,9 +452,9 @@ public class Janela_principal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null,
 						"O projeto SAGE (Sistema Administrativo de Gerenciamento de Estoque) foi feito com base nos princípios de um estoque físico, não sendo "
-								+ "extremamente complexo, mas longe de ser simples demais.\nO projeto foi desenvolvido na escola E.E.E.P. Professora Luiza de Teodora Vieira, no Jereissati II"
+								+ "extremamente complexo, mas longe de ser simples demais.\nO projeto foi desenvolvido na escola E.E.E.P. Professora Luiza de Teodoro Vieira, no Jereissati II"
 								+ ", durante o terceiro ano do Curso Técnico em Informática, na disciplina de Software/Desktop lecionada pelo professor Pedro Farias."
-								+ "\nSão utilizadas algumas tecnologias Java, principalmente JPA e Hibernate, além do JasperSoft para gerar relatórios e outras funções para layout e funcionalidade.",
+								+ "\nSão utilizadas algumas tecnologias Java, principalmente JPA e Hibernate, além do JasperSoft para gerar relatórios, maven para o gerenciamento de pacotes e outras funções para layout e funcionalidade.",
 						"Informações sobre o projeto", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -601,7 +601,9 @@ public class Janela_principal extends JFrame {
 		painelAtualizarSupervisor.add(botao_atualizar_senha_AtualizacaoSupervisor);
 
 		JLabel lblPesquisarId = new JLabel("Pesquisar pelo ID:");
-		lblPesquisarId.setBounds(20, 42, 182, 25);
+		if(ctrlPermissao.chamarVerificacao()==true) {
+			lblPesquisarId.setBounds(20, 42, 182, 25);	
+		}
 		botao_atualizar_senha_AtualizacaoSupervisor.add(lblPesquisarId);
 
 		// lblPesquisarId.setFont(new Font("Bahnschrift", Font.PLAIN, 14));

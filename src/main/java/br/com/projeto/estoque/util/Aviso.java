@@ -11,7 +11,7 @@ public class Aviso {
 					JOptionPane.ERROR_MESSAGE);
 			break;
 		case 2:
-			JOptionPane.showMessageDialog(null, "Login ou senha incorretos.", "Credenciais incorretas",
+			JOptionPane.showMessageDialog(null, "Dados incorretos.", "Credenciais incorretas",
 					JOptionPane.ERROR_MESSAGE);
 			break;
 		case 3:
@@ -74,6 +74,11 @@ public class Aviso {
 			JOptionPane.showMessageDialog(null,
 					"Muitas tentativas sem sucesso :( \n Talvez o programa seja encerrado por motivos de segurança.",
 					"Método de segurança", JOptionPane.WARNING_MESSAGE);
+			break;
+			
+		case 18:
+			JOptionPane.showMessageDialog(null, "CPF ou senha incorretos.", "Credenciais incorretas",
+					JOptionPane.ERROR_MESSAGE);
 			break;
 		default:
 			break;

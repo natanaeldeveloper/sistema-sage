@@ -136,7 +136,7 @@ public class Janela_login extends JFrame {
 		painelSupervisor.setLayout(null);
 		tabbedPane.addTab("Entrar como Supervisor", null, painelSupervisor, null);
 
-		JLabel lblCpfSupervisor = new JLabel("CPF:");
+		JLabel lblCpfSupervisor = new JLabel("CPF ou LOGIN:");
 		lblCpfSupervisor.setForeground(SystemColor.controlHighlight);
 		lblCpfSupervisor.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
 		lblCpfSupervisor.setBounds(90, 63, 330, 14);
