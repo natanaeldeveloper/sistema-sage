@@ -11,6 +11,8 @@ import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
 
 public class ControllerGerente extends ControllerGlobal {
+	
+	private static int erros = 0;
 	ControllerRegistroGerente controller = new ControllerRegistroGerente();
 
 	public boolean fazerLogin(String login_ou_cpf, String senha, TipoComportamento tipoComportamento) {
@@ -26,6 +28,15 @@ public class ControllerGerente extends ControllerGlobal {
 			controller.criarRegistroGerente(tipoComportamento, GerenteAtual.getGerente());
 			Essencial.getManager().getTransaction().commit();
 			login_efetuado = true;
+		} else {
+			ControllerGerente.erros +=1;
+			login_efetuado = false;
+			if(ControllerGerente.erros==3) {
+				Aviso.avisar(17);
+			}
+			if(ControllerGerente.erros==4) {
+				System.exit(0);
+			}
 		}
 		Essencial.getManager().close();
 		return login_efetuado;

@@ -70,6 +70,7 @@ public class ControllerGrupo {
 		return grupos;
 	}
 
+	// Esse método busca o nome do Grupo baseado no id do Produto inserido
 	public static Object encontrarGrupoPeloProduto(Integer id) {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select grupo.nome from Produto p where p.id=:idProduto");
@@ -88,33 +89,7 @@ public class ControllerGrupo {
 		return grupoEncontrado;
 	}
 
-	// Método para listar todos os grupos que não estão com "estocado" = true
-	public static List<Grupo> listarGruposNaoEstocados() {
-		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select g from Grupo g where g.estocado = 0");
-		List<Grupo> gruposNaoEstocados = query.getResultList();
-		manager.close();
-		return gruposNaoEstocados;
-	}
-
-	// Método para atualizar um grupo. Os dados alteráveis são limitados à descrição
-	// e à categoria
-	public Grupo atualizarGrupo(Integer id, String descricao, Integer id_categoria) {
-		manager = new JPAUtil().getEntityManager();
-
-		Categoria categoria = manager.find(Categoria.class, id_categoria);
-
-		Grupo grupoAtualizado = manager.find(Grupo.class, id);
-		grupoAtualizado.setDescricao(descricao);
-		grupoAtualizado.setCategoria(categoria);
-		manager.getTransaction().begin();
-		manager.merge(grupoAtualizado);
-		manager.getTransaction().commit();
-
-		manager.close();
-		return grupoAtualizado;
-	}
-
+	// Método para checar se já não existe um grupo com o mesmo nome
 	public static boolean checarGrupo(String nome) {
 		for (Grupo grupo : listarGrupos()) {
 			if (grupo.getNome().equals(nome)) {
@@ -126,6 +101,39 @@ public class ControllerGrupo {
 		return true;
 	}
 
+	// Método que checa os Grupos não estocados, e que também define como não
+	// estocado o Grupo que tiver seu subtotal igual a 0
+	public static void checarEstocado() {
+		manager = new JPAUtil().getEntityManager();
+
+		Query query = manager.createQuery("select g from Grupo g where g.subtotal = 0");
+
+		List<Grupo> grupos = query.getResultList();
+
+		if (grupos.size() > 0) {
+
+			List<String> nomesDosGrupos = new ArrayList();
+
+			for (Grupo grupo : grupos) {
+				grupo.setEstocado(false);
+				manager.getTransaction().begin();
+				manager.merge(grupo);
+				manager.getTransaction().commit();
+				nomesDosGrupos.add(grupo.getNome() + "\n");
+			}
+
+			JOptionPane.showMessageDialog(null,
+					"Lista de Grupos não estocados:" + nomesDosGrupos.toString().replace("[", "\n ").replace(",", "")
+							.replace("]", "Abasteça-os assim que possível!\n"),
+					"Grupos não estocados", JOptionPane.WARNING_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "Todos os Grupos cadastrados estão estocados!", "Grupos estocados",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+		manager.close();
+	}
+
+	// Método para checar se há algum problema de quantidade em algum grupo
 	public static boolean problemasNoEstoque() {
 		List<String> estoquesPrecarios = new ArrayList();
 		List<String> estoquesCheios = new ArrayList();
@@ -154,14 +162,15 @@ public class ControllerGrupo {
 			if (estoquesCheios.size() > 0) {
 				JOptionPane.showMessageDialog(null,
 						"Grupos com estoque lotado:\n\n" + estoquesCheios.toString().replace("[", " ").replace(",", "")
-								.replace("]", "\nCuidado para a mercadoria não naufragar!"),
+								.replace("]", "\nRisco de mercadoria naufragada!"),
 						"Estoques cheios", JOptionPane.WARNING_MESSAGE);
 			}
 
 			return true;
 		}
 
-		JOptionPane.showMessageDialog(null, "Tudo em dia!", "Grupos em dia", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Os estoques dos grupos estão estáveis!", "Grupos em dia",
+				JOptionPane.INFORMATION_MESSAGE);
 		return false;
 	}
 }

@@ -32,35 +32,4 @@ public class ControllerGlobal extends ControllerValidacao {
 		Aviso.avisar(5);
 		return objeto;
 	}
-
-	// public boolean cadastrarUsuario(String cpf, String senha) {
-	// if (verificarUsuarioJaCadastrado(cpf) == true) {
-	// criarUsuario(cpf, Criptografar.encriptografar(senha));
-	// JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso");
-	// return true;
-	// } else {
-	// JOptionPane.showMessageDialog(null, "CPF j� cadastrado, tente outro!");
-	// return false;
-	// }
-	//
-	// }
-
-	// public boolean chamarMetodosDeCriacao(String cpf, String senha) {
-	// boolean criou_usuario = false;
-	//
-	// Essencial.setManager(new JPAUtil().getEntityManager());
-	// Essencial.getManager().getTransaction().begin();
-	//
-	// if (testarCampos(cpf, senha) == false) {
-	// JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
-	// } else {
-	// criou_usuario = cadastrarUsuario(cpf, senha);
-	// }
-	//
-	// Essencial.getManager().getTransaction().commit();
-	// Essencial.getManager().close();
-	//
-	// return criou_usuario;
-	// }
-
 }

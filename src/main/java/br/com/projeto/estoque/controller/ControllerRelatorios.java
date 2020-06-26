@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import org.apache.commons.lang3.StringUtils;
 
 import br.com.projeto.estoque.util.Banco;
 import br.com.projeto.estoque.viewUpdate.Janela_route;
@@ -23,61 +26,82 @@ public class ControllerRelatorios {
 	String caminho;
 	File arquivo;
 	FileOutputStream fos;
-	
-	public void gerarRelatorioProdutos(String nome) {	
+
+	public void gerarRelatorioProdutos(JTextField tfNome) {
 		try {
-			jasper = new File("jasper/relatorio_produtos.jasper").getCanonicalPath();
-			relatorio = (JasperReport) JRLoader.loadObjectFromFile(jasper);
-			arq = new File(nome + ".pdf");
-			caminho = jr.route(arq);
-			arquivo = new File(caminho);
-			bytes = JasperRunManager.runReportToPdf(relatorio, null, new Banco().getConnection());
-			if (arquivo.exists()) {
-				arquivo.delete();
+			if (StringUtils.isBlank(tfNome.getText())) {
+				JOptionPane.showMessageDialog(null, "O nome precisa ser preenchido!", "Nome inválido",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			} else {
+				String nome = tfNome.getText();
+
+				jasper = new File("jasper/relatorio_produtos.jasper").getCanonicalPath();
+				relatorio = (JasperReport) JRLoader.loadObjectFromFile(jasper);
+				arq = new File(nome + ".pdf");
+				caminho = jr.route(arq);
+				if (caminho != null) {
+					arquivo = new File(caminho);
+					bytes = JasperRunManager.runReportToPdf(relatorio, null, new Banco().getConnection());
+					if (arquivo.exists()) {
+						arquivo.delete();
+					}
+					fos = new FileOutputStream(arquivo);
+					fos.write(bytes);
+					fos.flush();
+					fos.close();
+
+					JOptionPane.showMessageDialog(null, "Relatório criado com sucesso!", "Relatório criado",
+							JOptionPane.INFORMATION_MESSAGE);
+
+					tfNome.setText("");
+				}
 			}
-			fos = new FileOutputStream(arquivo);
-			fos.write(bytes);
-			fos.flush();
-			fos.close();
 		} catch (JRException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		JOptionPane.showMessageDialog(null, "Relatório criado com sucesso!", "Relatório criado",JOptionPane.INFORMATION_MESSAGE);
-		
 	}
-//	public void gerarRelatorioMovimentacoes(String nome) {	
-//		try {
-//			jasper = new File("jasper/relatorio_movimentacoes.jasper").getCanonicalPath();
-//			relatorio = (JasperReport) JRLoader.loadObjectFromFile(jasper);
-//			arq = new File(nome + ".pdf");
-//			caminho = jr.route(arq);
-//			arquivo = new File(caminho);
-//			bytes = JasperRunManager.runReportToPdf(relatorio, null, new Banco().getConnection());
-//			if (arquivo.exists()) {
-//				arquivo.delete();
-//			}
-//			fos = new FileOutputStream(arquivo);
-//			fos.write(bytes);
-//			fos.flush();
-//			fos.close();
-//		} catch (JRException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		JOptionPane.showMessageDialog(null, "Relatório criado com sucesso!", "Relatório criado",JOptionPane.INFORMATION_MESSAGE);
-//		
-//	}
+
+	public void gerarRelatorioMovimentacoes(JTextField tfNome) {
+		try {
+			if (StringUtils.isBlank(tfNome.getText())) {
+				JOptionPane.showMessageDialog(null, "O nome precisa ser preenchido!", "Nome inválido",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			} else {
+				String nome = tfNome.getText();
+
+				jasper = new File("jasper/relatorio_movimentacoes.jasper").getCanonicalPath();
+				relatorio = (JasperReport) JRLoader.loadObjectFromFile(jasper);
+				arq = new File(nome + ".pdf");
+				caminho = jr.route(arq);
+				if (caminho != null) {
+					arquivo = new File(caminho);
+					bytes = JasperRunManager.runReportToPdf(relatorio, null, new Banco().getConnection());
+					if (arquivo.exists()) {
+						arquivo.delete();
+					}
+					fos = new FileOutputStream(arquivo);
+					fos.write(bytes);
+					fos.flush();
+					fos.close();
+
+					JOptionPane.showMessageDialog(null, "Relatório criado com sucesso!", "Relatório criado",
+							JOptionPane.INFORMATION_MESSAGE);
+
+					tfNome.setText("");
+				}
+			}
+		} catch (JRException e1) {
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

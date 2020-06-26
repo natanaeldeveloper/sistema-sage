@@ -13,14 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.NamedQuery;
+
 //busca supervisor pelo cpf (apenas supervisor ativos)
 @NamedQuery(name = "buscarSupervisor", query = "select s from Supervisor s where s.cpf=:Scpf and s.status='ATIVO'")
-//busca todos os supervisores ativos
+// busca todos os supervisores ativos
 @NamedQuery(name = "supervisores", query = "select s from Supervisor s where s.status='ATIVO'")
 @NamedQuery(name = "buscarSupervisorLogin", query = "select s from Supervisor s where s.login=:Slogin")
-//busca todos os supervisores ativos pelo login
+// busca todos os supervisores ativos pelo login
 @NamedQuery(name = "buscarSupervisorAtivoLogin", query = "select s from Supervisor s where s.login=:Slogin and s.status='ATIVO'")
-//busca supervisor pelo cpf (qualquer supervisor)
+// busca supervisor pelo cpf (qualquer supervisor)
 @NamedQuery(name = "buscarSupervisorComCpf", query = "select s from Supervisor s where s.cpf=:Scpf")
 @Entity
 public class Supervisor {

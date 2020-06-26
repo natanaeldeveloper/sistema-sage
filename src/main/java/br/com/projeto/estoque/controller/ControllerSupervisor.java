@@ -16,19 +16,30 @@ import br.com.projeto.estoque.util.SupervisorDeletado;
 import br.com.projeto.estoque.viewUpdate.Janela_confirmar_delecao;
 
 public class ControllerSupervisor extends ControllerGlobal {
-
+	private static int erros = 0;
 	ControllerRegistroSupervisor controller = new ControllerRegistroSupervisor();
 
-	public boolean fazerLogin(String cpf, String senha, TipoComportamento tipoComportamento) {
+	public boolean fazerLogin(String cpf_ou_login, String senha, TipoComportamento tipoComportamento) {
 		boolean login = false;
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.getManager().getTransaction().begin();
-		if (verificarCredenciais(cpf, senha) == true) {
-			SupervisorAtual.setSupervisor(buscarSupervisorAtivoPeloCpf(cpf));
+		if (verificarCredenciais(cpf_ou_login, senha) == true) {
+			if (buscarSupervisorAtivoPeloLogin(cpf_ou_login) != null) {
+				SupervisorAtual.setSupervisor(buscarSupervisorAtivoPeloLogin(cpf_ou_login));
+			} else {
+				SupervisorAtual.setSupervisor(buscarSupervisorAtivoPeloCpf(cpf_ou_login));
+			}
 			controller.criarRegistroSupervisor(tipoComportamento, SupervisorAtual.getSupervisor());
 			login = true;
 		} else {
+			ControllerSupervisor.erros += 1;
 			login = false;
+			if (ControllerSupervisor.erros == 3) {
+				Aviso.avisar(17);
+			}
+			if (ControllerSupervisor.erros == 4) {
+				System.exit(0);
+			}
 		}
 		Essencial.getManager().getTransaction().commit();
 		Essencial.getManager().close();
@@ -38,22 +49,34 @@ public class ControllerSupervisor extends ControllerGlobal {
 	// Verifica se os dados digitados nos campos de login do Supervisor est�o de
 	// acordo com o banco de dados
 
-	public boolean verificarCredenciais(String cpf, String senha) {
+	public boolean verificarCredenciais(String login_ou_cpf, String senha) {
 
-		Supervisor supervisor = new Supervisor();
-		supervisor = buscarSupervisorAtivoPeloCpf(cpf);
+		Supervisor supervisorLogin = new Supervisor();
+		Supervisor supervisorCpf = new Supervisor();
+		supervisorCpf = buscarSupervisorAtivoPeloCpf(login_ou_cpf);
+		supervisorLogin = buscarSupervisorAtivoPeloLogin(login_ou_cpf);
 
-		if (supervisor == null) {
-			Aviso.avisar(2);
-			return false;
+		if (supervisorCpf == null) {
+			if (supervisorLogin == null) {
+				Aviso.avisar(2);
+				return false;
+			} else {
+				if (supervisorLogin.getSenha().equals(Criptografar.encriptografar(senha))) {
+					return true;
+				} else {
+					Aviso.avisar(2);
+					return false;
+				}
+			}
 		} else {
-			if (supervisor.getSenha().equals(Criptografar.encriptografar(senha))) {
+			if (supervisorCpf.getSenha().equals(Criptografar.encriptografar(senha))) {
 				return true;
 			} else {
 				Aviso.avisar(2);
 				return false;
 			}
 		}
+
 	}
 
 	// Cria um objeto do tipo supervisor
@@ -151,12 +174,27 @@ public class ControllerSupervisor extends ControllerGlobal {
 		}
 	}
 
+	public static Supervisor buscarSupervisorAtivoPeloLogin(String login) {
+		try {
+			Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarSupervisorAtivoLogin"));
+			Essencial.getQuery().setParameter("Slogin", login);
+			Supervisor supervisor = (Supervisor) Essencial.getQuery().getSingleResult();
+			return supervisor;
+		} catch (NoResultException e) {
+			return null;
+		} finally {
+
+		}
+	}
+
 	public Supervisor buscarSupervisorPeloId(int id) {
 		Supervisor supervisor = new Supervisor();
-
-		supervisor = Essencial.getManager().find(Supervisor.class, id);
-
-		if (supervisor.getStatus().equals(Status.INATIVO)) {
+		try {
+			supervisor = Essencial.getManager().find(Supervisor.class, id);
+			if (supervisor.getStatus().equals(Status.INATIVO)) {
+				supervisor = null;
+			}
+		} catch (NullPointerException e) {
 			supervisor = null;
 		}
 
@@ -221,21 +259,25 @@ public class ControllerSupervisor extends ControllerGlobal {
 
 	@SuppressWarnings("deprecation")
 	public boolean atualizarSupervisor(String senha, JFormattedTextField campo, String login,
-			JFormattedTextField cpf_gerente_AtualizacaoSupervisor, JPasswordField senha_gerente_AtualizacaoSupervisor) {
+			JFormattedTextField cpf_user_AtualizacaoSupervisor, JPasswordField senha_user_AtualizacaoSupervisor) {
 		Boolean supervisorAtualizado = false;
 		int id = 0;
 
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.getManager().getTransaction().begin();
 
-		if (validarConfirmacaoGerente(cpf_gerente_AtualizacaoSupervisor.getText(),
-				senha_gerente_AtualizacaoSupervisor.getText()) == true) {
+		if (validarConfirmacaoGerente(cpf_user_AtualizacaoSupervisor.getText(),
+				senha_user_AtualizacaoSupervisor.getText()) == true || SupervisorAtual.getSupervisor() != null) {
 
-			if (evitarValorVazio(campo, id) == false) {
-				// Só vai executar as demais se for digitado um id
+			if (evitarValorVazio(campo, id) == false && SupervisorAtual.getSupervisor() == null) {
+				Aviso.avisar(9);
 			} else {
 
-				id = Integer.valueOf(campo.getText());
+				if (SupervisorAtual.getSupervisor() == null) {
+					id = Integer.valueOf(campo.getText());
+				} else {
+					id = SupervisorAtual.getSupervisor().getId();
+				}
 
 				if (buscarSupervisorPeloId(id) == null) {
 					Aviso.avisar(11);
@@ -244,20 +286,29 @@ public class ControllerSupervisor extends ControllerGlobal {
 						Aviso.avisar(1);
 					} else {
 
-							if (buscarSupervisorPeloLogin(login) != null) {
-								Aviso.avisar(14);
+						if (buscarSupervisorPeloLogin(login) != null) {
+							Aviso.avisar(14);
+						} else {
+							if (SupervisorAtual.getSupervisor() != null) {
+								if (validarConfirmacaoSupervisor(cpf_user_AtualizacaoSupervisor.getText(),
+										senha_user_AtualizacaoSupervisor.getText())) {
+									Essencial.getManager().merge(criarAtualizacaoSupervisorSenha(id, senha));
+									Aviso.avisar(16);
+									supervisorAtualizado = true;
+								}
 							} else {
-								Essencial.getManager().merge(criarAtualizacaoSupervisor(id, senha, login));
+								Essencial.getManager().merge(criarAtualizacaoSupervisorSenha(id, senha));
 								Aviso.avisar(10);
 								supervisorAtualizado = true;
 							}
-
 						}
-					}
 
+					}
 				}
 
 			}
+
+		}
 
 		Essencial.getManager().getTransaction().commit();
 		Essencial.getManager().close();
@@ -267,37 +318,47 @@ public class ControllerSupervisor extends ControllerGlobal {
 
 	@SuppressWarnings("deprecation")
 	public boolean atualizarSupervisorSenha(JFormattedTextField campo, String senha,
-			JFormattedTextField cpf_gerente_AtualizacaoSupervisor, JPasswordField senha_gerente_AtualizacaoSupervisor) {
+			JFormattedTextField cpf_userAtualizacaoSupervisor, JPasswordField senha_user_AtualizacaoSupervisor) {
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.getManager().getTransaction().begin();
 		Boolean supervisorAtualizado = false;
 		int id = 0;
 
-		if (validarConfirmacaoGerente(cpf_gerente_AtualizacaoSupervisor.getText(),
-				senha_gerente_AtualizacaoSupervisor.getText()) == true) {
-
-			if (evitarValorVazio(campo, id) == false) {
-				// Só vai executar as demais se for digitado um id
+		if (validarConfirmacaoGerente(cpf_userAtualizacaoSupervisor.getText(),
+				senha_user_AtualizacaoSupervisor.getText()) == true || SupervisorAtual.getSupervisor() != null) {
+			if (evitarValorVazio(campo, id) == false && SupervisorAtual.getSupervisor() == null) {
+				Aviso.avisar(9);
 			} else {
-
-				id = Integer.valueOf(campo.getText());
+				if (SupervisorAtual.getSupervisor() == null) {
+					id = Integer.valueOf(campo.getText());
+				} else {
+					id = SupervisorAtual.getSupervisor().getId();
+				}
 
 				if (buscarSupervisorPeloId(id) == null) {
 					Aviso.avisar(11);
 				} else {
 					if (testarCampoSenha(senha) == false) {
-						Aviso.avisar(12);
+						Aviso.avisar(13);
 					} else {
-						Essencial.getManager().merge(criarAtualizacaoSupervisorSenha(id, senha));
-						Aviso.avisar(10);
-						supervisorAtualizado = true;
+						if (SupervisorAtual.getSupervisor() != null) {
+							if (validarConfirmacaoSupervisor(cpf_userAtualizacaoSupervisor.getText(),
+									senha_user_AtualizacaoSupervisor.getText())) {
+								Essencial.getManager().merge(criarAtualizacaoSupervisorSenha(id, senha));
+								Aviso.avisar(16);
+								supervisorAtualizado = true;
+							}
+						} else {
+							Essencial.getManager().merge(criarAtualizacaoSupervisorSenha(id, senha));
+							Aviso.avisar(10);
+							supervisorAtualizado = true;
+						}
+
 					}
 
 				}
 
 			}
-
-		} else {
 
 		}
 
@@ -307,11 +368,10 @@ public class ControllerSupervisor extends ControllerGlobal {
 		return supervisorAtualizado;
 
 	}
-	
-	
+
 	@SuppressWarnings("deprecation")
 	public boolean atualizarSupervisorLogin(JFormattedTextField campo, String login,
-			JFormattedTextField cpf_gerente_AtualizacaoSupervisor, JPasswordField senha_gerente_AtualizacaoSupervisor) {
+			JFormattedTextField cpf_user_AtualizacaoSupervisor, JPasswordField senha_user_AtualizacaoSupervisor) {
 
 		Boolean supervisorAtualizado = false;
 		int id = 0;
@@ -319,14 +379,16 @@ public class ControllerSupervisor extends ControllerGlobal {
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		Essencial.getManager().getTransaction().begin();
 
-		if (validarConfirmacaoGerente(cpf_gerente_AtualizacaoSupervisor.getText(),
-				senha_gerente_AtualizacaoSupervisor.getText()) == true) {
-
-			if (evitarValorVazio(campo, id) == false) {
-				// Só vai executar as demais se for digitado um id
+		if (validarConfirmacaoGerente(cpf_user_AtualizacaoSupervisor.getText(),
+				senha_user_AtualizacaoSupervisor.getText()) == true || SupervisorAtual.getSupervisor() != null) {
+			if (evitarValorVazio(campo, id) == false && SupervisorAtual.getSupervisor() == null) {
+				Aviso.avisar(9);
 			} else {
-
-				id = Integer.valueOf(campo.getText());
+				if (SupervisorAtual.getSupervisor() == null) {
+					id = Integer.valueOf(campo.getText());
+				} else {
+					id = SupervisorAtual.getSupervisor().getId();
+				}
 
 				if (buscarSupervisorPeloId(id) == null) {
 					Aviso.avisar(11);
@@ -337,9 +399,21 @@ public class ControllerSupervisor extends ControllerGlobal {
 						if (buscarSupervisorPeloLogin(login) != null) {
 							Aviso.avisar(3);
 						} else {
-							Essencial.getManager().merge(criarAtualizacaoSupervisorLogin(id, login));
-							Aviso.avisar(10);
-							supervisorAtualizado = true;
+
+							if (SupervisorAtual.getSupervisor() != null) {
+								if (validarConfirmacaoSupervisor(cpf_user_AtualizacaoSupervisor.getText(),
+										senha_user_AtualizacaoSupervisor.getText()) == true) {
+									Essencial.getManager().merge(criarAtualizacaoSupervisorLogin(id, login));
+									Aviso.avisar(16);
+									supervisorAtualizado = true;
+								}
+
+							} else {
+								Essencial.getManager().merge(criarAtualizacaoSupervisorLogin(id, login));
+								Aviso.avisar(10);
+								supervisorAtualizado = true;
+							}
+
 						}
 					}
 
@@ -349,19 +423,16 @@ public class ControllerSupervisor extends ControllerGlobal {
 			Essencial.getManager().close();
 
 		}
-
 		return supervisorAtualizado;
 
 	}
 
-	
-
-	public void excluirContaSupervisor(JFormattedTextField campoId, String login, String senha) {
+	public void excluirContaSupervisor(JFormattedTextField campoId, String cpf, String senha) {
 
 		int id = 0;
-		if (validarConfirmacaoGerente(login, senha) == true) {
+		if (validarConfirmacaoGerente(cpf, senha) == true) {
 			if (evitarValorVazio(campoId, id) == false) {
-				// Só vai executar as demais se for digitado um id
+				Aviso.avisar(9);
 			} else {
 
 				id = Integer.valueOf(campoId.getText());
@@ -383,6 +454,22 @@ public class ControllerSupervisor extends ControllerGlobal {
 
 			}
 
+		}
+
+	}
+
+	public void excluirContaPropria(String cpf, String senha) {
+		if (validarConfirmacaoSupervisor(cpf, senha) == true) {
+
+			Essencial.setManager(new JPAUtil().getEntityManager());
+			Essencial.getManager().getTransaction().begin();
+
+			Janela_confirmar_delecao confDell = new Janela_confirmar_delecao();
+			SupervisorDeletado.setId(SupervisorAtual.getSupervisor().getId());
+			confDell.setVisible(true);
+
+			Essencial.getManager().getTransaction().commit();
+			Essencial.getManager().close();
 		}
 
 	}

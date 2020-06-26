@@ -20,16 +20,16 @@ public class Grupo {
 
 	@Column(nullable = false, unique = true, length = 100)
 	private String nome;
-	
+
 	@Column(nullable = false)
 	private String descricao;
-	
+
 	@Column(nullable = true)
 	private int subtotal;
-	
+
 	@Column(nullable = false)
 	private int qtdMaxima;
-	
+
 	@Column(nullable = false)
 	private int qtdMinima;
 
@@ -70,7 +70,7 @@ public class Grupo {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
+
 	public int getSubtotal() {
 		return subtotal;
 	}

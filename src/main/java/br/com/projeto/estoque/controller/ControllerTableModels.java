@@ -19,7 +19,9 @@ import br.com.projeto.estoque.model.RegistroSupervisor;
 import br.com.projeto.estoque.model.Status;
 import br.com.projeto.estoque.model.Supervisor;
 import br.com.projeto.estoque.util.Essencial;
+import br.com.projeto.estoque.util.GerenteAtual;
 import br.com.projeto.estoque.util.JPAUtil;
+import br.com.projeto.estoque.util.SupervisorAtual;
 
 @SuppressWarnings("unchecked")
 public class ControllerTableModels {
@@ -38,24 +40,34 @@ public class ControllerTableModels {
 	// Método para popular a tabela de registros do gerente
 	public static void popularTableRegistrosSupervisor(JTable table_registros) {
 		Essencial.setManager(new JPAUtil().getEntityManager());
-		Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistrosSupervisores"));
 		List<RegistroSupervisor> registrosSupervisor;
-		registrosSupervisor = Essencial.getQuery().getResultList();
 
 		DefaultTableModel modelo = new DefaultTableModel();
 		table_registros.setModel(modelo);
 		modelo.addColumn("ID:");
-		modelo.addColumn("Supervisor:");
 		modelo.addColumn("Entrada/Saída:");
 		modelo.addColumn("Data e Hora:");
 
-		for (RegistroSupervisor registro : registrosSupervisor) {
-			modelo.addRow(new Object[] { registro.getId(), registro.getSupervisor().getId(),
-					registro.getTipoComportamento(), dateFormat.format(registro.getDataEHora()) });
+		if (GerenteAtual.getGerente() != null) {
+			modelo.addColumn("Supervisor:");
+			Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistrosSupervisores"));
+			registrosSupervisor = Essencial.getQuery().getResultList();
+			for (RegistroSupervisor registro : registrosSupervisor) {
+				modelo.addRow(new Object[] { registro.getId(), registro.getTipoComportamento(),
+						dateFormat.format(registro.getDataEHora()), registro.getSupervisor().getLogin() });
+			}
+		} else {
+			Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistroPorSuper"));
+			Essencial.getQuery().setParameter("supervisor", SupervisorAtual.getSupervisor());
+			registrosSupervisor = Essencial.getQuery().getResultList();
+			for (RegistroSupervisor registro : registrosSupervisor) {
+				modelo.addRow(new Object[] { registro.getId(), registro.getTipoComportamento(),
+						dateFormat.format(registro.getDataEHora()) });
+			}
 		}
 
 		table_registros.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		resizeColumnWidth(table_registros, 129);
+		resizeColumnWidth(table_registros, 172);
 	}
 
 	public static void popularTableSupervisor(JTable tableSupervisor) {

@@ -13,41 +13,48 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.NamedQuery;
 
-@NamedQuery(name="buscarRegistrosGerentes", query="select r from RegistroGerente r")
+@NamedQuery(name = "buscarRegistrosGerentes", query = "select r from RegistroGerente r")
 @Entity
 public class RegistroGerente {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@ManyToOne
 	private Gerente gerente;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private Timestamp dataEHora;
 	@Enumerated(EnumType.STRING)
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private TipoComportamento tipoComportamento;
-	
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Gerente getGerente() {
 		return gerente;
 	}
+
 	public void setGerente(Gerente gerente) {
 		this.gerente = gerente;
 	}
+
 	public Timestamp getDataEHora() {
 		return dataEHora;
 	}
+
 	public void setDataEHora(Timestamp dataEHora) {
 		this.dataEHora = dataEHora;
 	}
+
 	public TipoComportamento getTipoComportamento() {
 		return tipoComportamento;
 	}
+
 	public void setTipoComportamento(TipoComportamento tipoComportamento) {
 		this.tipoComportamento = tipoComportamento;
 	}

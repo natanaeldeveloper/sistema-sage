@@ -22,6 +22,7 @@ import br.com.projeto.estoque.viewUpdate.Janela_principal;
 public class ControllerInativarProduto {
 	private static EntityManager manager;
 
+	// Método para buscar os dados do Produto que será inativado
 	public void buscarProdutoInativado(JButton btnBuscar, JButton btnResetar, JTextField tfId,
 			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
 			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,
@@ -71,6 +72,7 @@ public class ControllerInativarProduto {
 		manager.close();
 	}
 
+	// Método que efetua a inativação do Produto
 	public void inativarProduto(JTextField tfId, JFormattedTextField tfPreco, JSpinner jsQuantidade,
 			JEditorPane epDescricao, JComboBox cbGrupo, JTextField tfMedida, JComboBox cbUnidade,
 			JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento) {
@@ -94,6 +96,7 @@ public class ControllerInativarProduto {
 		}
 	}
 
+	// Método que desabilita os inputs da view de Inativar o Produto
 	public void desabilitarInativacao(JButton btnBuscar, JButton btnResetar, JTextField tfId,
 			JFormattedTextField tfPreco, JSpinner jsQuantidade, JEditorPane epDescricao, JComboBox cbGrupo,
 			JTextField tfMedida, JComboBox cbUnidade, JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento,

@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -13,13 +16,18 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.ParseException;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -28,6 +36,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
@@ -38,6 +47,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -68,8 +78,7 @@ import br.com.projeto.estoque.controller.ControllerValidationCategoria;
 import br.com.projeto.estoque.controller.ControllerValidationFornecedor;
 import br.com.projeto.estoque.controller.ControllerValidationGrupo;
 import br.com.projeto.estoque.controller.ControllerValidationProduto;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowEvent;
+import br.com.projeto.estoque.util.SupervisorAtual;
 
 @SuppressWarnings({ "deprecation", "unchecked", "rawtypes" })
 public class Janela_principal extends JFrame {
@@ -78,9 +87,10 @@ public class Janela_principal extends JFrame {
 
 	@SuppressWarnings("unused")
 	private ControllerTableModels ctb;
+	JMenuItem menuItemBtnSair = new JMenuItem("Sair");
 
 	// CAMPOS DO PAINEL DE DELEÇÃO DO SUPERVISOR
-	private JFormattedTextField cpf_gerente_deleteSupervisor;
+	private JFormattedTextField cpf_usuarioAtual_deleteSupervisor;
 	private JPasswordField senha_gerente_deleteSupervisor;
 	private JFormattedTextField cpf_supervisor_deleteSupervisor;
 	private JFormattedTextField id_pesquisa_deleteSupervisor;
@@ -92,6 +102,7 @@ public class Janela_principal extends JFrame {
 	private JFormattedTextField login_supervisor_criarSupervisor = new JFormattedTextField();
 	private JPasswordField confirmacaoSenha_supervisor_criarSupervisor;
 	private JPasswordField senha_supervisor_criarSupervisor;
+	private JButton limpar_dados_criarSupervisor = new JButton("Limpar");
 
 	// CAMPOS DO PAINEL DE ATUALIZAÇÃO DO SUPERVISOR
 	private JFormattedTextField cpf_gerente_AtualizacaoSupervisor;
@@ -101,6 +112,7 @@ public class Janela_principal extends JFrame {
 	private JFormattedTextField cpf_atual_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
 	private JFormattedTextField login_atual_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
 	private JFormattedTextField novo_login_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
+	private JButton botao_limpar_dados_AtualizacaoSupervisor = new JButton("Limpar");
 
 	private JPanel contentPane;
 	private JTable table_fornecedores;
@@ -186,6 +198,7 @@ public class Janela_principal extends JFrame {
 	private JButton btnResetarAtualizarProduto;
 	private JButton btnLimparAtualizarProduto;
 	private JButton btnAtualizarProduto;
+	private JButton btnLimparCadastrarProduto = new JButton("Limpar");
 
 	private JButton btnBuscarAtualizarFornecedor;
 	private JButton btnResetarAtualizarFornecedor;
@@ -194,6 +207,8 @@ public class Janela_principal extends JFrame {
 	private JButton btnResetarInativarFornecedor;
 	private JButton btnBuscarInativarFornecedor;
 	private JButton btnInativarFornecedor;
+	private JButton btnLimparCadastrarGrupo = new JButton("Limpar");
+	private JButton btnLimparCadastrarCategoria = new JButton("Limpar");
 
 	private JButton btnBuscarProdutoInativar;
 	private JButton btnResetarInativarProduto;
@@ -233,29 +248,35 @@ public class Janela_principal extends JFrame {
 	private JTextField tfQtdMaxInativar;
 
 	public Janela_principal() {
-		addWindowFocusListener(new WindowFocusListener() {
-			public void windowGainedFocus(WindowEvent e) {
-			}
 
-			public void windowLostFocus(WindowEvent e) {
-			}
-		});
 		ctrlAux.setarLoginUsuarioAtual_na_telaPrincipal(usuario_atual_cadastrarSupervisor,
 				usuario_atual_atualizar_gerente, usuario_atual_deletarSupervisor);
 
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
 		setTitle("SAGE - Menu Principal");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1216, 603);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				ControllerGlobal controllerGlob = new ControllerGlobal();
+				controllerGlob.registrarSaidaUsuario();
+				Janela_login jlogin = new Janela_login();
+				jlogin.setVisible(true);
+				dispose();
+			}
+		});
+
 		JMenu menuRelatorio = new JMenu("Relatório");
 		menuRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		menuBar.add(menuRelatorio);
 
-		menuItemNovoRelatorio = new JMenuItem("Novo");
+		menuItemNovoRelatorio = new JMenuItem("Novo relatório");
 		menuItemNovoRelatorio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Janela_relatorio jr = new Janela_relatorio();
@@ -365,8 +386,6 @@ public class Janela_principal extends JFrame {
 		});
 		menuItemAlterarTema.add(temaDarker);
 
-		JMenuItem menuItemBtnSair = new JMenuItem("Sair");
-
 		menuDefinicoes.add(menuItemBtnSair);
 
 		JMenu menuUtilidades = new JMenu("Utilidades");
@@ -389,6 +408,14 @@ public class Janela_principal extends JFrame {
 		});
 		menuUtilidades.add(menuChecarEstoque);
 
+		JMenuItem menuChecarEstocado = new JMenuItem("Checar Grupos não estocados");
+		menuChecarEstocado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerGrupo.checarEstocado();
+			}
+		});
+		menuUtilidades.add(menuChecarEstocado);
+
 		JMenu menuMovimentacoes = new JMenu("Movimentações");
 		menuMovimentacoes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		menuBar.add(menuMovimentacoes);
@@ -401,6 +428,50 @@ public class Janela_principal extends JFrame {
 			}
 		});
 		menuMovimentacoes.add(menuItemMovimentar);
+
+		JMenu menuAtalhos = new JMenu("Atalhos");
+		menuAtalhos.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		menuBar.add(menuAtalhos);
+
+		JMenuItem menuItemVerAtalhos = new JMenuItem("Ver atalhos");
+		menuItemVerAtalhos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"Lista de Atalhos:\nF1 - Limpar todos os campos\nF2 - Abrir janela de Gerar Relatório\nF10 - Sair do Programa\n",
+						"Atalhos", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		menuAtalhos.add(menuItemVerAtalhos);
+
+		JMenu menuInformacoes = new JMenu("Informações");
+		menuInformacoes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		menuBar.add(menuInformacoes);
+
+		JMenuItem menuItemInformacoes = new JMenuItem("Sobre o projeto");
+		menuItemInformacoes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"O projeto SAGE (Sistema Administrativo de Gerenciamento de Estoque) foi feito com base nos princípios de um estoque físico, não sendo "
+								+ "extremamente complexo, mas longe de ser simples demais.\nO projeto foi desenvolvido na escola E.E.E.P. Professora Luiza de Teodora Vieira, no Jereissati II"
+								+ ", durante o terceiro ano do Curso Técnico em Informática, na disciplina de Software/Desktop lecionada pelo professor Pedro Farias."
+								+ "\nSão utilizadas algumas tecnologias Java, principalmente JPA e Hibernate, além do JasperSoft para gerar relatórios e outras funções para layout e funcionalidade.",
+						"Informações sobre o projeto", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		menuInformacoes.add(menuItemInformacoes);
+
+		JMenuItem menuItemEquipe = new JMenuItem("Sobre a equipe");
+		menuItemEquipe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"Alunos diretamente envolvidos no projeto:\n\nAndrew Monteiro - Natanel Oliveira - Leandro Vieira\n\nAs funções foram divididas, em termos gerais, em backend e frontend"
+								+ ", apesar de que todos na equipe contribuiram em ambas as áreas em algum ponto do desenvolvimento do projeto.\n*Destaque para o Natanael no design e implementação do layout, e para o Andrew e o Leandro"
+								+ " na lógica por trás das ações do estoque. Todos participaram no planejamento do banco de dados.",
+						"Informações sobre a equipe", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		menuInformacoes.add(menuItemEquipe);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -416,7 +487,11 @@ public class Janela_principal extends JFrame {
 		painelGeral.add(tabbedPane_area);
 
 		JPanel painelAreaSupervisor = new JPanel();
-		tabbedPane_area.addTab("Área do Supervisor", null, painelAreaSupervisor, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tabbedPane_area.addTab("Área do Supervisor", null, painelAreaSupervisor, null);
+		} else {
+			tabbedPane_area.addTab("Minha conta", null, painelAreaSupervisor, null);
+		}
 		painelAreaSupervisor.setLayout(null);
 
 		JTabbedPane tpSupervisores = new JTabbedPane(JTabbedPane.TOP);
@@ -427,12 +502,12 @@ public class Janela_principal extends JFrame {
 
 		// ADICIONAR CAMPOS DE CADASTRAR gerente NESSE PANEL
 		JPanel painelCadastrarSupervisor = new JPanel();
-		tpSupervisores.addTab("Cadastrar Supervisor",
-				new ImageIcon(getClass().getResource("/sage_icons/profile_plus_round [#1343].png")),
-				painelCadastrarSupervisor, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tpSupervisores.addTab("Cadastrar Supervisor",
+					new ImageIcon(getClass().getResource("/sage_icons/profile_plus_round [#1343].png")),
+					painelCadastrarSupervisor, null);
+		}
 		painelCadastrarSupervisor.setLayout(null);
-
-		JButton limpar_dados_criarSupervisor = new JButton("Limpar");
 
 		limpar_dados_criarSupervisor.setBounds(383, 406, 105, 34);
 		painelCadastrarSupervisor.add(limpar_dados_criarSupervisor);
@@ -484,9 +559,9 @@ public class Janela_principal extends JFrame {
 		layeredPane_2_1.add(lblLogin);
 
 		JLabel label = new JLabel("USUÁRIO ATUAL:");
-		label.setForeground(Color.BLACK);
-		label.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label.setBounds(20, 11, 106, 25);
+		label.setForeground(new Color(0, 0, 1));
+		label.setFont(new Font("Segoe UI", Font.BOLD, 11));
+		label.setBounds(23, 11, 106, 25);
 		painelCadastrarSupervisor.add(label);
 
 		usuario_atual_cadastrarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
@@ -495,12 +570,16 @@ public class Janela_principal extends JFrame {
 
 		// ADICIONAR CAMPOS DE ATUALIZAR gerente NESSE PANEL
 		JPanel painelAtualizarSupervisor = new JPanel();
-		tpSupervisores.addTab("Atualizar Supervisor",
-				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1342].png")),
-				painelAtualizarSupervisor, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tpSupervisores.addTab("Atualizar Supervisor",
+					new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1342].png")),
+					painelAtualizarSupervisor, null);
+		} else {
+			tpSupervisores.addTab("Atualizar conta",
+					new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1342].png")),
+					painelAtualizarSupervisor, null);
+		}
 		painelAtualizarSupervisor.setLayout(null);
-
-		JButton botao_limpar_dados_AtualizacaoSupervisor = new JButton("Limpar");
 
 		botao_limpar_dados_AtualizacaoSupervisor.setBounds(30, 429, 78, 34);
 		painelAtualizarSupervisor.add(botao_limpar_dados_AtualizacaoSupervisor);
@@ -524,18 +603,22 @@ public class Janela_principal extends JFrame {
 		JLabel lblPesquisarId = new JLabel("Pesquisar pelo ID:");
 		lblPesquisarId.setBounds(20, 42, 182, 25);
 		botao_atualizar_senha_AtualizacaoSupervisor.add(lblPesquisarId);
+
 		// lblPesquisarId.setFont(new Font("Bahnschrift", Font.PLAIN, 14));
 
 		id_pesquisa_supervisor_AtualizacaoSupervisor = new JFormattedTextField();
-		id_pesquisa_supervisor_AtualizacaoSupervisor.setBounds(20, 69, 86, 25);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			id_pesquisa_supervisor_AtualizacaoSupervisor.setBounds(20, 69, 86, 25);
+		}
 		botao_atualizar_senha_AtualizacaoSupervisor.add(id_pesquisa_supervisor_AtualizacaoSupervisor);
 		id_pesquisa_supervisor_AtualizacaoSupervisor.setText("0");
 		id_pesquisa_supervisor_AtualizacaoSupervisor.setColumns(10);
 		// formattedTextField_1_2.setBackground(SystemColor.controlHighlight);
 
 		JButton buscar_supervisor_AtualizacaoSupervisor = new JButton("Buscar");
-
-		buscar_supervisor_AtualizacaoSupervisor.setBounds(116, 69, 86, 25);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			buscar_supervisor_AtualizacaoSupervisor.setBounds(116, 69, 86, 25);
+		}
 		botao_atualizar_senha_AtualizacaoSupervisor.add(buscar_supervisor_AtualizacaoSupervisor);
 		// passwordField.setBackground(SystemColor.controlHighlight);
 
@@ -563,6 +646,12 @@ public class Janela_principal extends JFrame {
 		login_atual_supervisor_AtualizacaoSupervisor.setEditable(false);
 		login_atual_supervisor_AtualizacaoSupervisor.setColumns(10);
 		login_atual_supervisor_AtualizacaoSupervisor.setBounds(20, 126, 253, 25);
+
+		if (ctrlPermissao.chamarVerificacao() == false) {
+			login_atual_supervisor_AtualizacaoSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
+			cpf_atual_supervisor_AtualizacaoSupervisor.setText("RESTRITO");
+		}
+
 		botao_atualizar_senha_AtualizacaoSupervisor.add(login_atual_supervisor_AtualizacaoSupervisor);
 
 		JLabel lblCpfAtual = new JLabel("CPF atual:");
@@ -578,8 +667,14 @@ public class Janela_principal extends JFrame {
 		botao_atualizar_senha_AtualizacaoSupervisor.add(lblNovoLogin);
 
 		JLayeredPane layeredPane_2 = new JLayeredPane();
-		layeredPane_2.setBorder(new TitledBorder(null, "Confirme Seus Dados de Gerente", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			layeredPane_2.setBorder(new TitledBorder(null, "Confirme Seus Dados de Gerente", TitledBorder.LEADING,
+					TitledBorder.TOP, null, null));
+		} else {
+			layeredPane_2.setBorder(
+					new TitledBorder(null, "Confirme Seus Dados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		}
+
 		layeredPane_2.setBounds(20, 38, 583, 113);
 		painelAtualizarSupervisor.add(layeredPane_2);
 
@@ -607,9 +702,9 @@ public class Janela_principal extends JFrame {
 		painelAtualizarSupervisor.add(btn_atualizar_login_AtualizacaoSupervisor);
 
 		JLabel lblUsurioAtual = new JLabel("USUÁRIO ATUAL:");
-		lblUsurioAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblUsurioAtual.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		lblUsurioAtual.setForeground(Color.BLACK);
-		lblUsurioAtual.setBounds(20, 11, 106, 25);
+		lblUsurioAtual.setBounds(23, 11, 106, 25);
 		painelAtualizarSupervisor.add(lblUsurioAtual);
 
 		usuario_atual_atualizar_gerente.setFont(new Font("Tahoma", Font.ITALIC, 11));
@@ -619,14 +714,25 @@ public class Janela_principal extends JFrame {
 
 		// ADICIONAR CAMPOS DE DELETAR gerente NESSE PANEL
 		JPanel painelDeletarSupervisor = new JPanel();
-		tpSupervisores.addTab("Deletar Supervisor",
-				new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")), painelDeletarSupervisor,
-				null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tpSupervisores.addTab("Deletar Supervisor",
+					new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")),
+					painelDeletarSupervisor, null);
+		} else {
+			tpSupervisores.addTab("Deletar minha conta",
+					new ImageIcon(getClass().getResource("/sage_icons/profile_round [#1346].png")),
+					painelDeletarSupervisor, null);
+		}
 		painelDeletarSupervisor.setLayout(null);
 
 		JLayeredPane layeredPane_2_2 = new JLayeredPane();
-		layeredPane_2_2.setBorder(new TitledBorder(null, "Confirme Seus Dados de Gerente", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			layeredPane_2_2.setBorder(new TitledBorder(null, "Confirme Seus Dados de Gerente", TitledBorder.LEADING,
+					TitledBorder.TOP, null, null));
+		} else {
+			layeredPane_2_2.setBorder(
+					new TitledBorder(null, "Confirme Seus Dados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		}
 		layeredPane_2_2.setBounds(20, 39, 583, 113);
 		painelDeletarSupervisor.add(layeredPane_2_2);
 
@@ -643,10 +749,10 @@ public class Janela_principal extends JFrame {
 		lblNewLabel_5_2.setBounds(307, 26, 253, 25);
 		layeredPane_2_2.add(lblNewLabel_5_2);
 
-		cpf_gerente_deleteSupervisor = new JFormattedTextField();
-		cpf_gerente_deleteSupervisor.setColumns(10);
-		cpf_gerente_deleteSupervisor.setBounds(307, 50, 253, 25);
-		layeredPane_2_2.add(cpf_gerente_deleteSupervisor);
+		cpf_usuarioAtual_deleteSupervisor = new JFormattedTextField();
+		cpf_usuarioAtual_deleteSupervisor.setColumns(10);
+		cpf_usuarioAtual_deleteSupervisor.setBounds(307, 50, 253, 25);
+		layeredPane_2_2.add(cpf_usuarioAtual_deleteSupervisor);
 
 		JLayeredPane layeredPane_1_1 = new JLayeredPane();
 		layeredPane_1_1.setBorder(
@@ -656,20 +762,26 @@ public class Janela_principal extends JFrame {
 
 		JLabel lblPesquisarId_1 = new JLabel("Pesquisar ID:");
 		lblPesquisarId_1.setBounds(20, 33, 182, 25);
-		layeredPane_1_1.add(lblPesquisarId_1);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			layeredPane_1_1.add(lblPesquisarId_1);
+		}
 
 		id_pesquisa_deleteSupervisor = new JFormattedTextField();
 		id_pesquisa_deleteSupervisor.setText("0");
 		id_pesquisa_deleteSupervisor.setColumns(10);
 		id_pesquisa_deleteSupervisor.setBounds(20, 69, 86, 25);
-		layeredPane_1_1.add(id_pesquisa_deleteSupervisor);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			layeredPane_1_1.add(id_pesquisa_deleteSupervisor);
+		}
 
 		id_pesquisa_deleteSupervisor.setText("0");
 
 		JButton botao_pesquisa_deleteSupervisor = new JButton("Buscar");
 
 		botao_pesquisa_deleteSupervisor.setBounds(116, 69, 86, 25);
-		layeredPane_1_1.add(botao_pesquisa_deleteSupervisor);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			layeredPane_1_1.add(botao_pesquisa_deleteSupervisor);
+		}
 
 		JLabel lblNewLabel_3_2 = new JLabel("Login");
 		lblNewLabel_3_2.setBounds(20, 103, 253, 27);
@@ -690,6 +802,11 @@ public class Janela_principal extends JFrame {
 		login_supervisor_deleteSupervisor.setBounds(20, 133, 253, 25);
 		layeredPane_1_1.add(login_supervisor_deleteSupervisor);
 
+		if (ctrlPermissao.chamarVerificacao() == false) {
+			login_supervisor_deleteSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
+			cpf_supervisor_deleteSupervisor.setText("RESTRITO");
+		}
+
 		botao_limpar_dados_deleteSupervisor.setBounds(383, 406, 105, 34);
 		painelDeletarSupervisor.add(botao_limpar_dados_deleteSupervisor);
 
@@ -699,17 +816,19 @@ public class Janela_principal extends JFrame {
 		painelDeletarSupervisor.add(botao_deletar_deleteSupervisor);
 
 		usuario_atual_deletarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		usuario_atual_deletarSupervisor.setBounds(146, 11, 169, 25);
+		usuario_atual_deletarSupervisor.setBounds(143, 11, 169, 25);
 		painelDeletarSupervisor.add(usuario_atual_deletarSupervisor);
 
 		JLabel label_2 = new JLabel("USUÁRIO ATUAL:");
 		label_2.setForeground(Color.BLACK);
-		label_2.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_2.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		label_2.setBounds(23, 11, 106, 25);
 		painelDeletarSupervisor.add(label_2);
 
 		JPanel painelAreaFornecedor = new JPanel();
-		tabbedPane_area.addTab("Área do Fornecedor", null, painelAreaFornecedor, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tabbedPane_area.addTab("Área do Fornecedor", null, painelAreaFornecedor, null);
+		}
 		painelAreaFornecedor.setLayout(null);
 
 		JTabbedPane tpFornecedores = new JTabbedPane(JTabbedPane.TOP);
@@ -1131,7 +1250,9 @@ public class Janela_principal extends JFrame {
 		painelInativarFornecedor.add(lblAvisoInativarFornecedor);
 
 		JPanel painelAreaProduto = new JPanel();
-		tabbedPane_area.addTab("Área do Produto", null, painelAreaProduto, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tabbedPane_area.addTab("Área do Produto", null, painelAreaProduto, null);
+		}
 		painelAreaProduto.setLayout(null);
 
 		JTabbedPane tpProdutos = new JTabbedPane(JTabbedPane.TOP);
@@ -1241,8 +1362,6 @@ public class Janela_principal extends JFrame {
 		JButton btnCadastrarProduto = new JButton("Cadastrar");
 		btnCadastrarProduto.setBounds(504, 437, 99, 34);
 		painelCadastrarProduto.add(btnCadastrarProduto);
-
-		JButton btnLimparCadastrarProduto = new JButton("Limpar");
 		btnLimparCadastrarProduto.setBounds(389, 437, 105, 34);
 		painelCadastrarProduto.add(btnLimparCadastrarProduto);
 
@@ -1638,7 +1757,9 @@ public class Janela_principal extends JFrame {
 		tfQtdMaxInativar.setVisible(false);
 
 		JPanel painelAreaGruposECategorias = new JPanel();
-		tabbedPane_area.addTab("Grupos e Categorias", null, painelAreaGruposECategorias, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tabbedPane_area.addTab("Grupos e Categorias", null, painelAreaGruposECategorias, null);
+		}
 		painelAreaGruposECategorias.setLayout(null);
 
 		JTabbedPane tpGruposECategorias = new JTabbedPane(JTabbedPane.TOP);
@@ -1701,7 +1822,6 @@ public class Janela_principal extends JFrame {
 		epDescricaoCadastrarGrupo = new JEditorPane();
 		spDescricaoCadastrarGrupo.setViewportView(epDescricaoCadastrarGrupo);
 
-		JButton btnLimparCadastrarGrupo = new JButton("Limpar");
 		btnLimparCadastrarGrupo.setBounds(389, 435, 105, 34);
 		painelCadastrarGrupo.add(btnLimparCadastrarGrupo);
 
@@ -1739,7 +1859,6 @@ public class Janela_principal extends JFrame {
 		epDescricaoCadastrarCategoria = new JEditorPane();
 		spDescricaoCadastrarCategoria.setViewportView(epDescricaoCadastrarCategoria);
 
-		JButton btnLimparCadastrarCategoria = new JButton("Limpar");
 		btnLimparCadastrarCategoria.setBounds(389, 435, 105, 34);
 		painelCadastrarCategoria.add(btnLimparCadastrarCategoria);
 
@@ -1764,12 +1883,18 @@ public class Janela_principal extends JFrame {
 		painelListarProdutos.add(spProdutos);
 
 		JPanel painelListarSupervisores = new JPanel();
-		tabbedPane_listagem.addTab("Supervisores", null, painelListarSupervisores, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tabbedPane_listagem.addTab("Supervisores", null, painelListarSupervisores, null);
+		}
 		painelListarSupervisores.setLayout(null);
 
 		JPanel painelListarRegistroSupervisores = new JPanel();
 		painelListarRegistroSupervisores.setLayout(null);
-		tabbedPane_listagem.addTab("Supervisores - registros", null, painelListarRegistroSupervisores, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tabbedPane_listagem.addTab("Supervisores - registros", null, painelListarRegistroSupervisores, null);
+		} else {
+			tabbedPane_listagem.addTab("Meus registros", null, painelListarRegistroSupervisores, null);
+		}
 
 		JScrollPane spSupervisores = new JScrollPane();
 		spSupervisores.setBounds(10, 11, 517, 425);
@@ -1805,7 +1930,9 @@ public class Janela_principal extends JFrame {
 		spProdutos.setViewportView(table_produtos);
 
 		JPanel painelListarFornecedores = new JPanel();
-		tabbedPane_listagem.addTab("Fornecedores", null, painelListarFornecedores, null);
+		if (ctrlPermissao.chamarVerificacao() == true) {
+			tabbedPane_listagem.addTab("Fornecedores", null, painelListarFornecedores, null);
+		}
 		painelListarFornecedores.setLayout(null);
 
 		JScrollPane spFornecedores = new JScrollPane();
@@ -2190,7 +2317,7 @@ public class Janela_principal extends JFrame {
 
 		botao_limpar_dados_deleteSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlAux.limparCampos(cpf_gerente_deleteSupervisor, senha_gerente_deleteSupervisor,
+				ctrlAux.limparCampos(cpf_usuarioAtual_deleteSupervisor, senha_gerente_deleteSupervisor,
 						cpf_supervisor_deleteSupervisor, id_pesquisa_deleteSupervisor,
 						login_supervisor_deleteSupervisor, senha_gerente_deleteSupervisor);
 
@@ -2202,11 +2329,14 @@ public class Janela_principal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (ctrlPermissao.chamarVerificacao() == true) {
 					ctrlSuper.excluirContaSupervisor(id_pesquisa_deleteSupervisor,
-							cpf_gerente_deleteSupervisor.getText(), senha_gerente_deleteSupervisor.getText());
+							cpf_usuarioAtual_deleteSupervisor.getText(), senha_gerente_deleteSupervisor.getText());
 
-					ctrlAux.limparCampos(cpf_gerente_deleteSupervisor, senha_gerente_deleteSupervisor,
+					ctrlAux.limparCampos(cpf_usuarioAtual_deleteSupervisor, senha_gerente_deleteSupervisor,
 							cpf_supervisor_deleteSupervisor, id_pesquisa_deleteSupervisor,
 							login_supervisor_deleteSupervisor, senha_gerente_deleteSupervisor);
+				} else {
+					ctrlSuper.excluirContaPropria(cpf_usuarioAtual_deleteSupervisor.getText(),
+							senha_gerente_deleteSupervisor.getText());
 				}
 			}
 		});
@@ -2267,18 +2397,15 @@ public class Janela_principal extends JFrame {
 
 		btn_atualizar_senha_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (ctrlPermissao.chamarVerificacao() == true) {
-					if (ctrlSuper.atualizarSupervisorSenha(id_pesquisa_supervisor_AtualizacaoSupervisor,
-							nova_senha_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlSuper.atualizarSupervisorSenha(id_pesquisa_supervisor_AtualizacaoSupervisor,
+						nova_senha_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+						senha_gerente_AtualizacaoSupervisor) == true) {
 
-						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-								id_pesquisa_supervisor_AtualizacaoSupervisor,
-								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-								cpf_atual_supervisor_AtualizacaoSupervisor,
-								login_atual_supervisor_AtualizacaoSupervisor,
-								novo_login_supervisor_AtualizacaoSupervisor);
-					}
+					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
+							login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
+
 				}
 			}
 		});
@@ -2286,19 +2413,14 @@ public class Janela_principal extends JFrame {
 		// MÉTODO DE ATUALIZAÇÃO DO LOGIN DO SUPERVISOR
 		btn_atualizar_login_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (ctrlPermissao.chamarVerificacao() == true) {
-					if (ctrlSuper.atualizarSupervisorLogin(id_pesquisa_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlSuper.atualizarSupervisorLogin(id_pesquisa_supervisor_AtualizacaoSupervisor,
+						novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+						senha_gerente_AtualizacaoSupervisor) == true) {
 
-						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-								id_pesquisa_supervisor_AtualizacaoSupervisor,
-								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-								cpf_atual_supervisor_AtualizacaoSupervisor,
-								login_atual_supervisor_AtualizacaoSupervisor,
-								novo_login_supervisor_AtualizacaoSupervisor);
-					}
-
+					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
+							login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
 				}
 
 			}
@@ -2308,22 +2430,56 @@ public class Janela_principal extends JFrame {
 		btn_atualizar_tudo_AtualizacaoSupervisor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (ctrlPermissao.chamarVerificacao() == true) {
-					if (ctrlSuper.atualizarSupervisor(nova_senha_supervisor_AtualizacaoSupervisor.getText(),
-							id_pesquisa_supervisor_AtualizacaoSupervisor,
-							novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
-							senha_gerente_AtualizacaoSupervisor) == true) {
+				if (ctrlSuper.atualizarSupervisor(nova_senha_supervisor_AtualizacaoSupervisor.getText(),
+						id_pesquisa_supervisor_AtualizacaoSupervisor,
+						novo_login_supervisor_AtualizacaoSupervisor.getText(), cpf_gerente_AtualizacaoSupervisor,
+						senha_gerente_AtualizacaoSupervisor) == true) {
 
-						ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
-								id_pesquisa_supervisor_AtualizacaoSupervisor,
-								nova_senha_supervisor_AtualizacaoSupervisor, senha_gerente_AtualizacaoSupervisor,
-								cpf_atual_supervisor_AtualizacaoSupervisor,
-								login_atual_supervisor_AtualizacaoSupervisor,
-								novo_login_supervisor_AtualizacaoSupervisor);
-
-					}
+					ctrlAux.limparCampos(cpf_gerente_AtualizacaoSupervisor,
+							id_pesquisa_supervisor_AtualizacaoSupervisor, nova_senha_supervisor_AtualizacaoSupervisor,
+							senha_gerente_AtualizacaoSupervisor, cpf_atual_supervisor_AtualizacaoSupervisor,
+							login_atual_supervisor_AtualizacaoSupervisor, novo_login_supervisor_AtualizacaoSupervisor);
 
 				}
+			}
+		});
+
+		// ATALHO DE LIMPAR CAMPOS DE QUALQUER PAINEL
+		// ATALHO = F1
+		// Atalho para gerar relatório clicando na tecla F2
+
+		InputMap inputMap_limpar = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		inputMap_limpar.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "forward");
+		this.getRootPane().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap_limpar);
+		this.getRootPane().getActionMap().put("forward", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				limpar_dados_criarSupervisor.doClick();
+				botao_limpar_dados_AtualizacaoSupervisor.doClick();
+				btnLimparAtualizarProduto.doClick();
+				btnLimparCadastrarFornecedor.doClick();
+				btnLimparCadastrarProduto.doClick();
+				btnLimparAtualizarFornecedor.doClick();
+				btnLimparCadastrarGrupo.doClick();
+				btnLimparCadastrarCategoria.doClick();
+			}
+		});
+
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				System.out.println(e);
+				if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F10) {
+					menuItemBtnSair.doClick();
+					return true;
+				} else if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F2) {
+					menuItemNovoRelatorio.doClick();
+					return true;
+				}
+				return false;
 			}
 		});
 

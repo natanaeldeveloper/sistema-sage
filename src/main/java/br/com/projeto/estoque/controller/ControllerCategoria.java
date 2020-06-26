@@ -46,6 +46,8 @@ public class ControllerCategoria {
 		return listCategorias;
 	}
 
+	// Esse método checa se já não existe uma categoria com o mesmo nome, quando o
+	// usuário for cadastrar uma nova
 	public boolean checarCategorias(String nome) {
 		for (Categoria c : listarCategorias()) {
 			if (c.getNome().equals(nome)) {

@@ -10,9 +10,9 @@ public class Banco {
 		String driver = "com.mysql.jdbc.Driver";
 		String banco = "estoquetecfour";
 		String host = "localhost";
-		String str_conn = "jdbc:mysql://" + host + ":3306/" + banco + "?serverTimezone=GMT-3"; // URL de conex?o
+		String str_conn = "jdbc:mysql://" + host + ":3306/" + banco + "?serverTimezone=GMT-3"; // URL de conexão
 		String usuario = "root";
-		String senha = "root";
+		String senha = "";
 
 		try {
 			Class.forName(driver); // Carrega o driver

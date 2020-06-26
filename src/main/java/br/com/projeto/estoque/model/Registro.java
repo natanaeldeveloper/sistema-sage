@@ -11,12 +11,13 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Registro {
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private Timestamp dataEHora;
-	
+
 	@ManyToOne
 	private Gerente gerente;
 
