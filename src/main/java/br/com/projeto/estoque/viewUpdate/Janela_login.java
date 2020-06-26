@@ -27,6 +27,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import br.com.projeto.estoque.controller.ControllerGerente;
 import br.com.projeto.estoque.controller.ControllerSupervisor;
 import br.com.projeto.estoque.model.TipoComportamento;
+import java.awt.Toolkit;
 
 @SuppressWarnings("deprecation")
 public class Janela_login extends JFrame {
@@ -51,7 +52,8 @@ public class Janela_login extends JFrame {
 	}
 
 	public Janela_login() {
-
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
 		setTitle("SAGE - Login");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,7 +86,7 @@ public class Janela_login extends JFrame {
 		tfLoginGerente.setBackground(SystemColor.control);
 		tfLoginGerente.setBounds(90, 84, 330, 35);
 		painelGerente.add(tfLoginGerente);
-		
+
 		// Isso serve pro input do CPF do gerente já ser focado assim que a janela abrir
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e) {

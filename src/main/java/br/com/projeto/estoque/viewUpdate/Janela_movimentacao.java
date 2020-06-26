@@ -2,6 +2,7 @@ package br.com.projeto.estoque.viewUpdate;
 
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -43,6 +44,8 @@ public class Janela_movimentacao extends JFrame {
 
 	@SuppressWarnings("unchecked")
 	public Janela_movimentacao() {
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setTitle("Movimentações");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

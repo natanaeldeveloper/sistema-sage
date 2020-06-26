@@ -23,7 +23,6 @@ public class ControllerMovimentacao {
 	private static EntityManager manager;
 	private static Date data;
 	private static long tempo;
-	@SuppressWarnings("unused")
 	private static Timestamp ts;
 
 	// No método construtor, é criado um novo Timestamp que será usado para definir

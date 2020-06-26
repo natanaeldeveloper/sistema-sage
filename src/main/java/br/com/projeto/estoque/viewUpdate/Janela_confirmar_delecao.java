@@ -3,6 +3,7 @@ package br.com.projeto.estoque.viewUpdate;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,7 +19,7 @@ import br.com.projeto.estoque.controller.ControllerSupervisor;
 import br.com.projeto.estoque.util.SupervisorDeletado;
 
 public class Janela_confirmar_delecao extends JFrame {
-	
+
 	/**
 	 * 
 	 */
@@ -48,6 +49,9 @@ public class Janela_confirmar_delecao extends JFrame {
 	 * Create the frame.
 	 */
 	public Janela_confirmar_delecao() {
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
+		setTitle("Confirmar deleção");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 389, 206);
 		setLocationRelativeTo(null);
@@ -56,29 +60,31 @@ public class Janela_confirmar_delecao extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		setResizable(false);
+
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		panel.setBounds(0, 0, 373, 167);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Janela_confirmar_delecao.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
+		lblNewLabel.setIcon(new ImageIcon(
+				Janela_confirmar_delecao.class.getResource("/javax/swing/plaf/metal/icons/ocean/warning.png")));
 		lblNewLabel.setBounds(162, 11, 47, 44);
 		panel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("Essa a\u00E7\u00E3o excluir\u00E1 todos os dados desse usu\u00E1rio");
+
+		JLabel lblNewLabel_1 = new JLabel("Essa ação excluirá todos os dados desse usuário");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_1.setBounds(49, 52, 314, 29);
 		panel.add(lblNewLabel_1);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("permanentemente, deseja continuar?");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_2.setBounds(77, 77, 259, 14);
 		panel.add(lblNewLabel_2);
-		
-		JButton btnNewButton = new JButton("cancelar");
+
+		JButton btnNewButton = new JButton("Cancelar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -86,15 +92,15 @@ public class Janela_confirmar_delecao extends JFrame {
 		});
 		btnNewButton.setBounds(77, 118, 89, 23);
 		panel.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("deletar");
+
+		JButton btnNewButton_1 = new JButton("Deletar");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ctrlSuper.excluirConta(SupervisorDeletado.getId());
 				ControllerPermissao ctrlPermissao = new ControllerPermissao();
-				if(ctrlPermissao.chamarVerificacao()==true) {
-					dispose();	
-				}else {
+				if (ctrlPermissao.chamarVerificacao() == true) {
+					dispose();
+				} else {
 					Janela_principal jprincipal = new Janela_principal();
 					Janela_login jlogin = new Janela_login();
 					dispose();

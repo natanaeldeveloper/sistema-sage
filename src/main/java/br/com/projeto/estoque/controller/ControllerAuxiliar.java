@@ -158,7 +158,8 @@ public class ControllerAuxiliar {
 			JTextField tfSubtotal, JTextField tfQtdMax) {
 
 		manager = new JPAUtil().getEntityManager();
-		Query query = manager.createQuery("select p from Produto p where p.descricao=:descricaoProduto");
+		Query query = manager
+				.createQuery("select p from Produto p where p.descricao=:descricaoProduto and p.status = 'ATIVO'");
 		query.setParameter("descricaoProduto", cbProduto.getSelectedItem().toString());
 		Produto produto = (Produto) query.getSingleResult();
 		tfQtdAtual.setText(produto.getQuantidade() + "");
@@ -180,6 +181,8 @@ public class ControllerAuxiliar {
 		tfQtdMax.setText("");
 	}
 
+	// Esse método reseta os campos do Produto e do Grupo na interface das
+	// Movimentações
 	public static void resetarCamposProdutoEGrupo(JTextField tfQtdAtual, JTextField tfQtdMin, JTextField tfSubtotal,
 			JTextField tfQtdMax) {
 		tfQtdAtual.setText("");
@@ -319,11 +322,13 @@ public class ControllerAuxiliar {
 	// Confere se as datas inseridas fazem sentido
 	public static boolean dataErrada(JDateChooser dcDataFabricacao, JDateChooser dcDataVencimento) {
 		if (dcDataFabricacao.getDate().after(Calendar.getInstance().getTime())) {
-			JOptionPane.showMessageDialog(null, "A data de fabricação inserida é inválida!",
+			JOptionPane.showMessageDialog(null,
+					"A data de fabricação inserida é inválida! Ela deve ser anterior à data atual.",
 					"Data de fabricação inválida", JOptionPane.ERROR_MESSAGE);
 			return true;
 		} else if (dcDataVencimento.getDate().before(Calendar.getInstance().getTime())) {
-			JOptionPane.showMessageDialog(null, "A data de vencimento inserida é inválida!",
+			JOptionPane.showMessageDialog(null,
+					"A data de vencimento inserida é inválida! Ela deve ser posterior à data atual.",
 					"Data de vencimento inválida", JOptionPane.ERROR_MESSAGE);
 			return true;
 		} else if (dcDataFabricacao.getDate().after(dcDataVencimento.getDate())) {
@@ -334,6 +339,8 @@ public class ControllerAuxiliar {
 		return false;
 	}
 
+	// Método chamado para repopular os Fornecedores sempre que o usuário clicar na
+	// JComboBox de seleionar Fornecedor na tela de Cadastrar Produtos
 	public static void repopularFornecedores(JComboBox cbFornecedor) {
 		cbFornecedor.removeAllItems();
 

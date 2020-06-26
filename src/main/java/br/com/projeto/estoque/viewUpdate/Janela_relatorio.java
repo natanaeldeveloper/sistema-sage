@@ -2,11 +2,9 @@ package br.com.projeto.estoque.viewUpdate;
 
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -20,6 +18,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import br.com.projeto.estoque.controller.ControllerRelatorios;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 @SuppressWarnings({ "serial", "rawtypes" })
 public class Janela_relatorio extends JFrame {
@@ -31,6 +31,8 @@ public class Janela_relatorio extends JFrame {
 
 	@SuppressWarnings("unchecked")
 	public Janela_relatorio() {
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		setTitle("Relatórios");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -41,14 +43,13 @@ public class Janela_relatorio extends JFrame {
 		setResizable(false);
 		contentPane.setLayout(null);
 
-		
 		gerar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ControllerRelatorios cr = new ControllerRelatorios();
 				if (tipo.getSelectedIndex() == 0) {
-					cr.gerarRelatorioProdutos(nome.getText());
+					cr.gerarRelatorioProdutos(nome);
 				} else if (tipo.getSelectedIndex() == 1) {
-					cr.gerarRelatorioMovimentacoes(nome.getText());
+					cr.gerarRelatorioMovimentacoes(nome);
 				}
 			}
 		});
@@ -66,7 +67,7 @@ public class Janela_relatorio extends JFrame {
 		contentPane.add(separator);
 
 		tipo = new JComboBox();
-		tipo.setModel(new DefaultComboBoxModel(new String[] { "Produtos", "Movimentações" }));
+		tipo.setModel(new DefaultComboBoxModel(new String[] { "Produtos Ativos", "Movimentações" }));
 		tipo.setBounds(134, 84, 181, 27);
 		contentPane.add(tipo);
 
@@ -79,6 +80,19 @@ public class Janela_relatorio extends JFrame {
 		contentPane.add(lblNewLabel_1_1);
 
 		nome = new JTextField();
+		nome.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					ControllerRelatorios cr = new ControllerRelatorios();
+					if (tipo.getSelectedIndex() == 0) {
+						cr.gerarRelatorioProdutos(nome);
+					} else if (tipo.getSelectedIndex() == 1) {
+						cr.gerarRelatorioMovimentacoes(nome);
+					}
+				}
+			}
+		});
 		nome.setBounds(134, 122, 130, 27);
 		contentPane.add(nome);
 		nome.setColumns(10);
@@ -87,7 +101,6 @@ public class Janela_relatorio extends JFrame {
 		lblNewLabel_2.setBounds(274, 122, 41, 27);
 		contentPane.add(lblNewLabel_2);
 		setLocationRelativeTo(null);
-		
-		
+
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -34,7 +35,7 @@ public class Janela_inicial extends JFrame {
 	private JProgressBar barraDeCarregamento;
 	private JPanel contentPane;
 	public String loanding = "";
-	
+
 	private JLabel lblCarregando;
 	JButton btnContinuar;
 	public Boolean result = true;
@@ -55,6 +56,8 @@ public class Janela_inicial extends JFrame {
 	}
 
 	public Janela_inicial() {
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
 		setTitle("SAGE - Inicialização");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,6 +76,12 @@ public class Janela_inicial extends JFrame {
 				dispose();
 			}
 		});
+
+		JLabel lblEeepProfessoraLuiza = new JLabel("E.E.E.P. Professora Luiza de Teodoro Vieira");
+		lblEeepProfessoraLuiza.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEeepProfessoraLuiza.setBounds(10, 11, 575, 14);
+		lblEeepProfessoraLuiza.setForeground(Color.LIGHT_GRAY);
+		contentPane.add(lblEeepProfessoraLuiza);
 		btnContinuar.setEnabled(false);
 		btnContinuar.setBackground(SystemColor.controlHighlight);
 		btnContinuar.setBounds(247, 381, 104, 33);
@@ -98,7 +107,7 @@ public class Janela_inicial extends JFrame {
 		contentPane.add(imgFundo);
 		new loanding().start();
 		new temporizador().start();
-		
+
 		InputMap inputMap = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "forward");
 		this.getRootPane().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap);
@@ -110,7 +119,6 @@ public class Janela_inicial extends JFrame {
 				btnContinuar.doClick();
 			}
 		});
-
 
 	}
 

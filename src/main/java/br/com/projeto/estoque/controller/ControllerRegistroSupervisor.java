@@ -8,17 +8,17 @@ import br.com.projeto.estoque.model.TipoComportamento;
 import br.com.projeto.estoque.util.Essencial;
 
 public class ControllerRegistroSupervisor {
-	
+
 	public static void main(String[] args) {
 		System.out.println("a");
 	}
-	
+
 	public static Timestamp pegarDataHora() {
 		Timestamp dataHora = new Timestamp(System.currentTimeMillis());
 		return dataHora;
 	}
 
-	public RegistroSupervisor criarRegistroSupervisor(TipoComportamento tipoComportamento, Supervisor supervisor) {		
+	public RegistroSupervisor criarRegistroSupervisor(TipoComportamento tipoComportamento, Supervisor supervisor) {
 		RegistroSupervisor registro = new RegistroSupervisor();
 		registro.setSupervisor(supervisor);
 		registro.setDataEHora(pegarDataHora());

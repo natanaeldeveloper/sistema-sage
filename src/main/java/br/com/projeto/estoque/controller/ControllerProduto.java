@@ -122,6 +122,8 @@ public class ControllerProduto {
 		return listaProdutos;
 	}
 
+	// Método para listar apenas a descrição dos Produtos, para a view de
+	// Movimentação
 	public static List<String> listarDescricaoProdutosAtivos() {
 		manager = new JPAUtil().getEntityManager();
 		Query query = manager.createQuery("select descricao from Produto p where p.status = :statusProduto");

@@ -67,21 +67,15 @@ public class ControllerValidationMovimentacao {
 			Integer idProduto = ControllerAuxiliar.pegarIdProdutoSelecionado(cbProduto);
 			String descricao = epDescricao.getText();
 
-			// Verificação extra, apenas para caso de erros inesperados
-			try {
-				ControllerMovimentacao tm = new ControllerMovimentacao();
-				tm.cadastrarMovimentacao(tipo, idFornecedor, idProduto, quantidade, descricao);
+			ControllerMovimentacao tm = new ControllerMovimentacao();
+			tm.cadastrarMovimentacao(tipo, idFornecedor, idProduto, quantidade, descricao);
 
-				// Se o ControllerMovimentacao retornar que o commit foi um sucesso, o código
-				// abaixo é executado e a variável é resetada
-				if (sucessoMovimentacao) {
-					limparCampos(cbTipoMovimentacao, cbFornecedor, cbProduto, tfQuantidade, epDescricao);
-					checarInativacao(cbProduto);
-					sucessoMovimentacao = false;
-				}
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Um erro inesperado aconteceu. Se ele persistir, entre em contato!",
-						"Erro desconhecido", JOptionPane.ERROR_MESSAGE);
+			// Se o ControllerMovimentacao retornar que o commit foi um sucesso, o código
+			// abaixo é executado e a variável é resetada
+			if (sucessoMovimentacao) {
+				limparCampos(cbTipoMovimentacao, cbFornecedor, cbProduto, tfQuantidade, epDescricao);
+				checarInativacao(cbProduto);
+				sucessoMovimentacao = false;
 			}
 
 		}

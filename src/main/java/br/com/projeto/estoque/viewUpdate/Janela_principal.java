@@ -3,11 +3,11 @@ package br.com.projeto.estoque.viewUpdate;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -36,6 +36,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
@@ -246,31 +247,20 @@ public class Janela_principal extends JFrame {
 	private JTextField tfSubtotalInativar;
 	private JTextField tfQtdMaxInativar;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Janela_principal frame = new Janela_principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public Janela_principal() {
 
 		ctrlAux.setarLoginUsuarioAtual_na_telaPrincipal(usuario_atual_cadastrarSupervisor,
 				usuario_atual_atualizar_gerente, usuario_atual_deletarSupervisor);
 
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(Janela_login.class.getResource("/sage_icons/logoTransparente.png")));
 		setTitle("SAGE - Menu Principal");
 		setResizable(false);
 		setBounds(100, 100, 1216, 603);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -286,7 +276,7 @@ public class Janela_principal extends JFrame {
 		menuRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		menuBar.add(menuRelatorio);
 
-		menuItemNovoRelatorio = new JMenuItem("Novo");
+		menuItemNovoRelatorio = new JMenuItem("Novo relatório");
 		menuItemNovoRelatorio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Janela_relatorio jr = new Janela_relatorio();
@@ -396,7 +386,6 @@ public class Janela_principal extends JFrame {
 		});
 		menuItemAlterarTema.add(temaDarker);
 
-
 		menuDefinicoes.add(menuItemBtnSair);
 
 		JMenu menuUtilidades = new JMenu("Utilidades");
@@ -419,6 +408,14 @@ public class Janela_principal extends JFrame {
 		});
 		menuUtilidades.add(menuChecarEstoque);
 
+		JMenuItem menuChecarEstocado = new JMenuItem("Checar Grupos não estocados");
+		menuChecarEstocado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControllerGrupo.checarEstocado();
+			}
+		});
+		menuUtilidades.add(menuChecarEstocado);
+
 		JMenu menuMovimentacoes = new JMenu("Movimentações");
 		menuMovimentacoes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		menuBar.add(menuMovimentacoes);
@@ -431,6 +428,50 @@ public class Janela_principal extends JFrame {
 			}
 		});
 		menuMovimentacoes.add(menuItemMovimentar);
+
+		JMenu menuAtalhos = new JMenu("Atalhos");
+		menuAtalhos.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		menuBar.add(menuAtalhos);
+
+		JMenuItem menuItemVerAtalhos = new JMenuItem("Ver atalhos");
+		menuItemVerAtalhos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"Lista de Atalhos:\nF1 - Limpar todos os campos\nF2 - Abrir janela de Gerar Relatório\nF10 - Sair do Programa\n",
+						"Atalhos", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		menuAtalhos.add(menuItemVerAtalhos);
+
+		JMenu menuInformacoes = new JMenu("Informações");
+		menuInformacoes.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		menuBar.add(menuInformacoes);
+
+		JMenuItem menuItemInformacoes = new JMenuItem("Sobre o projeto");
+		menuItemInformacoes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"O projeto SAGE (Sistema Administrativo de Gerenciamento de Estoque) foi feito com base nos princípios de um estoque físico, não sendo "
+								+ "extremamente complexo, mas longe de ser simples demais.\nO projeto foi desenvolvido na escola E.E.E.P. Professora Luiza de Teodora Vieira, no Jereissati II"
+								+ ", durante o terceiro ano do Curso Técnico em Informática, na disciplina de Software/Desktop lecionada pelo professor Pedro Farias."
+								+ "\nSão utilizadas algumas tecnologias Java, principalmente JPA e Hibernate, além do JasperSoft para gerar relatórios e outras funções para layout e funcionalidade.",
+						"Informações sobre o projeto", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		menuInformacoes.add(menuItemInformacoes);
+
+		JMenuItem menuItemEquipe = new JMenuItem("Sobre a equipe");
+		menuItemEquipe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null,
+						"Alunos diretamente envolvidos no projeto:\n\nAndrew Monteiro - Natanel Oliveira - Leandro Vieira\n\nAs funções foram divididas, em termos gerais, em backend e frontend"
+								+ ", apesar de que todos na equipe contribuiram em ambas as áreas em algum ponto do desenvolvimento do projeto.\n*Destaque para o Natanael no design e implementação do layout, e para o Andrew e o Leandro"
+								+ " na lógica por trás das ações do estoque. Todos participaram no planejamento do banco de dados.",
+						"Informações sobre a equipe", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		menuInformacoes.add(menuItemEquipe);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -518,9 +559,9 @@ public class Janela_principal extends JFrame {
 		layeredPane_2_1.add(lblLogin);
 
 		JLabel label = new JLabel("USUÁRIO ATUAL:");
-		label.setForeground(Color.BLACK);
-		label.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label.setBounds(20, 11, 106, 25);
+		label.setForeground(new Color(0, 0, 1));
+		label.setFont(new Font("Segoe UI", Font.BOLD, 11));
+		label.setBounds(23, 11, 106, 25);
 		painelCadastrarSupervisor.add(label);
 
 		usuario_atual_cadastrarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
@@ -609,8 +650,7 @@ public class Janela_principal extends JFrame {
 		if (ctrlPermissao.chamarVerificacao() == false) {
 			login_atual_supervisor_AtualizacaoSupervisor.setText(SupervisorAtual.getSupervisor().getLogin());
 			cpf_atual_supervisor_AtualizacaoSupervisor.setText("RESTRITO");
-			}
-
+		}
 
 		botao_atualizar_senha_AtualizacaoSupervisor.add(login_atual_supervisor_AtualizacaoSupervisor);
 
@@ -662,9 +702,9 @@ public class Janela_principal extends JFrame {
 		painelAtualizarSupervisor.add(btn_atualizar_login_AtualizacaoSupervisor);
 
 		JLabel lblUsurioAtual = new JLabel("USUÁRIO ATUAL:");
-		lblUsurioAtual.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblUsurioAtual.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		lblUsurioAtual.setForeground(Color.BLACK);
-		lblUsurioAtual.setBounds(20, 11, 106, 25);
+		lblUsurioAtual.setBounds(23, 11, 106, 25);
 		painelAtualizarSupervisor.add(lblUsurioAtual);
 
 		usuario_atual_atualizar_gerente.setFont(new Font("Tahoma", Font.ITALIC, 11));
@@ -776,12 +816,12 @@ public class Janela_principal extends JFrame {
 		painelDeletarSupervisor.add(botao_deletar_deleteSupervisor);
 
 		usuario_atual_deletarSupervisor.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		usuario_atual_deletarSupervisor.setBounds(146, 11, 169, 25);
+		usuario_atual_deletarSupervisor.setBounds(143, 11, 169, 25);
 		painelDeletarSupervisor.add(usuario_atual_deletarSupervisor);
 
 		JLabel label_2 = new JLabel("USUÁRIO ATUAL:");
 		label_2.setForeground(Color.BLACK);
-		label_2.setFont(new Font("Tahoma", Font.BOLD, 11));
+		label_2.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		label_2.setBounds(23, 11, 106, 25);
 		painelDeletarSupervisor.add(label_2);
 
@@ -2404,11 +2444,10 @@ public class Janela_principal extends JFrame {
 			}
 		});
 
-		
-		//ATALHO DE LIMPAR CAMPOS DE QUALQUER PAINEL
-		//ATALHO = F1
-		//Atalho para gerar relatório clicando na tecla F2
-		
+		// ATALHO DE LIMPAR CAMPOS DE QUALQUER PAINEL
+		// ATALHO = F1
+		// Atalho para gerar relatório clicando na tecla F2
+
 		InputMap inputMap_limpar = this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		inputMap_limpar.put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "forward");
 		this.getRootPane().setInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW, inputMap_limpar);
@@ -2428,30 +2467,22 @@ public class Janela_principal extends JFrame {
 			}
 		});
 
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
 
-		KeyboardFocusManager
-        .getCurrentKeyboardFocusManager()
-        .addKeyEventDispatcher(new KeyEventDispatcher() {
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				System.out.println(e);
+				if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F10) {
+					menuItemBtnSair.doClick();
+					return true;
+				} else if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F2) {
+					menuItemNovoRelatorio.doClick();
+					return true;
+				}
+				return false;
+			}
+		});
 
-		@Override
-          public boolean dispatchKeyEvent(KeyEvent e) {
-            System.out.println(e);
-            if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F10) {
-            	menuItemBtnSair.doClick();
-              return true;
-            }else if (e.getID() == e.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F2) {
-            	menuItemNovoRelatorio.doClick();
-                return true;
-            }
-            return false;
-          }
-        });
-		
-		
-		
-
-		
-		
 		// MÉTODO DE REGISTRAR A SAÍDA DO USUÁRIO AO CLICAR NO BOTÃO DE SAIR
 
 		menuItemBtnSair.addActionListener(new ActionListener() {
@@ -2465,7 +2496,7 @@ public class Janela_principal extends JFrame {
 		});
 
 	}
-	
+
 	public class Atualizar extends Thread {
 		public void run() {
 			try {

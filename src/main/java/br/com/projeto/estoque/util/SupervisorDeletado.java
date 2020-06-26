@@ -11,5 +11,4 @@ public class SupervisorDeletado {
 		SupervisorDeletado.id = id;
 	}
 
-
 }

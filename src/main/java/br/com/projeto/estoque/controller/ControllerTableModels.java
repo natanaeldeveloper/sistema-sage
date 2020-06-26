@@ -41,34 +41,33 @@ public class ControllerTableModels {
 	public static void popularTableRegistrosSupervisor(JTable table_registros) {
 		Essencial.setManager(new JPAUtil().getEntityManager());
 		List<RegistroSupervisor> registrosSupervisor;
-		
+
 		DefaultTableModel modelo = new DefaultTableModel();
 		table_registros.setModel(modelo);
 		modelo.addColumn("ID:");
 		modelo.addColumn("Entrada/Saída:");
 		modelo.addColumn("Data e Hora:");
-		
-		if(GerenteAtual.getGerente()!=null) {
+
+		if (GerenteAtual.getGerente() != null) {
 			modelo.addColumn("Supervisor:");
 			Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistrosSupervisores"));
 			registrosSupervisor = Essencial.getQuery().getResultList();
 			for (RegistroSupervisor registro : registrosSupervisor) {
-				modelo.addRow(new Object[] { registro.getId(), registro.getTipoComportamento(), dateFormat.format(registro.getDataEHora()),
-						registro.getSupervisor().getLogin()
-						});
+				modelo.addRow(new Object[] { registro.getId(), registro.getTipoComportamento(),
+						dateFormat.format(registro.getDataEHora()), registro.getSupervisor().getLogin() });
 			}
-		}else {
+		} else {
 			Essencial.setQuery(Essencial.getManager().createNamedQuery("buscarRegistroPorSuper"));
 			Essencial.getQuery().setParameter("supervisor", SupervisorAtual.getSupervisor());
 			registrosSupervisor = Essencial.getQuery().getResultList();
 			for (RegistroSupervisor registro : registrosSupervisor) {
-				modelo.addRow(new Object[] { registro.getId(),
-						registro.getTipoComportamento(), dateFormat.format(registro.getDataEHora()) });
+				modelo.addRow(new Object[] { registro.getId(), registro.getTipoComportamento(),
+						dateFormat.format(registro.getDataEHora()) });
 			}
 		}
 
 		table_registros.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		resizeColumnWidth(table_registros, 129);
+		resizeColumnWidth(table_registros, 172);
 	}
 
 	public static void popularTableSupervisor(JTable tableSupervisor) {

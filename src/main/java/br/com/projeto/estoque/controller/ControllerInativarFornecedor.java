@@ -16,6 +16,7 @@ public class ControllerInativarFornecedor {
 	private static EntityManager manager;
 	protected static boolean sucessoInativacao = false;
 
+	// Método para buscar os dados do Fornecedor que será inativado
 	public void buscarFornecedorInativado(JButton btnResetar, JButton btnBuscar, JButton btnInativar, JTextField tfId,
 			JTextField tfCnpj, JTextField tfNome, JTextField tfEmail, JTextField tfRazaoSocial) {
 
@@ -56,6 +57,7 @@ public class ControllerInativarFornecedor {
 		manager.close();
 	}
 
+	// Método para resetar os dados da interface de Inativar Fornecedor
 	public void resetarInativar(JButton btnResetar, JButton btnBuscar, JButton btnInativar, JTextField tfId,
 			JTextField tfCnpj, JTextField tfNome, JTextField tfEmail, JTextField tfRazaoSocial) {
 		btnResetar.setEnabled(false);
@@ -66,6 +68,7 @@ public class ControllerInativarFornecedor {
 		Janela_principal.lblAvisoInativarFornecedor.setForeground(new Color(187, 187, 187));
 	}
 
+	// Método que efetua a inativação do Fornecedor
 	public void inativarFornecedor(JButton btnResetar, JButton btnBuscar, JButton btnInativar, JTextField tfId,
 			JTextField tfCnpj, JTextField tfNome, JTextField tfEmail, JTextField tfRazaoSocial) {
 		Integer idInativado = Integer.parseInt(tfId.getText());

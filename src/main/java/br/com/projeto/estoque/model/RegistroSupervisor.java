@@ -12,43 +12,51 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.NamedQuery;
-@NamedQuery(name="buscarRegistrosSupervisores", query="select r from RegistroSupervisor r")
-@NamedQuery(name="buscarRegistroPorSuper", query="select r from RegistroSupervisor r where r.supervisor=:supervisor")
+
+@NamedQuery(name = "buscarRegistrosSupervisores", query = "select r from RegistroSupervisor r")
+@NamedQuery(name = "buscarRegistroPorSuper", query = "select r from RegistroSupervisor r where r.supervisor=:supervisor")
 @Entity
 public class RegistroSupervisor {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@ManyToOne
 	private Supervisor supervisor;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private Timestamp dataEHora;
 	@Enumerated(EnumType.STRING)
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private TipoComportamento tipoComportamento;
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public Supervisor getSupervisor() {
 		return supervisor;
 	}
+
 	public void setSupervisor(Supervisor supervisor) {
 		this.supervisor = supervisor;
 	}
+
 	public Timestamp getDataEHora() {
 		return dataEHora;
 	}
+
 	public void setDataEHora(Timestamp dataEHora) {
 		this.dataEHora = dataEHora;
 	}
+
 	public TipoComportamento getTipoComportamento() {
 		return tipoComportamento;
 	}
+
 	public void setTipoComportamento(TipoComportamento tipoComportamento) {
 		this.tipoComportamento = tipoComportamento;
 	}
