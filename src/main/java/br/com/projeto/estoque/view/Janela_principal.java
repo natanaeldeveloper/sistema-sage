@@ -2473,7 +2473,6 @@ public class Janela_principal extends JFrame {
 
 			@Override
 			public boolean dispatchKeyEvent(KeyEvent e) {
-				System.out.println(e);
 				if (e.getID() == KeyEvent.KEY_RELEASED && e.getKeyCode() == KeyEvent.VK_F10) {
 					menuItemBtnSair.doClick();
 					return true;
