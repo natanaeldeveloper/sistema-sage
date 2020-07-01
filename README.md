@@ -1,4 +1,4 @@
-﻿<h1>Sistema de Estoque - SAGE</h1>
+﻿<h1>Sistema Administrativo de Gerencimanto de Estoque - SAGE</h1>
 
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/Natanael-Oliveira-br/project_SAGE"></a>
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/Natanael-Oliveira-br/project_SAGE"></a>
