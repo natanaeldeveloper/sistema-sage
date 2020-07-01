@@ -10,24 +10,6 @@
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Natanael-Oliveira-br/project_SAGE"></a>
 </p>
 
-
-
-### Imagens do Projeto
-#### Janela de boas vindas
-![Janela inicial](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela1.png)
-
-#### Janela de conexão com o banco de dados
-![Janela de conexão](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela2.png)
-
-#### Janela de administração
-![Janela restrita](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela3.png)
-
-#### Janela de geração de relatórios
-![Janela de Relatórios](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela4.png)
-
-#### Janela de rota de download
-![Janela de rota de download](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela5.png)
-
 ## Pré-requisitos de uso
 
 - banco de dados mysql
@@ -55,6 +37,22 @@
 * Natanael Oliveira - Designer - [Visitar perfil](https://github.com/Natanael-Oliveira-br) 
 * Leandro - Developer - [Visitar perfil](https://github.com/Leandro0101) 
 * Andrew - Developer - [Visitar perfil](https://github.com/Andrew-2609)
+
+### Imagens do Projeto
+#### Janela de boas vindas
+![Janela inicial](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela1.png)
+
+#### Janela de conexão com o banco de dados
+![Janela de conexão](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela2.png)
+
+#### Janela de administração
+![Janela restrita](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela3.png)
+
+#### Janela de geração de relatórios
+![Janela de Relatórios](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela4.png)
+
+#### Janela de rota de download
+![Janela de rota de download](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela5.png)
 
 
 ## Licença
