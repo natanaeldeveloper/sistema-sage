@@ -1,4 +1,7 @@
-﻿<h1>Sistema Administrativo de Gerencimanto de Estoque - SAGE</h1>
+﻿<div style="text-align:center;">
+  <img src="https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/logo-200.png">
+ </div>
+ <h2>Sistema Administrativo de Gerencimanto de Estoque - SAGE</h2>
 
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/Natanael-Oliveira-br/project_SAGE"></a>
 <a href="https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/Natanael-Oliveira-br/project_SAGE"></a>
@@ -7,9 +10,6 @@
 
 
 ### Imagens do Projeto
-
-#### Logo da empresa 
-
 #### Janela de boas vindas
 ![Janela inicial](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela1.png)
 
