@@ -46,13 +46,13 @@
 ![Janela de conexão](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela2.png)
 
 #### Janela de administração
-![Janela restrita](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela3.png)
+![Janel de login](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela3.png)
 
 #### Janela de geração de relatórios
-![Janela de Relatórios](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela4.png)
+![Painel de controle](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela4.png)
 
 #### Janela de rota de download
-![Janela de rota de download](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela5.png)
+![Janela de criação de relatórios](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela5.png)
 
 
 ## Licença
