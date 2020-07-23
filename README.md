@@ -38,23 +38,6 @@
 * Leandro - Developer - [Visitar perfil](https://github.com/Leandro0101) 
 * Andrew - Developer - [Visitar perfil](https://github.com/Andrew-2609)
 
-### Imagens do Projeto
-#### Janela de boas vindas
-![Janela inicial](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela1.png)
-
-#### Janela de conexão com o banco de dados
-![Janela de conexão](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela2.png)
-
-#### Janela de administração
-![Janel de login](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela3.png)
-
-#### Janela de geração de relatórios
-![Painel de controle](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela4.png)
-
-#### Janela de rota de download
-![Janela de criação de relatórios](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/identidade_visual/janela5.png)
-
-
 ## Licença
 
 Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE](https://github.com/Natanael-Oliveira-br/project_SAGE/blob/master/LICENSE) para obter detalhes
